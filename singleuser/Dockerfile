@@ -10,9 +10,12 @@ RUN apt-get install --yes \
         virtualenv \
         locales \
         build-essential \
-        gcc \
-        vim-tiny \
-        nano
+        gcc
+
+RUN apt-get install --yes \
+        vim \
+        nano \
+        emacs
 
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
