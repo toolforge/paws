@@ -1,0 +1,3 @@
+[submodule "singleuser/pwb"]
+	path = singleuser/pwb
+	url = https://gerrit.wikimedia.org/r/pywikibot/core.git
