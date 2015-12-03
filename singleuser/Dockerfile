@@ -58,7 +58,7 @@ RUN chown 52771:52771 /home/paws
 
 ENV HOME=/home/paws
 ENV USER=tools.paws
-ENV PATH=/srv/pwb/bin:$PATH
+ENV PATH=/srv/pwb/bin:/srv/pwb:$PATH
 ENV SHELL=/bin/bash
 ENV PYWIKIBOT2_DIR_PWB=/srv/pwb
 WORKDIR /home/paws
