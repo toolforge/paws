@@ -31,6 +31,7 @@ RUN mkdir -p /srv/pwb
 RUN virtualenv -p python3 /srv/pwb
 
 ADD pwb/ /srv/pwb
+ADD user-config.py /srv/pwb/
 
 RUN /srv/pwb/bin/pip install \
     requests \
@@ -59,6 +60,7 @@ ENV HOME=/home/paws
 ENV USER=tools.paws
 ENV PATH=/srv/pwb/bin:$PATH
 ENV SHELL=/bin/bash
+ENV PYWIKIBOT2_DIR_PWB=/srv/pwb
 WORKDIR /home/paws
 
 RUN chown 52771:52771 /srv/pwb
