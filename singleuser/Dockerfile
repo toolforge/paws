@@ -47,6 +47,12 @@ RUN /srv/pwb/bin/pip install \
     memento_client \
     ipywidgets
 
+# MW related libraries
+RUN /srv/pwb/bin/pip install \
+    python-mwapi \
+    mwdb \
+    mwxml
+
 RUN /srv/pwb/bin/pip install jupyterhub ipython[notebook] bash_kernel
 RUN /srv/pwb/bin/pip install /srv/pwb/
 
