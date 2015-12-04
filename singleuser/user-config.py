@@ -15,4 +15,4 @@ del f
 del custom_path
 
 # Things that should be non-easily-overridable
-usernames['*']['*'] = os.environ['JPY_USER']
+usernames['wikipedia']['*'] = os.environ['JPY_USER']
