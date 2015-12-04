@@ -28,10 +28,11 @@ COPY passwd /etc/passwd
 
 RUN mkdir -p /srv/pwb
 
-RUN virtualenv -p python3 /srv/pwb
 
-ADD pwb/ /srv/pwb
+RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/pwb
 ADD user-config.py /srv/pwb/
+
+RUN virtualenv -p python3 /srv/pwb
 
 RUN /srv/pwb/bin/pip install \
     requests \
