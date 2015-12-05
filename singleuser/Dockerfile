@@ -71,6 +71,8 @@ ENV PYWIKIBOT2_DIR=/srv/pwb
 
 WORKDIR /home/paws
 
+ADD banner /etc/bash.bashrc
+
 RUN chown 52771:52771 /srv/pwb
 USER 52771
 
