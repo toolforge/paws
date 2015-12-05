@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Welcome to PAWS!"
+echo "PLease behave responsibly"
+echo "Getting Started: https://www.mediawiki.org/wiki/User:John_Vandenberg/GCI_walk-through"
+echo "Questions? Need help? Find us on #pywikibot on IRC on freenode!"
+echo "File bugs at https://phabricator.wikimedia.org/maniphest/task/create/?projects=PAWS"
