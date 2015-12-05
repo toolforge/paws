@@ -1,4 +1,5 @@
 jupyterhub
 ipython[notebook]
+mwoauth
 git+https://github.com/jupyter/oauthenticator.git#egg=oauthenticator
 git+https://github.com/jupyter/dockerspawner.git#egg=dockerspawner
