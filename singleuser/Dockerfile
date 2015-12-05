@@ -76,6 +76,8 @@ ADD banner /etc/bash.bashrc
 RUN chown 52771:52771 /srv/pwb
 USER 52771
 
+EXPOSE 8888
+
 CMD jupyterhub-singleuser \
   --port=8888 \
   --ip=0.0.0.0 \
