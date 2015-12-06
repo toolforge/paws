@@ -16,3 +16,12 @@ del custom_path
 
 # Things that should be non-easily-overridable
 usernames['wikipedia']['*'] = os.environ['JPY_USER']
+
+# If OAuth integration is available, take it
+if 'CLIENT_ID' in os.environ:
+    authenticate['*'] = (
+        os.environ['CLIENT_ID'],
+        os.environ['CLIENT_SECRET'],
+        os.environ['ACCESS_KEY'],
+        os.environ['ACCESS_SECRET']
+    )

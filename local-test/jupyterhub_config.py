@@ -13,5 +13,6 @@ c.DockerSpawner.container_image = 'yuvipanda/pawsuser'
 c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
 c.MWOAuthenticator.client_id = 'e9f54a40f11e930c5b8e9c422e2cb470'
 c.MWOAuthenticator.client_secret = '4efddbcac568a99dcc164fa72560cca05841ffd5'
+c.MWOAuthenticator.pass_secrets = True
 
 c.JupyterHub.ip = '0.0.0.0'
