@@ -1,4 +1,12 @@
 #!/bin/bash
+
+# Make history more useful and permanent!
+# Stolen from http://mywiki.wooledge.org/BashFAQ/088
+HISTFILESIZE=400000000
+HISTSIZE=10000
+PROMPT_COMMAND="history -a"
+
+shopt -s histappend
 echo "Welcome to PAWS!"
 echo "Please behave responsibly"
 echo "Getting Started: https://www.mediawiki.org/wiki/User:John_Vandenberg/GCI_walk-through"
