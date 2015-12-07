@@ -12,10 +12,13 @@ RUN apt-get install --yes \
         build-essential \
         gcc
 
+# Utilities
 RUN apt-get install --yes \
-        vim \
+        curl \
+        dnsutils \
+        emacs \
         nano \
-        emacs
+        vim
 
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
