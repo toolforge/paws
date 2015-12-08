@@ -22,7 +22,7 @@ if os.path.exists(custom_path):
 del custom_path
 
 # Things that should be non-easily-overridable
-usernames['wikipedia']['*'] = os.environ['JPY_USER']
+usernames[family]['*'] = os.environ['JPY_USER']
 
 # If OAuth integration is available, take it
 if 'CLIENT_ID' in os.environ:
