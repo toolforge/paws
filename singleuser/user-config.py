@@ -7,14 +7,7 @@ family = 'wikipedia'
 custom_path = os.path.expanduser('~/user-config.py')
 if os.path.exists(custom_path):
     with open(custom_path, 'r') as f:
-        variables = globals()
-        # Do not pass in variables we do not want users to change
-        for var in ['usernames', 'sysopnames']:
-            del variables[var]
-        del var
-
-        exec(compile(f.read(), custom_path, 'exec'), variables)
-        del variables
+        exec(compile(f.read(), custom_path, 'exec'), globals())
 
     del f
 # Clean up temp variables, since pwb issues a warning otherwise
