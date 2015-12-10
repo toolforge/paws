@@ -51,6 +51,16 @@ RUN /srv/pwb/bin/pip install \
     memento_client \
     ipywidgets
 
+# Dev requirements for pwb
+RUN /srv/pwb/bin/pip install \
+    six \
+    nose \
+    pep257 \
+    pyflakes \
+    flake8 \
+    codecov \
+    coverage
+
 # MW related libraries
 RUN /srv/pwb/bin/pip install \
     python-mwapi \
