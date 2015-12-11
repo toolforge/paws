@@ -17,6 +17,7 @@ RUN apt-get install --yes \
         curl \
         dnsutils \
         emacs \
+        links \
         nano \
         vim
 
