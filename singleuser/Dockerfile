@@ -34,22 +34,9 @@ RUN mkdir -p /srv/pwb
 
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/pwb
 ADD user-config.py /srv/pwb/
+ADD install-pwb /usr/local/bin
 
-RUN virtualenv -p python3 /srv/pwb
-
-RUN /srv/pwb/bin/pip install \
-    requests \
-    python-stdnum \
-    mwoauth \
-    google \
-    socketIO-client \
-    flickrapi \
-    irc \
-    mwparserfromhell \
-    beautifulsoup4 \
-    pycountry \
-    memento_client \
-    ipywidgets
+RUN /usr/local/bin/install-pwb
 
 # MW related libraries
 RUN /srv/pwb/bin/pip install \
