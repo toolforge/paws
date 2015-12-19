@@ -71,7 +71,7 @@ WORKDIR /home/paws
 
 COPY banner /etc/bash.bashrc
 
-RUN chown 52771:52771 /srv/pwb
+RUN chown -R 52771:52771 /srv/pwb
 USER 52771
 
 EXPOSE 8888
