@@ -47,6 +47,11 @@ RUN /srv/pwb/bin/pip install \
     mwdb \
     mwxml
 
+# Visualization libraries
+RUN /srv/pwb/bin/pip install \
+    bokeh \
+    ipywidgets
+
 RUN /srv/pwb/bin/pip install jupyterhub ipython[notebook] bash_kernel
 RUN /srv/pwb/bin/pip install /srv/pwb/
 
