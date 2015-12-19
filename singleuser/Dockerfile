@@ -34,10 +34,10 @@ RUN mkdir -p /srv/pwb
 
 
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/pwb
-ADD user-config.py /srv/pwb/
-ADD user-fixes.py /srv/pwb/
+COPY user-config.py /srv/pwb/
+COPY user-fixes.py /srv/pwb/
 
-ADD install-pwb /usr/local/bin
+COPY install-pwb /usr/local/bin
 
 RUN /usr/local/bin/install-pwb
 
@@ -69,7 +69,7 @@ ENV PYWIKIBOT2_DIR=/srv/pwb
 
 WORKDIR /home/paws
 
-ADD banner /etc/bash.bashrc
+COPY banner /etc/bash.bashrc
 
 RUN chown 52771:52771 /srv/pwb
 USER 52771
