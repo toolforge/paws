@@ -2,18 +2,23 @@ FROM debian:jessie
 
 MAINTAINER Yuvi Panda <yuvipanda@riseup,net>
 
-RUN apt-get update
-RUN apt-get install --yes \
+RUN apt-get update --yes
+
+# Matplotlib needs freetype, png and pkg-config
+RUN apt-get install --yes --no-install-recommends \
         python3.4 \
         git \
         python3.4-dev \
         virtualenv \
         locales \
+        pkg-config \
         build-essential \
-        gcc
+        gcc \
+        libfreetype6-dev \
+        libpng-dev
 
 # Utilities
-RUN apt-get install --yes \
+RUN apt-get install --yes --no-install-recommends \
         curl \
         dnsutils \
         emacs \
@@ -50,7 +55,8 @@ RUN /srv/pwb/bin/pip install \
 # Visualization libraries
 RUN /srv/pwb/bin/pip install \
     bokeh \
-    ipywidgets
+    ipywidgets \
+    matplotlib
 
 RUN /srv/pwb/bin/pip install jupyterhub ipython[notebook] bash_kernel
 RUN /srv/pwb/bin/pip install /srv/pwb/
