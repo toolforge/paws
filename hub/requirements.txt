@@ -1,0 +1,5 @@
+mwoauth
+requests-futures
+git+https://github.com/yuvipanda/jupyterhub.git@0.3.0-wikimedia#egg=jupyterhub
+git+https://github.com/yuvipanda/oauthenticator.git@wmf#egg=oauthenticator
+
