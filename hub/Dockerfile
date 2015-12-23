@@ -1,9 +1,18 @@
 FROM debian:jessie
 
+RUN echo 'lold'
 RUN apt-get update
-RUN apt-get install -y python3 virtualenv ca-certificates nodejs nodejs-legacy npm git locales
 
-RUN npm -g install configurable-http-proxy
+# npm is needed because we're installing jupyter from git, which requires it
+# We can toss it once we go back to using pip
+RUN apt-get install --yes --no-install-recommends \
+    python3 \
+    virtualenv \
+    ca-certificates \
+    git \
+    locales \
+    nodejs-legacy \
+    npm
 
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
