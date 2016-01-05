@@ -60,6 +60,7 @@ RUN /srv/pwb/bin/pip install \
 
 RUN /srv/pwb/bin/pip install jupyterhub ipython[notebook] bash_kernel
 RUN /srv/pwb/bin/pip install /srv/pwb/
+RUN /srv/pwb/bin/pip install git+https://github.com/yuvipanda/python-wdqs.git
 
 # Install the bash kernel
 RUN /srv/pwb/bin/python -m bash_kernel.install
