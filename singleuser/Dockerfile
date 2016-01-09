@@ -48,9 +48,15 @@ RUN /usr/local/bin/install-pwb
 
 # MW related libraries
 RUN /srv/pwb/bin/pip install \
-    python-mwapi \
+    mwapi \
     mwdb \
-    mwxml
+    mwxml \
+    mwreverts \
+    mwsessions \
+    mwdiffs \
+    mwoauth \
+    mwtypes \
+    mwpersistence
 
 # Visualization libraries
 RUN /srv/pwb/bin/pip install \
