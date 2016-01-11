@@ -30,24 +30,24 @@ RUN apt-get install --yes --no-install-recommends \
 RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
 
-RUN  mkdir -p /srv/pwb && chown 52771:52771 /srv/pwb
+RUN  mkdir -p /srv/paws && chown 52771:52771 /srv/paws
 
 # HACK! HACK! HACK!
 COPY passwd /etc/passwd
 
-RUN mkdir -p /srv/pwb
+RUN mkdir -p /srv/paws
 
 
-RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/pwb
-COPY user-config.py /srv/pwb/
-COPY user-fixes.py /srv/pwb/
+RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws
+COPY user-config.py /srv/paws/
+COPY user-fixes.py /srv/paws/
 
-COPY install-pwb /usr/local/bin
+COPY install-pwb /usr/local/bin/
 
 RUN /usr/local/bin/install-pwb
 
 # MW related libraries
-RUN /srv/pwb/bin/pip install \
+RUN /srv/paws/bin/pip install \
     mwapi \
     mwdb \
     mwxml \
@@ -59,32 +59,32 @@ RUN /srv/pwb/bin/pip install \
     mwpersistence
 
 # Visualization libraries
-RUN /srv/pwb/bin/pip install \
+RUN /srv/paws/bin/pip install \
     bokeh \
     ipywidgets \
     matplotlib
 
-RUN /srv/pwb/bin/pip install jupyterhub ipython[notebook] bash_kernel
-RUN /srv/pwb/bin/pip install /srv/pwb/
-RUN /srv/pwb/bin/pip install git+https://github.com/yuvipanda/python-wdqs.git
+RUN /srv/paws/bin/pip install jupyterhub ipython[notebook] bash_kernel
+RUN /srv/paws/bin/pip install /srv/paws/
+RUN /srv/paws/bin/pip install git+https://github.com/yuvipanda/python-wdqs.git
 
 # Install the bash kernel
-RUN /srv/pwb/bin/python -m bash_kernel.install
+RUN /srv/paws/bin/python -m bash_kernel.install
 
 RUN mkdir -p /home/paws
 RUN chown 52771:52771 /home/paws
 
 ENV HOME=/home/paws
 ENV USER=tools.paws
-ENV PATH=/srv/pwb/bin:/srv/pwb:$PATH
+ENV PATH=/srv/paws/bin:/srv/paws:$PATH
 ENV SHELL=/bin/bash
-ENV PYWIKIBOT2_DIR=/srv/pwb
+ENV PYWIKIBOT2_DIR=/srv/paws
 
 WORKDIR /home/paws
 
 COPY banner /etc/bash.bashrc
 
-RUN chown -R 52771:52771 /srv/pwb
+RUN chown -R 52771:52771 /srv/paws
 USER 52771
 
 EXPOSE 8888
