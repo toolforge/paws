@@ -15,7 +15,9 @@ RUN apt-get install --yes --no-install-recommends \
         build-essential \
         gcc \
         libfreetype6-dev \
-        libpng-dev
+        libpng-dev \
+        libzmq3-dev \
+        libreadline-dev
 
 # Utilities
 RUN apt-get install --yes --no-install-recommends \
@@ -79,6 +81,16 @@ ENV USER=tools.paws
 ENV PATH=/srv/paws/bin:/srv/paws:$PATH
 ENV SHELL=/bin/bash
 ENV PYWIKIBOT2_DIR=/srv/paws
+
+# Setup R packages
+RUN apt-get install --yes --no-install-recommends \
+    r-recommended \
+    r-base-dev
+
+COPY install-r /usr/local/bin/install-r
+RUN /usr/local/bin/install-r
+
+RUN /srv/paws/bin/pip install rpy2
 
 WORKDIR /home/paws
 
