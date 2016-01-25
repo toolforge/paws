@@ -66,6 +66,21 @@ RUN /srv/paws/bin/pip install \
     ipywidgets \
     matplotlib
 
+# Machine-learning type stuff
+RUN apt-get install --yes \
+    libblas3 \
+    libblas-dev \
+    liblapack3 \
+    liblapack-dev \
+    libquadmath0 \
+    gfortran
+
+RUN /srv/paws/bin/pip install \
+    revscoring \
+    editquality \
+    wikiclass \
+    scikit-neuralnetwork
+
 RUN /srv/paws/bin/pip install jupyterhub ipython[notebook] bash_kernel
 RUN /srv/paws/bin/pip install /srv/paws/
 RUN /srv/paws/bin/pip install git+https://github.com/yuvipanda/python-wdqs.git
