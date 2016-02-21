@@ -1,6 +1,5 @@
 FROM debian:jessie
 
-RUN echo 'lold'
 RUN apt-get update
 
 # npm is needed because we're installing jupyter from git, which requires it
@@ -12,7 +11,9 @@ RUN apt-get install --yes --no-install-recommends \
     git \
     locales \
     nodejs-legacy \
-    npm
+    npm \
+    nginx-extras \
+    lua-cjson
 
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
@@ -24,17 +25,15 @@ COPY passwd /etc/passwd
 RUN virtualenv -p python3 /srv/jupyterhub
 WORKDIR /srv/jupyterhub
 
-COPY requirements.txt /srv/jupyterhub
+COPY requirements.txt /srv/jupyterhub/requirements.txt
 RUN /srv/jupyterhub/bin/pip install -r  /srv/jupyterhub/requirements.txt
 
 # Needed for kubespawner
-ENV PYTHONPATH=.:$PYTHONPATH
-
-COPY kubespawner/kubespawner /srv/jupyterhub/kubespawner
 COPY jupyterhub_config.py /srv/jupyterhub/
 
 # Fuck you too, Docker? https://github.com/docker/docker/issues/6119
 RUN chown -R 52771:52771 /srv/jupyterhub
+
 USER 52771
 
 EXPOSE 8000

@@ -2,11 +2,12 @@ import os
 c.Application.log_level = 'DEBUG'
 
 c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
-c.JupyterHub.hub_ip = '0.0.0.0'
-c.JupyterHub.proxy_api_ip = os.environ['PROXY_PORT_8001_TCP_ADDR']
+c.JupyterHub.hub_ip = '127.0.0.1'
+c.JupyterHub.ip = '0.0.0.0'
+c.JupyterHub.proxy_cmd = '/srv/jupyterhub/bin/nchp'
 
-c.MWOAuthenticator.client_id = '8303709369544a0b519dbb0df52fc804'
-c.MWOAuthenticator.client_secret = '5eb1c8a7d97edd72db241f8cd8ea2c6f7fd9ab39'
+c.MWOAuthenticator.client_id = '0a73e346a40b07262b6e36bdba01cba4'
+c.MWOAuthenticator.client_secret = '99b284730a79dd30e2c35988be42708ef7e57122'
 c.MWOAuthenticator.pass_secrets = True
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
@@ -40,5 +41,7 @@ c.KubeSpawner.volume_mounts = [
         'name': 'dumps',
         }
 ]
+c.KubeSpawner.start_timeout = 60 * 5  # First pulls can be really slow
+
 
 c.JupyterHub.base_url = '/paws/'
