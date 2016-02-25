@@ -6,7 +6,7 @@ install.packages(
     repos = c('http://irkernel.github.io/', 'http://cran.us.r-project.org'),
 )
 
-IRkernel::installspec()
+IRkernel::installspec(FALSE)
 " > /tmp/install-r
 
 R -f /tmp/install-r

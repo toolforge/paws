@@ -33,11 +33,10 @@ RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
 
 RUN  mkdir -p /srv/paws && chown 52771:52771 /srv/paws
+ENV PATH=/srv/paws/bin:/srv/paws:$PATH
 
 # HACK! HACK! HACK!
 COPY passwd /etc/passwd
-
-RUN mkdir -p /srv/paws
 
 
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws
@@ -91,11 +90,6 @@ RUN /srv/paws/bin/python -m bash_kernel.install
 RUN mkdir -p /home/paws
 RUN chown 52771:52771 /home/paws
 
-ENV HOME=/home/paws
-ENV USER=tools.paws
-ENV PATH=/srv/paws/bin:/srv/paws:$PATH
-ENV SHELL=/bin/bash
-ENV PYWIKIBOT2_DIR=/srv/paws
 
 # Setup R packages
 RUN apt-get install --yes --no-install-recommends \
@@ -110,6 +104,11 @@ RUN /srv/paws/bin/pip install rpy2
 WORKDIR /home/paws
 
 COPY banner /etc/bash.bashrc
+
+ENV HOME=/home/paws
+ENV USER=tools.paws
+ENV SHELL=/bin/bash
+ENV PYWIKIBOT2_DIR=/srv/paws
 
 RUN chown -R 52771:52771 /srv/paws
 USER 52771
