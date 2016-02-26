@@ -20,7 +20,7 @@ RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
 
 # HACK! HACK! HACK!
-COPY passwd /etc/passwd
+RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 
 RUN virtualenv -p python3 /srv/jupyterhub
 WORKDIR /srv/jupyterhub
