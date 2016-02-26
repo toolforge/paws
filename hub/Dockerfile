@@ -38,4 +38,4 @@ USER 52771
 
 EXPOSE 8000
 
-CMD /srv/jupyterhub/bin/jupyterhub --config /srv/jupyterhub/jupyterhub_config.py
+CMD /srv/jupyterhub/bin/jupyterhub --config /srv/jupyterhub/jupyterhub_config.py --no-ssl
