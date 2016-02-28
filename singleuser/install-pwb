@@ -8,8 +8,8 @@ virtualenv -p python3 /srv/paws
 # Remove 'Pillow' from requirements.txt
 sed -e '/Pillow/d' /srv/paws/requirements.txt > /tmp/requirements.txt
 
-/srv/paws/bin/pip install -r /tmp/requirements.txt
-/srv/paws/bin/pip install -r /srv/paws/dev-requirements.txt
+/srv/paws/bin/pip install --no-cache-dir -r /tmp/requirements.txt
+/srv/paws/bin/pip install --no-cache-dir -r /srv/paws/dev-requirements.txt
 
 # cleanup
 rm /tmp/requirements.txt

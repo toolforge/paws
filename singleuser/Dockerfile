@@ -48,7 +48,7 @@ COPY install-pwb /usr/local/bin/
 RUN /usr/local/bin/install-pwb
 
 # MW related libraries
-RUN /srv/paws/bin/pip install \
+RUN /srv/paws/bin/pip --no-cache-dir install \
     mwapi \
     mwdb \
     mwxml \
@@ -60,7 +60,7 @@ RUN /srv/paws/bin/pip install \
     mwpersistence
 
 # Visualization libraries
-RUN /srv/paws/bin/pip install \
+RUN /srv/paws/bin/pip --no-cache-dir install \
     bokeh \
     ipywidgets \
     matplotlib \
@@ -75,15 +75,15 @@ RUN apt-get install --yes \
     libquadmath0 \
     gfortran
 
-RUN /srv/paws/bin/pip install \
+RUN /srv/paws/bin/pip --no-cache-dir install \
     revscoring \
     editquality \
     wikiclass \
     scikit-neuralnetwork
 
-RUN /srv/paws/bin/pip install jupyterhub ipython[notebook] bash_kernel
-RUN /srv/paws/bin/pip install /srv/paws/
-RUN /srv/paws/bin/pip install git+https://github.com/yuvipanda/python-wdqs.git
+RUN /srv/paws/bin/pip --no-cache-dir install jupyterhub ipython[notebook] bash_kernel
+RUN /srv/paws/bin/pip --no-cache-dir install /srv/paws/
+RUN /srv/paws/bin/pip --no-cache-dir install git+https://github.com/yuvipanda/python-wdqs.git
 
 # Install the bash kernel
 RUN /srv/paws/bin/python -m bash_kernel.install
@@ -102,7 +102,7 @@ RUN apt-get install --yes --no-install-recommends \
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
 
-RUN /srv/paws/bin/pip install rpy2
+RUN /srv/paws/bin/pip --no-cache-dir install rpy2
 
 WORKDIR /home/paws
 
