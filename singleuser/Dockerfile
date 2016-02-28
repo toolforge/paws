@@ -36,7 +36,7 @@ RUN  mkdir -p /srv/paws && chown 52771:52771 /srv/paws
 ENV PATH=/srv/paws/bin:/srv/paws:$PATH
 
 # HACK! HACK! HACK!
-COPY passwd /etc/passwd
+RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 
 
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws
