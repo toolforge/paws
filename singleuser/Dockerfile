@@ -95,7 +95,9 @@ RUN chown 52771:52771 /home/paws
 # Setup R packages
 RUN apt-get install --yes --no-install-recommends \
     r-recommended \
-    r-base-dev
+    r-base-dev \
+    r-cran-ggplot2 \
+    r-cran-rmysql
 
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
