@@ -63,7 +63,8 @@ RUN /srv/paws/bin/pip install \
 RUN /srv/paws/bin/pip install \
     bokeh \
     ipywidgets \
-    matplotlib
+    matplotlib \
+    pandas
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
