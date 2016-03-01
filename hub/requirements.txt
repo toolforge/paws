@@ -1,4 +1,5 @@
 mwoauth
+pymysql
 requests-futures
 git+https://github.com/yuvipanda/jupyterhub.git@paws#egg=jupyterhub
 git+https://github.com/yuvipanda/mwoauthenticator.git@wmf#egg=oauthenticator
