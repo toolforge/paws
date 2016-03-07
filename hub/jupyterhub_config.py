@@ -5,6 +5,9 @@ c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
 c.JupyterHub.hub_ip = '127.0.0.1'
 c.JupyterHub.ip = '0.0.0.0'
 c.JupyterHub.db_url = os.environ['JPY_DB_URL']
+c.JupyterHub.db_kwargs = {
+    'pool_recycle': 60  # Do not keep connections for more than one minute
+}
 
 c.MWOAuthenticator.client_id = '0a73e346a40b07262b6e36bdba01cba4'
 c.MWOAuthenticator.client_secret = '99b284730a79dd30e2c35988be42708ef7e57122'
