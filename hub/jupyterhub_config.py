@@ -1,4 +1,8 @@
 import os
+import hmac
+import hashlib
+
+
 c.Application.log_level = 'DEBUG'
 
 c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
@@ -15,6 +19,27 @@ c.MWOAuthenticator.pass_secrets = True
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 c.KubeSpawner.kube_namespace = 'paws'
+
+
+def generate_mysql_password(spawner):
+    h = hmac.new(
+        os.environ['MYSQL_HMAC_KEY'].encode('utf-8'),
+        spawner.user.name.encode('utf-8'),
+        hashlib.sha256
+    )
+    return h.hexdigest()
+
+
+def generate_mysql_username(spawner):
+    return spawner.user.name
+
+
+c.KubeSpawner.extra_env = {
+    'MYSQL_HOST': os.environ['MYSQL_SERVICE_HOST'],
+    'MYSQL_USERNAME': generate_mysql_username,
+    'MYSQL_PASSWORD': generate_mysql_password
+}
+
 c.KubeSpawner.kube_api_endpoint = 'https://%s' % os.environ['KUBERNETES_PORT_443_TCP_ADDR']
 c.KubeSpawner.hub_ip_connect = '%s:8000' % os.environ['PAWS_PORT_8000_TCP_ADDR']
 c.KubeSpawner.kube_ca_path = False
