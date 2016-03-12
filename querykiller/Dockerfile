@@ -7,7 +7,7 @@ RUN apt-get install --yes --no-install-recommends \
 CMD pt-kill \
     --busy-time 1800 \
     --interval 60 \
-    --user "${MYSQL_USER}" \
+    --user "${MYSQL_USERNAME}" \
     --password "${MYSQL_PASSWORD}" \
     --host "${MYSQL_HOST}" \
     --kill \
