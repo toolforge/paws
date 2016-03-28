@@ -1,7 +1,7 @@
+requests
 mwoauth
-pymysql
 requests-futures
-git+https://github.com/yuvipanda/jupyterhub.git@paws#egg=jupyterhub
 git+https://github.com/yuvipanda/mwoauthenticator.git@wmf#egg=oauthenticator
-git+https://github.com/yuvipanda/jupyterhub-nginx-chp.git@master#egg=nchp
+pymysql
+git+https://github.com/yuvipanda/jupyterhub.git@paws#egg=jupyterhub
 git+https://github.com/yuvipanda/jupyterhub-kubernetes-spawner.git@master#egg=kubespawner

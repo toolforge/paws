@@ -46,7 +46,7 @@ c.KubeSpawner.kube_api_endpoint = 'https://%s' % os.environ['KUBERNETES_PORT_443
 c.KubeSpawner.hub_ip_connect = '%s:8000' % os.environ['PAWS_PORT_8000_TCP_ADDR']
 c.KubeSpawner.kube_ca_path = False
 c.KubeSpawner.kube_token = os.environ['INSECURE_KUBE_TOKEN']
-c.KubeSpawner.singleuser_image_spec = 'yuvipanda/pawsuser:latest'
+c.KubeSpawner.singleuser_image_spec = 'tools-docker-registry.wmflabs.org/pawsuser'
 c.KubeSpawner.volumes = [
     {
         'name': 'home',
@@ -69,7 +69,7 @@ c.KubeSpawner.volume_mounts = [
     {
         'mountPath': '/public/dumps',
         'name': 'dumps',
-        }
+    }
 ]
 c.KubeSpawner.start_timeout = 60 * 5  # First pulls can be really slow
 

@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM tools-docker-registry.wmflabs.org/jessie-wikimedia
 
 RUN apt-get update
 
@@ -11,13 +11,13 @@ RUN apt-get install --yes --no-install-recommends \
     git \
     locales \
     nodejs-legacy \
-    npm \
-    nginx-extras \
-    lua-cjson
+    npm
 
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
+
+RUN npm install -g configurable-http-proxy
 
 # HACK! HACK! HACK!
 RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
