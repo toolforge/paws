@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM tools-docker-registry.wmflabs.org/jessie-wikimedia
 
 MAINTAINER Yuvi Panda <yuvipanda@riseup,net>
 
@@ -22,11 +22,13 @@ RUN apt-get install --yes --no-install-recommends \
 # Utilities
 RUN apt-get install --yes --no-install-recommends \
         curl \
+        wget \
         dnsutils \
         emacs \
         links \
         nano \
-        vim
+        vim \
+        mariadb-client
 
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
@@ -60,11 +62,15 @@ RUN /srv/paws/bin/pip --no-cache-dir install \
     mwpersistence
 
 # Visualization libraries
-RUN /srv/paws/bin/pip --no-cache-dir install \
+RUN /srv/paws/bin/pip3 --no-cache-dir install \
     bokeh \
     ipywidgets \
     matplotlib \
     pandas
+
+# DB access
+RUN /srv/paws/bin/pip3 --no-cache-dir install \
+    mycli
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
@@ -114,6 +120,8 @@ ENV SHELL=/bin/bash
 ENV PYWIKIBOT2_DIR=/srv/paws
 
 RUN chown -R 52771:52771 /srv/paws
+RUN chown -R 52771:52771 /usr/local/lib/R/site-library
+
 USER 52771
 
 EXPOSE 8888
