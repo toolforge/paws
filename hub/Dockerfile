@@ -6,27 +6,24 @@ RUN apt-get update
 # We can toss it once we go back to using pip
 RUN apt-get install --yes --no-install-recommends \
     python3 \
-    virtualenv \
     ca-certificates \
     git \
     locales \
     nodejs-legacy \
     npm \
-    nginx-extras \
-    lua-cjson
+    python3-pip
 
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
 
+RUN npm install -g git+https://github.com/yuvipanda/configurable-http-proxy.git#statsd
+
 # HACK! HACK! HACK!
 RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 
-RUN virtualenv -p python3 /srv/jupyterhub
-WORKDIR /srv/jupyterhub
-
 COPY requirements.txt /srv/jupyterhub/requirements.txt
-RUN /srv/jupyterhub/bin/pip install -r  /srv/jupyterhub/requirements.txt
+RUN pip3 install -r  /srv/jupyterhub/requirements.txt
 
 # Needed for kubespawner
 COPY jupyterhub_config.py /srv/jupyterhub/
@@ -38,4 +35,4 @@ USER 52771
 
 EXPOSE 8000
 
-CMD /srv/jupyterhub/bin/jupyterhub --config /srv/jupyterhub/jupyterhub_config.py --no-ssl
+CMD /usr/local/bin/jupyterhub --config /srv/jupyterhub/jupyterhub_config.py --no-ssl
