@@ -39,7 +39,7 @@ def generate_mysql_username(spawner):
     return spawner.user.name
 
 
-c.KubeSpawner.extra_env = {
+c.KubeSpawner.environment = {
     'MYSQL_HOST': os.environ['MYSQL_SERVICE_HOST'],
     'MYSQL_USERNAME': generate_mysql_username,
     'MYSQL_PASSWORD': generate_mysql_password
