@@ -17,7 +17,7 @@ RUN apt-get install --yes --no-install-recommends \
 RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
 
-RUN npm install -g git+https://github.com/yuvipanda/configurable-http-proxy.git#statsd
+RUN npm install -g git+https://github.com/yuvipanda/configurable-http-proxy.git#master
 
 # HACK! HACK! HACK!
 RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
