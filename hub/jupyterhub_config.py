@@ -24,7 +24,7 @@ c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 c.KubeSpawner.kube_namespace = 'paws'
 
 c.Authenticator.admin_users = {'YuviPanda'}
-c.Authenticator.admin_access = True
+c.JupyterHub.admin_access = True
 
 def generate_mysql_password(spawner):
     h = hmac.new(
