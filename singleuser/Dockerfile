@@ -18,7 +18,8 @@ RUN apt-get install --yes --no-install-recommends \
         libpng-dev \
         libzmq3-dev \
         libreadline-dev \
-        libxml2-dev
+        libxml2-dev \
+        libxslt1-dev
 
 # Utilities
 RUN apt-get install --yes --no-install-recommends \
