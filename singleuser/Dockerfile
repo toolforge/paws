@@ -2,6 +2,15 @@ FROM tools-docker-registry.wmflabs.org/jessie-wikimedia
 
 MAINTAINER Yuvi Panda <yuvipanda@riseup,net>
 
+ENV HOME=/home/paws
+ENV USER=tools.paws
+ENV SHELL=/bin/bash
+ENV PYWIKIBOT2_DIR=/srv/paws
+
+WORKDIR /home/paws
+
+COPY banner /etc/bash.bashrc
+
 # Add the R debian repo
 RUN apt-key adv --keyserver keys.gnupg.net --recv-key 381BA480
 RUN echo 'deb http://cran.us.r-project.org/bin/linux/debian jessie-cran3/' >> /etc/apt/sources.list
@@ -35,6 +44,12 @@ RUN apt-get install --yes --no-install-recommends \
         nano \
         vim \
         mariadb-client
+
+# Setup R packages
+RUN apt-get install --yes --no-install-recommends \
+    r-recommended \
+    r-base-dev
+
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
@@ -74,23 +89,10 @@ RUN /srv/paws/bin/python -m bash_kernel.install
 RUN mkdir -p /home/paws
 RUN chown 52771:52771 /home/paws
 
-
-# Setup R packages
-RUN apt-get install --yes --no-install-recommends \
-    r-recommended \
-    r-base-dev
-
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
 
-WORKDIR /home/paws
 
-COPY banner /etc/bash.bashrc
-
-ENV HOME=/home/paws
-ENV USER=tools.paws
-ENV SHELL=/bin/bash
-ENV PYWIKIBOT2_DIR=/srv/paws
 
 RUN chown -R 52771:52771 /srv/paws
 RUN chown -R 52771:52771 /usr/local/lib/R/site-library
