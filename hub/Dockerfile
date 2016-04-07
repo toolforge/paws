@@ -1,4 +1,4 @@
-FROM docker-registry.tools.wmflabs.org/wikimedia-jessie
+FROM docker-registry.tools.wmflabs.org/jessie-wikimedia
 
 RUN apt-get update
 
