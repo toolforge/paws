@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM docker-registry.tools.wmflabs.org/wikimedia-jessie
 
 RUN apt-get update
 
