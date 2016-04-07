@@ -31,6 +31,15 @@ RUN apt-get install --yes --no-install-recommends \
         vim \
         mariadb-client
 
+# Machine-learning type stuff
+RUN apt-get install --yes \
+    libblas3 \
+    libblas-dev \
+    liblapack3 \
+    liblapack-dev \
+    libquadmath0 \
+    gfortran
+
 # Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
 RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -52,16 +61,7 @@ RUN /usr/local/bin/install-pwb
 COPY requirements.txt /tmp/requirements.txt
 RUN /srv/paws/bin/pip --no-cache-dir install -r /tmp/requirements.txt
 
-# Machine-learning type stuff
-RUN apt-get install --yes \
-    libblas3 \
-    libblas-dev \
-    liblapack3 \
-    liblapack-dev \
-    libquadmath0 \
-    gfortran
-
-RUN /srv/paws/bin/pip --no-cache-dir install jupyter ipython[notebook] bash_kernel
+RUN /srv/paws/bin/pip --no-cache-dir install jupyterhub ipython[notebook] bash_kernel
 RUN /srv/paws/bin/pip --no-cache-dir install /srv/paws/
 RUN /srv/paws/bin/pip --no-cache-dir install git+https://github.com/yuvipanda/python-wdqs.git
 
