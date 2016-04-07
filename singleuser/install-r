@@ -2,7 +2,7 @@
 
 echo "
 install.packages(
-    c('rzmq','repr','IRkernel','IRdisplay'),
+    c('rzmq','repr','IRkernel','IRdisplay', 'devtools', 'dplyr', 'curl', 'ggplot2', 'RMySQL'),
     repos = c('http://irkernel.github.io/', 'http://cran.us.r-project.org'),
 )
 

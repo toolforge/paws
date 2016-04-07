@@ -2,6 +2,10 @@ FROM tools-docker-registry.wmflabs.org/jessie-wikimedia
 
 MAINTAINER Yuvi Panda <yuvipanda@riseup,net>
 
+# Add the R debian repo
+RUN apt-key adv --keyserver keys.gnupg.net --recv-key 381BA480
+RUN echo 'deb http://cran.us.r-project.org/bin/linux/debian jessie-cran3/' >> /etc/apt/sources.list
+
 RUN apt-get update --yes
 
 # Matplotlib needs freetype, png and pkg-config
@@ -76,9 +80,7 @@ RUN chown 52771:52771 /home/paws
 # Setup R packages
 RUN apt-get install --yes --no-install-recommends \
     r-recommended \
-    r-base-dev \
-    r-cran-ggplot2 \
-    r-cran-rmysql
+    r-base-dev
 
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
