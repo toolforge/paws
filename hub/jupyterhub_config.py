@@ -49,7 +49,7 @@ c.KubeSpawner.kube_api_endpoint = 'https://%s' % os.environ['KUBERNETES_PORT_443
 c.KubeSpawner.hub_ip_connect = '%s:8000' % os.environ['PAWS_PORT_8000_TCP_ADDR']
 c.KubeSpawner.kube_ca_path = False
 c.KubeSpawner.kube_token = os.environ['INSECURE_KUBE_TOKEN']
-c.KubeSpawner.singleuser_image_spec = 'yuvipanda/pawsuser:latest'
+c.KubeSpawner.singleuser_image_spec = 'docker-registry.tools.wmflabs.org/pawsuser:latest'
 c.KubeSpawner.volumes = [
     {
         'name': 'home',
