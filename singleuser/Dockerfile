@@ -66,9 +66,7 @@ RUN /usr/local/bin/install-pwb
 COPY requirements.txt /tmp/requirements.txt
 RUN /srv/paws/bin/pip --no-cache-dir install -r /tmp/requirements.txt
 
-RUN /srv/paws/bin/pip --no-cache-dir install jupyterhub ipython[notebook] bash_kernel
 RUN /srv/paws/bin/pip --no-cache-dir install /srv/paws/
-RUN /srv/paws/bin/pip --no-cache-dir install git+https://github.com/yuvipanda/python-wdqs.git
 
 # Install the bash kernel
 RUN /srv/paws/bin/python -m bash_kernel.install
@@ -84,8 +82,6 @@ RUN apt-get install --yes --no-install-recommends \
 
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
-
-RUN /srv/paws/bin/pip --no-cache-dir install rpy2
 
 WORKDIR /home/paws
 

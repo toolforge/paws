@@ -1,3 +1,4 @@
+# Mediawiki related stuff
 mwapi
 mwdb
 mwxml
@@ -7,6 +8,7 @@ mwdiffs
 mwoauth
 mwtypes
 mwpersistence
+git+https://github.com/yuvipanda/python-wdqs.git
 
 # visualization libraries
 bokeh
@@ -31,3 +33,11 @@ beautifulsoup4
 # SQL!
 pymysql
 mycli
+
+# Jupyter specific things
+jupyterhub # Needed for singleuser script
+ipython[notebook]
+bash_kernel
+
+# Interface with other languages
+rpy2
