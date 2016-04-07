@@ -17,7 +17,8 @@ RUN apt-get install --yes --no-install-recommends \
         libfreetype6-dev \
         libpng-dev \
         libzmq3-dev \
-        libreadline-dev
+        libreadline-dev \
+        libxml2-dev
 
 # Utilities
 RUN apt-get install --yes --no-install-recommends \
@@ -40,7 +41,6 @@ ENV PATH=/srv/paws/bin:/srv/paws:$PATH
 # HACK! HACK! HACK!
 RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 
-
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws
 COPY user-config.py /srv/paws/
 COPY user-fixes.py /srv/paws/
@@ -49,28 +49,8 @@ COPY install-pwb /usr/local/bin/
 
 RUN /usr/local/bin/install-pwb
 
-# MW related libraries
-RUN /srv/paws/bin/pip --no-cache-dir install \
-    mwapi \
-    mwdb \
-    mwxml \
-    mwreverts \
-    mwsessions \
-    mwdiffs \
-    mwoauth \
-    mwtypes \
-    mwpersistence
-
-# Visualization libraries
-RUN /srv/paws/bin/pip3 --no-cache-dir install \
-    bokeh \
-    ipywidgets \
-    matplotlib \
-    pandas
-
-# DB access
-RUN /srv/paws/bin/pip3 --no-cache-dir install \
-    mycli
+COPY requirements.txt /tmp/requirements.txt
+RUN /srv/paws/bin/pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
@@ -81,13 +61,7 @@ RUN apt-get install --yes \
     libquadmath0 \
     gfortran
 
-RUN /srv/paws/bin/pip --no-cache-dir install \
-    revscoring \
-    editquality \
-    wikiclass \
-    scikit-neuralnetwork
-
-RUN /srv/paws/bin/pip --no-cache-dir install jupyterhub ipython[notebook] bash_kernel
+RUN /srv/paws/bin/pip --no-cache-dir install jupyter ipython[notebook] bash_kernel
 RUN /srv/paws/bin/pip --no-cache-dir install /srv/paws/
 RUN /srv/paws/bin/pip --no-cache-dir install git+https://github.com/yuvipanda/python-wdqs.git
 

@@ -1,0 +1,33 @@
+mwapi
+mwdb
+mwxml
+mwreverts
+mwsessions
+mwdiffs
+mwoauth
+mwtypes
+mwpersistence
+
+# visualization libraries
+bokeh
+ipywidgets
+matplotlib
+
+# scientific stuff
+pandas
+scipy
+scikit-learn
+scikit-neuralnetwork
+
+# Revscoring stuff
+revscoring 
+editquality
+wikiclass
+
+# Scraping
+lxml
+beautifulsoup
+
+# SQL!
+pymysql
+mycli
