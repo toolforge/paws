@@ -7,9 +7,15 @@ ENV USER=tools.paws
 ENV SHELL=/bin/bash
 ENV PYWIKIBOT2_DIR=/srv/paws
 
-WORKDIR /home/paws
+# Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
+RUN locale-gen C.UTF-8
+ENV LC_ALL C.UTF-8
 
-COPY banner /etc/bash.bashrc
+# Create and setup temporary home. This will be overmounted on for PAWS,
+# but is useful for things that write stuff to $HOME when building
+RUN mkdir -p /home/paws
+RUN chown 52771:52771 /home/paws
+WORKDIR /home/paws
 
 # Add the R debian repo
 RUN apt-key adv --keyserver keys.gnupg.net --recv-key 381BA480
@@ -17,27 +23,27 @@ RUN echo 'deb http://cran.us.r-project.org/bin/linux/debian jessie-cran3/' >> /e
 
 RUN apt-get update --yes
 
-# Matplotlib needs freetype, png and pkg-config
+# Install languages needed and their core dev packages
 RUN apt-get install --yes --no-install-recommends \
         python3.4 \
-        git \
         python3.4-dev \
-        virtualenv \
+        r-recommended \
+        r-base-dev
+
+# Base building utilities that'll always be required, probably
+RUN apt-get install --yes --no-install-recommends \
+        git \
         locales \
         pkg-config \
         build-essential \
         gcc \
-        libfreetype6-dev \
-        libpng-dev \
-        libzmq3-dev \
-        libreadline-dev \
-        libxml2-dev \
-        libxslt1-dev
+        virtualenv
 
 # Utilities
 RUN apt-get install --yes --no-install-recommends \
         curl \
         wget \
+        less \
         dnsutils \
         emacs \
         links \
@@ -45,57 +51,53 @@ RUN apt-get install --yes --no-install-recommends \
         vim \
         mariadb-client
 
-# Setup R packages
-RUN apt-get install --yes --no-install-recommends \
-    r-recommended \
-    r-base-dev
-
-
 # Machine-learning type stuff
 RUN apt-get install --yes \
-    libblas3 \
+    # For scipy & friends
     libblas-dev \
-    liblapack3 \
     liblapack-dev \
     libquadmath0 \
-    gfortran
+    gfortran \
+    # for lxml
+    libxml2-dev \
+    libxslt1-dev \
+    # for matplotlib
+    libfreetype6-dev \
+    libpng-dev \
+    # for ipython kernels
+    libzmq3-dev \
+    libreadline-dev
 
-# Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
-RUN locale-gen C.UTF-8
-ENV LC_ALL C.UTF-8
-
-RUN  mkdir -p /srv/paws && chown 52771:52771 /srv/paws
+RUN mkdir -p /srv/paws && chown 52771:52771 /srv/paws
 ENV PATH=/srv/paws/bin:/srv/paws:$PATH
 
 # HACK! HACK! HACK!
 RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 
-RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws
-COPY user-config.py /srv/paws/
-COPY user-fixes.py /srv/paws/
-
-COPY install-pwb /usr/local/bin/
-
-RUN /usr/local/bin/install-pwb
-
+# Install mass amount of python libraries!
 COPY requirements.txt /tmp/requirements.txt
 RUN /srv/paws/bin/pip --no-cache-dir install -r /tmp/requirements.txt
-
-RUN /srv/paws/bin/pip --no-cache-dir install /srv/paws/
 
 # Install the bash kernel
 RUN /srv/paws/bin/python -m bash_kernel.install
 
-RUN mkdir -p /home/paws
-RUN chown 52771:52771 /home/paws
-
+# Install the R Kernel and libraries
 COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
 
-
+# Install pywikibot
+RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws
+COPY user-config.py /srv/paws/
+COPY user-fixes.py /srv/paws/
+COPY install-pwb /usr/local/bin/
+RUN /usr/local/bin/install-pwb
+RUN /srv/paws/bin/pip --no-cache-dir install /srv/paws/
 
 RUN chown -R 52771:52771 /srv/paws
+# Allow people to install their own R libraries
 RUN chown -R 52771:52771 /usr/local/lib/R/site-library
+
+COPY banner /etc/bash.bashrc
 
 USER 52771
 
