@@ -72,6 +72,11 @@ RUN apt-get install --yes \
 RUN mkdir -p /srv/paws && chown 52771:52771 /srv/paws
 ENV PATH=/srv/paws/bin:/srv/paws:$PATH
 
+RUN virtualenv -p python3 /srv/paws
+
+# Upgrade pip to latest, unconditionally.
+RUN /srv/paws/bin/pip install -U pip
+
 # HACK! HACK! HACK!
 RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 

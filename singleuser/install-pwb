@@ -1,10 +1,5 @@
 #!/bin/bash
 
-virtualenv -p python3 /srv/paws
-
-# Upgrade pip to support conditionals in requirements.txt
-/srv/paws/bin/pip install -U pip
-
 # Remove 'Pillow' from requirements.txt
 sed -e '/Pillow/d' /srv/paws/requirements.txt > /tmp/requirements.txt
 
