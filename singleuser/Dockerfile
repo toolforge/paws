@@ -67,7 +67,11 @@ RUN apt-get install --yes \
     libpng-dev \
     # for ipython kernels
     libzmq3-dev \
-    libreadline-dev
+    libreadline-dev \
+    # For R's mysql
+    libmariadb-client-lgpl-dev \
+    # For R's curl
+    libcurl4-openssl-dev
 
 RUN mkdir -p /srv/paws && chown 52771:52771 /srv/paws
 ENV PATH=/srv/paws/bin:/srv/paws:$PATH
