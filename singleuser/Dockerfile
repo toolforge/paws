@@ -7,9 +7,6 @@ ENV USER=tools.paws
 ENV SHELL=/bin/bash
 ENV PYWIKIBOT2_DIR=/srv/paws
 
-# Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
-RUN locale-gen C.UTF-8
-ENV LC_ALL C.UTF-8
 
 # Create and setup temporary home. This will be overmounted on for PAWS,
 # but is useful for things that write stuff to $HOME when building
@@ -23,21 +20,25 @@ RUN echo 'deb http://cran.us.r-project.org/bin/linux/debian jessie-cran3/' >> /e
 
 RUN apt-get update --yes
 
-# Install languages needed and their core dev packages
-RUN apt-get install --yes --no-install-recommends \
-        python3.4 \
-        python3.4-dev \
-        r-recommended \
-        r-base-dev
-
 # Base building utilities that'll always be required, probably
 RUN apt-get install --yes --no-install-recommends \
         git \
         locales \
         pkg-config \
         build-essential \
-        gcc \
-        virtualenv
+        gcc
+
+# Setup the C.UTF-8 Locale, since otherwise it defaults to an ASCII one
+RUN locale-gen C.UTF-8
+ENV LC_ALL C.UTF-8
+
+# Install languages needed and their core dev packages
+RUN apt-get install --yes --no-install-recommends \
+        python3.4 \
+        python3.4-dev \
+        virtualenv \
+        r-recommended \
+        r-base-dev
 
 # Utilities
 RUN apt-get install --yes --no-install-recommends \
