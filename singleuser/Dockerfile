@@ -92,12 +92,11 @@ COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
 
 # Install pywikibot
-RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws
+RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
 COPY user-config.py /srv/paws/
 COPY user-fixes.py /srv/paws/
 COPY install-pwb /usr/local/bin/
 RUN /usr/local/bin/install-pwb
-RUN /srv/paws/bin/pip --no-cache-dir install /srv/paws/
 
 RUN chown -R 52771:52771 /srv/paws
 # Allow people to install their own R libraries
