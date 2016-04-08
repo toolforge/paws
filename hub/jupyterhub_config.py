@@ -13,8 +13,8 @@ c.JupyterHub.db_kwargs = {
     'pool_recycle': 60  # Do not keep connections for more than one minute
 }
 
-c.JupyterHub.statsd_host = 'labmon1001.eqiad.wmnet'
-c.JupyterHub.statsd_prefix = 'tools.paws'
+c.JupyterHub.statsd_host = os.environ.get('STATSD_HOST', 'labmon1001.eqiad.wmnet')
+c.JupyterHub.statsd_prefix = os.environ.get('STATSD_PREFIX', 'tools.paws')
 
 c.MWOAuthenticator.client_id = '0a73e346a40b07262b6e36bdba01cba4'
 c.MWOAuthenticator.client_secret = '99b284730a79dd30e2c35988be42708ef7e57122'
