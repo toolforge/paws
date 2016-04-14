@@ -91,6 +91,13 @@ http {
         }
 
         location /paws-public {
+            index index.html index.ipynb Index.ipynb;
+            fancyindex on;
+
+            alias /data/project/paws/userhomes;
+        }
+
+        location /paws-public/User: {
             rewrite_by_lua '
                 local m = ngx.re.match(ngx.var.uri, "/paws-public/User:([^/]+)(.*)");
                 if m then
@@ -115,14 +122,9 @@ http {
 
                         ngx.shared.usernamemapping:set(m[1], userid);
                     end
-                    return ngx.exec("/paws-public/" .. userid  .. m[2]);
+                    ngx.req.set_uri("/paws-public/" .. userid  .. m[2], true);
                 end
             ';
-
-            index index.html index.ipynb Index.ipynb;
-            fancyindex on;
-
-            alias /data/project/paws/userhomes;
 
             proxy_http_version 1.1;
 
