@@ -1,7 +1,11 @@
 FROM docker-registry.tools.wmflabs.org/jessie-wikimedia
 
 RUN apt-get update
-RUN apt-get install --yes --no-install-recommends nginx-extras luarocks
+RUN apt-get install --yes --no-install-recommends \
+            nginx-extras \
+            luarocks \
+            unzip \
+            build-essential
 
 RUN luarocks install lua-resty-http
 RUN luarocks install lua-cjson
