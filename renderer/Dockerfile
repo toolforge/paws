@@ -9,7 +9,11 @@ RUN apt-get install --yes --no-install-recommends \
 
 RUN pip3 install nbconvert ipython
 
-ADD renderer.py /srv/renderer.py
+COPY renderer.py /srv/renderer.py
+COPY basic.tpl /srv/basic.tpl
+COPY full.tpl /srv/full.tpl
+
+WORKDIR /srv
 
 CMD /usr/bin/uwsgi \
     --plugins python3 \
