@@ -57,7 +57,7 @@ http {
     # NOTE: This causes issues when resolving localhost and
     # other hostnames traditionally set in /etc/hosts, since
     # DNS servers respond erratically to queries for them.
-    resolver %s;
+    resolver %s ipv6=off;
 
     # This is used to support websocket proxying. We need to set
     # the 'Upgrade' HTTP header to either 'upgrade' (for websockets)
