@@ -85,10 +85,11 @@ http {
         }
 
         # Only after the User: redirect! Otherwise our backend can't find the file.
-        location ~ /\d+/[^/]\.ipynb$ {
+        location ~ /\d+/.*\.ipynb$ {
             include /etc/nginx/uwsgi_params;
             uwsgi_pass uwsgi://%s:8000;
         }
+
         location /paws-public {
             rewrite_by_lua '
                 local m = ngx.re.match(ngx.var.uri, "/paws-public/User:([^/]+)(.*)");
