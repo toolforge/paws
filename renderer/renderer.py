@@ -13,9 +13,12 @@ def application(request):
     if not full_path.startswith(BASE_PATH):
         # DANGER!
         return Response("Suspicious url", status=403)
-    if full_path.endswith('.ipynb'):
-        exporter = HTMLExporter()
-        with open(full_path) as file_handle:
-            html, res = exporter.from_file(file_handle)
+    try:
+        if full_path.endswith('.ipynb'):
+            exporter = HTMLExporter()
+            with open(full_path) as file_handle:
+                html, res = exporter.from_file(file_handle)
             return Response(html, mimetype='text/html')
+    except FileNotFoundError:
+        return Response("Not found", status=404)
     return Response(full_path)
