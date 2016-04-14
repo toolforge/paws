@@ -22,7 +22,7 @@ def render_ipynb(full_path):
     Render a given ipynb file
     """
     exporter = HTMLExporter()
-    with open(full_path) as file_handle:
+    with open(full_path, encoding='utf-8') as file_handle:
         html, res = exporter.from_file(file_handle)
     return Response(html, mimetype='text/html')
 
