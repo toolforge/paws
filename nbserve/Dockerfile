@@ -6,8 +6,8 @@ RUN apt-get install --yes --no-install-recommends nginx-extras luarocks
 RUN luarocks install lua-resty-http
 RUN luarocks install lua-cjson
 
-COPY nginx.conf /srv/nginx.conf
+COPY nginx.py /srv/nginx.py
 
 EXPOSE 8080
 
-CMD /usr/sbin/nginx -c /srv/nginx.conf
+CMD /usr/bin/python /srv/nginx.py

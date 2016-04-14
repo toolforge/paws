@@ -1,3 +1,8 @@
+#!/usr/bin/python
+import os
+
+
+CONFIG = """
 # Let nginx automatically determine the number of worker processes
 # to run. This defaults to number of cores on the host.
 worker_processes auto;
@@ -49,14 +54,15 @@ http {
     # it does not do so at this time, and needs us to set the DNS
     # server explicitly. This can be specified by the user, but
     # defaults to a value we parse out of /etc/resolv.conf.
-    # NOTE: This causes issues when resolving `localhost` and
+    # NOTE: This causes issues when resolving localhost and
     # other hostnames traditionally set in /etc/hosts, since
     # DNS servers respond erratically to queries for them.
-    resolver 8.8.8.8;
+    resolver %s;
 
     # This is used to support websocket proxying. We need to set
     # the 'Upgrade' HTTP header to either 'upgrade' (for websockets)
-    # or 'close' (for everything else). See https://www.nginx.com/resources/admin-guide/reverse-proxy/
+    # or 'close' (for everything else).
+    # See https://www.nginx.com/resources/admin-guide/reverse-proxy/
     # for more details.
     map $http_upgrade $connection_upgrade {
             default upgrade;
@@ -68,12 +74,12 @@ http {
 
     lua_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
     lua_ssl_verify_depth 10;
-    
+
     # This is the 'regular' server, that sees all public
     # traffic and proxies them to the appropriate backend server.
     server {
         listen 0.0.0.0:8000;
-        
+
         location ~ \/\. {
             deny all;
         }
@@ -86,18 +92,21 @@ http {
                     if userid == nil then
                         local http = require "resty.http";
                         local httpc = http.new();
-                        local apiurl = "https://meta.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&prop=&list=users&meta=&usprop=centralids&ususers=" .. m[1];
-                    
+                        local apiurl = "https://meta.wikimedia.org/w/api.php?" ..
+                                       "action=query&format=json&formatversion=2" ..
+                                       "&prop=&list=users&meta=&usprop=centralids" ..
+                                       "&ususers=" .. m[1];
+
                         local res, err = httpc:request_uri(apiurl);
                         local cjson = require "cjson";
                         local resp_data = cjson.decode(res.body);
-                    
+
                         ngx.log(ngx.ERR, res.body);
                         if resp_data["query"]["users"][1]["missing"] then
                             ngx.exit(404);
                         end
                         userid = resp_data["query"]["users"][1]["centralids"]["CentralAuth"]
-                        
+
                         ngx.shared.usernamemapping:set(m[1], userid);
                     end
                     return ngx.exec("/paws-public/" .. userid  .. m[2]);
@@ -121,3 +130,25 @@ http {
         }
     }
 }
+"""
+
+def get_nameservers(ipv4only=True):
+    """
+    Return a list of nameservers from parsing /etc/resolv.conf.
+
+    If ipv4only is set, filter out ipv6 nameservers. This is because nginx
+    freaks out in some formats of ipv6 that otherwise seem ok.
+    """
+    nameservers = []
+    with open('/etc/resolv.conf') as f:
+        for line in f:
+            if line.strip().startswith('nameserver'):
+                nameservers += line.strip().split(' ')[1:]
+    if ipv4only:
+        nameservers = [n for n in nameservers if ':' not in n]
+    return nameservers
+
+with open('/tmp/nginx.conf', 'w') as f:
+    f.write(CONFIG % ' '.join(get_nameservers()))
+
+os.execl('/usr/sbin/nginx', '/usr/sbin/nginx', '-c', '/tmp/nginx.conf')
