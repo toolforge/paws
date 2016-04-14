@@ -84,6 +84,10 @@ http {
             deny all;
         }
 
+        location ~ [^/]\.ipynb$ {
+            include /etc/nginx/uwsgi_params;
+            uwsgi_pass uwsgi://%s:9000;
+        }
         location /paws-public {
             rewrite_by_lua '
                 local m = ngx.re.match(ngx.var.uri, "/paws-public/User:([^/]+)(.*)");
@@ -149,6 +153,12 @@ def get_nameservers(ipv4only=True):
     return nameservers
 
 with open('/tmp/nginx.conf', 'w') as f:
-    f.write(CONFIG % ' '.join(get_nameservers()))
+    # Not using the nicer .format since it gets confused by the { } in the
+    # nginx config itself :(
+    params = (
+        ' '.join(get_nameservers()),
+        os.environ['RENDERER_PORT_8000_TCP_ADDR']
+    )
+    f.write(CONFIG % params)
 
 os.execl('/usr/sbin/nginx', '/usr/sbin/nginx', '-c', '/tmp/nginx.conf')
