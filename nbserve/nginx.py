@@ -119,7 +119,9 @@ http {
                 end
             ';
 
+            index index.html index.ipynb Index.ipynb;
             fancyindex on;
+
             alias /data/project/paws/userhomes;
 
             proxy_http_version 1.1;
