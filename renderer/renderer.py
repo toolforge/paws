@@ -6,6 +6,31 @@ import os
 BASE_PATH = os.environ['BASE_PATH']
 URL_PREFIX = os.environ['URL_PREFIX']
 
+def get_extension(path):
+    """
+    Return the extension of the path, if any
+    """
+    splits = path.split('.')
+    if len(splits) == 1:
+        # This means there's no two parts - so either no ., or nothing before
+        # or after the .. Easier to handle by just saying we found no extensions.
+        return ''
+    return splits[-1]
+
+def render_ipynb(full_path):
+    """
+    Render a given ipynb file
+    """
+    exporter = HTMLExporter()
+    with open(full_path) as file_handle:
+        html, res = exporter.from_file(file_handle)
+    return Response(html, mimetype='text/html')
+
+# Map of extensions to functions to call for handling them
+handlers = {
+    'ipynb': render_ipynb,
+}
+
 @Request.application
 def application(request):
     full_path = os.path.join(BASE_PATH, request.path.lstrip(URL_PREFIX))
@@ -14,11 +39,9 @@ def application(request):
         # DANGER!
         return Response("Suspicious url", status=403)
     try:
-        if full_path.endswith('.ipynb'):
-            exporter = HTMLExporter()
-            with open(full_path) as file_handle:
-                html, res = exporter.from_file(file_handle)
-            return Response(html, mimetype='text/html')
+        extension = get_extension(full_path)
+        if extension:
+            return handlers[extension](full_path)
     except FileNotFoundError:
         return Response("Not found", status=404)
     return Response(full_path)
