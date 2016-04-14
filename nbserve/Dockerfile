@@ -1,10 +1,10 @@
-FROM debian:jessie
+FROM docker-registry.tools.wmflabs.org/jessie-wikimedia
 
 RUN apt-get update
-RUN apt-get install --yes --no-install-recommends lighttpd
+RUN apt-get install --yes --no-install-recommends nginx-extras
 
-COPY lighttpd.conf /srv/lighttpd.conf
+COPY nginx.conf /srv/nginx.conf
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD /usr/sbin/lighttpd -f /srv/lighttpd.conf -D
+CMD /usr/sbin/nginx -c /srv/nginx.conf
