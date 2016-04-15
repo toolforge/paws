@@ -84,6 +84,10 @@ http {
             deny all;
         }
 
+        location ~ ^/paws-public/user/([^/]+)/notebooks/(.*)$ {
+            rewrite /paws-public/user/([^/]+)/notebooks/(.*)$ /paws-public/User:$1/$2 permanent;
+        }
+
         # Only after the User: redirect! Otherwise our backend can't find the file.
         location ~ /\d+/.*\.ipynb$ {
             include /etc/nginx/uwsgi_params;
@@ -96,6 +100,8 @@ http {
 
             alias /data/project/paws/userhomes;
         }
+
+
 
         location /paws-public/User: {
             rewrite_by_lua '
