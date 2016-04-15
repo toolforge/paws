@@ -84,6 +84,9 @@ http {
             deny all;
         }
 
+        # No port numbes in redirects
+        port_in_redirect off;
+
         location ~ ^/paws-public/user/([^/]+)/notebooks/(.*)$ {
             rewrite /paws-public/user/([^/]+)/notebooks/(.*)$ /paws-public/User:$1/$2 permanent;
         }
