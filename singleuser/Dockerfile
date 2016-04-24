@@ -74,7 +74,7 @@ RUN apt-get install --yes \
     libcurl4-openssl-dev
 
 RUN mkdir -p /srv/paws && chown 52771:52771 /srv/paws
-ENV PATH=/srv/paws/bin:/srv/paws:$PATH
+ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
 
 RUN virtualenv -p python3 /srv/paws
 
