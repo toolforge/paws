@@ -75,6 +75,9 @@ http {
     lua_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
     lua_ssl_verify_depth 10;
 
+    # Serve things with appropriate mimetypes
+    include /etc/nginx/mime.types;
+
     # This is the 'regular' server, that sees all public
     # traffic and proxies them to the appropriate backend server.
     server {
