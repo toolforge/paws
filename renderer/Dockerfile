@@ -5,7 +5,7 @@ RUN apt-get install --yes --no-install-recommends \
         python3-pip \
         uwsgi-plugin-python3
 
-RUN pip3 install nbconvert ipython
+RUN pip3 install nbconvert ipython werkzeug
 
 COPY renderer.py /srv/renderer.py
 COPY basic.tpl /srv/basic.tpl
