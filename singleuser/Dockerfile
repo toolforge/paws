@@ -5,6 +5,7 @@ MAINTAINER Yuvi Panda <yuvipanda@riseup,net>
 ENV HOME=/home/paws
 ENV USER=tools.paws
 ENV SHELL=/bin/bash
+ENV EDITOR=/bin/nano
 ENV PYWIKIBOT2_DIR=/srv/paws
 
 
