@@ -103,6 +103,9 @@ COPY user-fixes.py /srv/paws/
 COPY install-pwb /usr/local/bin/
 RUN /usr/local/bin/install-pwb
 
+COPY install-extensions /usr/local/bin/
+RUN /usr/local/bin/install-extensions
+
 RUN chown -R 52771:52771 /srv/paws
 # Allow people to install their own R libraries
 RUN chown -R 52771:52771 /usr/local/lib/R/site-library

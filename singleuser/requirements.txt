@@ -11,9 +11,13 @@ mwpersistence
 git+https://github.com/yuvipanda/python-wdqs.git
 
 # visualization libraries
-bokeh
 ipywidgets
+bokeh
 matplotlib
+seaborn
+ipyleaflet
+pythreejs
+bqplot
 
 # scientific stuff
 pandas
@@ -35,9 +39,9 @@ pymysql
 mycli
 
 # Jupyter specific things
-jupyterhub # Needed for singleuser script
-ipython[notebook]
 bash_kernel
+ipython[notebook]
+jupyterhub # Needed for singleuser script
 
 # Interface with other languages
 rpy2
