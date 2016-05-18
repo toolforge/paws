@@ -95,7 +95,7 @@ http {
         }
 
         # Only after the User: redirect! Otherwise our backend can't find the file.
-        location ~ /\d+/.*\.ipynb$ {
+        location ~ ^/paws-public/\d+/.*\.ipynb$ {
             include /etc/nginx/uwsgi_params;
             uwsgi_pass uwsgi://%s:8000;
         }
@@ -108,6 +108,11 @@ http {
         }
 
 
+	location /accelredir {
+            internal;
+
+            alias /data/project/paws/userhomes;
+        }
 
         location /paws-public/User: {
             rewrite_by_lua '

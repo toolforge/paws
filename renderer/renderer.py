@@ -33,11 +33,16 @@ handlers = {
 
 @Request.application
 def application(request):
-    full_path = os.path.join(BASE_PATH, request.path.lstrip(URL_PREFIX))
+    file_path = request.path.lstrip(URL_PREFIX) 
+    full_path = os.path.join(BASE_PATH, file_path)
     # Protect against path traversal attacks, if they make it this far.
     if not full_path.startswith(BASE_PATH):
         # DANGER!
         return Response("Suspicious url", status=403)
+    if request.args.get('format', None) == 'raw':
+        accel_path = os.path.join('/accelredir/', file_path)
+        return Response('', headers={'X-Accel-Redirect': accel_path})
+
     try:
         extension = get_extension(full_path)
         if extension:
