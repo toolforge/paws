@@ -60,7 +60,7 @@ c.KubeSpawner.volumes = [
     {
         'name': 'dumps',
         'hostPath': {
-            'path': '/public/dumps',
+            'path': '/public/dumps/',
         }
     }
 ]
@@ -70,7 +70,7 @@ c.KubeSpawner.volume_mounts = [
         'name': 'home'
     },
     {
-        'mountPath': '/public/dumps',
+        'mountPath': '/public/dumps/',
         'name': 'dumps',
         }
 ]
