@@ -1,4 +1,4 @@
-FROM tools-docker-registry.wmflabs.org/jessie-wikimedia
+FROM tools-docker-registry.wmflabs.org/jessie-toollabs
 
 MAINTAINER Yuvi Panda <yuvipanda@riseup,net>
 

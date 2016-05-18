@@ -1,6 +1,4 @@
-FROM docker-registry.tools.wmflabs.org/jessie-wikimedia
-
-RUN apt-get update
+FROM docker-registry.tools.wmflabs.org/jessie-toollabs
 
 # npm is needed because we're installing jupyter from git, which requires it
 # We can toss it once we go back to using pip
@@ -19,9 +17,6 @@ ENV LC_ALL C.UTF-8
 
 RUN npm install -g git+https://github.com/jupyter/configurable-http-proxy.git#master
 
-# HACK! HACK! HACK!
-RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
-
 COPY requirements.txt /srv/jupyterhub/requirements.txt
 RUN pip3 install -r  /srv/jupyterhub/requirements.txt
 
@@ -30,8 +25,6 @@ COPY jupyterhub_config.py /srv/jupyterhub/
 
 # Fuck you too, Docker? https://github.com/docker/docker/issues/6119
 RUN chown -R 52771:52771 /srv/jupyterhub
-
-USER 52771
 
 EXPOSE 8000
 

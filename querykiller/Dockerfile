@@ -1,6 +1,5 @@
-FROM debian:jessie
+FROM docker-registry.tools.wmflabs.org/jessie-toollabs
 
-RUN apt-get update
 RUN apt-get install --yes --no-install-recommends \
     percona-toolkit
 

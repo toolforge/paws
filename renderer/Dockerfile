@@ -1,6 +1,4 @@
-FROM docker-registry.tools.wmflabs.org/jessie-wikimedia
-
-RUN apt-get update
+FROM docker-registry.tools.wmflabs.org/jessie-toollabs
 
 RUN apt-get install --yes --no-install-recommends \
         python3 \

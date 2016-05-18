@@ -1,7 +1,10 @@
-FROM docker-registry.tools.wmflabs.org/jessie-wikimedia
+FROM docker-registry.tools.wmflabs.org/jessie-toollabs
+
+RUN echo lol
+RUN echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list
 
 RUN apt-get update
-RUN apt-get install --yes --no-install-recommends \
+RUN apt-get install --yes --no-install-recommends -t jessie-backports \
             nginx-extras \
             luarocks \
             unzip \
