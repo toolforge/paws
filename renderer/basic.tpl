@@ -22,13 +22,9 @@
 {% endblock output_group %}
 
 {% block in_prompt -%}
-<div class="prompt input_prompt">
-</div>
 {%- endblock in_prompt %}
 
 {% block empty_in_prompt -%}
-<div class="prompt input_prompt">
-</div>
 {%- endblock empty_in_prompt %}
 
 {# 
@@ -48,17 +44,6 @@
 
 {% block output %}
 <div class="output_area">
-{%- if output.output_type == 'execute_result' -%}
-    <div class="prompt output_prompt">
-{%- if cell.execution_count is defined -%}
-    Out[{{ cell.execution_count|replace(None, "&nbsp;") }}]:
-{%- else -%}
-    Out[&nbsp;]:
-{%- endif -%}
-{%- else -%}
-    <div class="prompt">
-{%- endif -%}
-    </div>
 {{ super() }}
 </div>
 {% endblock output %}

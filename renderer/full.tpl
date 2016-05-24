@@ -31,6 +31,10 @@ div#notebook {
   border-top: none;
 }
 
+div#notebook-container {
+  padding: 40px;
+}
+
 @media print {
   div.cell {
     display: block;
