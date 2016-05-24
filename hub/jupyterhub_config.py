@@ -6,8 +6,7 @@ import hashlib
 c.Application.log_level = 'DEBUG'
 
 c.JupyterHub.authenticator_class = 'oauthenticator.mediawiki.MWOAuthenticator'
-c.JupyterHub.hub_ip = '127.0.0.1'
-c.JupyterHub.ip = '0.0.0.0'
+c.JupyterHub.hub_ip = '0.0.0.0'
 c.JupyterHub.db_url = os.environ['JPY_DB_URL']
 c.JupyterHub.db_kwargs = {
     'pool_recycle': 60  # Do not keep connections for more than one minute
@@ -45,8 +44,11 @@ c.KubeSpawner.environment = {
     'MYSQL_PASSWORD': generate_mysql_password
 }
 
-c.KubeSpawner.kube_api_endpoint = 'https://%s' % os.environ['KUBERNETES_PORT_443_TCP_ADDR']
-c.KubeSpawner.hub_ip_connect = '%s:8000' % os.environ['PAWS_PORT_8000_TCP_ADDR']
+c.KubeSpawner.kube_api_endpoint = 'https://%s' % os.environ['KUBERNETES_SERVICE_HOST']
+c.KubeSpawner.hub_ip_connect = '%s:%s' % (os.environ['HUB_SERVICE_HOST'], os.environ['HUB_SERVICE_PORT'])
+c.JupyterHub.ip =  os.environ['PAWS_SERVICE_HOST']
+c.JupyterHub.proxy_api_ip =  os.environ['PROXYAPI_SERVICE_HOST']
+c.JupyterHub.proxy_api_port = 8001
 c.KubeSpawner.kube_ca_path = False
 c.KubeSpawner.kube_token = os.environ['INSECURE_KUBE_TOKEN']
 c.KubeSpawner.singleuser_image_spec = 'docker-registry.tools.wmflabs.org/pawsuser:latest'

@@ -15,8 +15,6 @@ RUN apt-get install --yes --no-install-recommends \
 RUN locale-gen C.UTF-8
 ENV LC_ALL C.UTF-8
 
-RUN npm install -g git+https://github.com/jupyter/configurable-http-proxy.git#master
-
 COPY requirements.txt /srv/jupyterhub/requirements.txt
 RUN pip3 install -r  /srv/jupyterhub/requirements.txt
 
