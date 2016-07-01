@@ -1,7 +1,7 @@
 {
     "name" : "paws",
     "title" : "PAWS",
-    "description" : "Pywikibot: A Web Shell",
+    "description" : "PAWS: A Web Shell",
     "url" : "https://paws.wmflabs.org",
     "keywords" : "paws, pywikibot, jupyter notebook, python",
     "author" : "Yuvi Panda",
