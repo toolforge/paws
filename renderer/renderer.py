@@ -52,6 +52,8 @@ def application(request):
         extension = get_extension(full_path, format)
         if extension and extension in handlers:
             return handlers[extension](full_path, format)
+        else:
+            return Response("No handlers for format %s" % extension, status=400)
     except FileNotFoundError:
         return Response("Not found", status=404)
     return Response(full_path)
