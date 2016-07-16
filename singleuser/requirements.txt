@@ -40,7 +40,9 @@ mycli
 
 # Jupyter specific things
 bash_kernel
-ipython[notebook]
+ipython
+terminado
+https://tools.wmflabs.org/paws-support/notebook-4.2.1.tar.gz
 jupyterhub # Needed for singleuser script
 
 # Interface with other languages
