@@ -6,7 +6,8 @@ import os
 BASE_PATH = os.environ['BASE_PATH']
 URL_PREFIX = os.environ['URL_PREFIX']
 
-def get_extension(path):
+
+def get_extension(path, format):
     """
     Return the extension of the path, if any
     """
@@ -17,7 +18,8 @@ def get_extension(path):
         return ''
     return splits[-1]
 
-def render_ipynb(full_path):
+
+def render_ipynb(full_path, format):
     """
     Render a given ipynb file
     """
@@ -31,6 +33,7 @@ handlers = {
     'ipynb': render_ipynb,
 }
 
+
 @Request.application
 def application(request):
     file_path = request.path.lstrip(URL_PREFIX) 
@@ -39,14 +42,20 @@ def application(request):
     if not full_path.startswith(BASE_PATH):
         # DANGER!
         return Response("Suspicious url", status=403)
-    if request.args.get('format', None) == 'raw':
+    format = request.args.get('format', None)
+    if format == 'raw':
+        # Let nginx serve raw files
         accel_path = os.path.join('/accelredir/', file_path)
         return Response('', headers={'X-Accel-Redirect': accel_path})
 
     try:
-        extension = get_extension(full_path)
-        if extension:
-            return handlers[extension](full_path)
+        extension = get_extension(full_path, format)
+        if extension and extension in handlers:
+            return handlers[extension](full_path, format)
     except FileNotFoundError:
         return Response("Not found", status=404)
     return Response(full_path)
+
+if __name__ == '__main__':
+    from werkzeug.serving import run_simple
+    run_simple('localhost', 4000, application)

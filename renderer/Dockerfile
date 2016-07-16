@@ -3,9 +3,10 @@ FROM docker-registry.tools.wmflabs.org/jessie-toollabs
 RUN apt-get install --yes --no-install-recommends \
         python3 \
         python3-pip \
-        uwsgi-plugin-python3
+        uwsgi-plugin-python3 \
+        git
 
-RUN pip3 install nbconvert ipython werkzeug
+RUN pip3 install git+https://github.com/jupyter/nbconvert.git ipython werkzeug
 
 COPY renderer.py /srv/renderer.py
 COPY basic.tpl /srv/basic.tpl

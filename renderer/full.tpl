@@ -55,7 +55,7 @@ div#notebook-container {
 <link rel="stylesheet" href="custom.css">
 
 <!-- Loading mathjax macro -->
-{{ mathjax() }}
+{{ mathjax('https://tools-static.wmflabs.org/cdnjs/ajax/libs/mathjax/2.6.1/MathJax.js?config=TeX-AMS_HTML') }}
 {%- endblock html_head -%}
 </head>
 {%- endblock header -%}
