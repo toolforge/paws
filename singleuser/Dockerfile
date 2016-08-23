@@ -1,4 +1,4 @@
-FROM docker-registry.tools.wmflabs.org/jessie-toollabs
+FROM docker-registry.tools.wmflabs.org/toollabs-base
 
 MAINTAINER Yuvi Panda <yuvipanda@riseup,net>
 
@@ -81,9 +81,6 @@ RUN virtualenv -p python3 /srv/paws
 
 # Upgrade pip to latest, unconditionally.
 RUN /srv/paws/bin/pip install -U pip
-
-# HACK! HACK! HACK!
-RUN echo 'tools.paws:x:52771:52771:tools.paws:/home/paws:/bin/bash' >> /etc/passwd
 
 # Install mass amount of python libraries!
 COPY requirements.txt /tmp/requirements.txt
