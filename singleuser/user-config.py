@@ -15,7 +15,14 @@ if os.path.exists(custom_path):
 del custom_path
 
 # Things that should be non-easily-overridable
-usernames[family]['*'] = os.environ['JPY_USER']
+for fam in (
+        'wikipedia', 'commons', 'meta', 'wikiboots', 'wikimedia',
+        'wikiquote', 'wikisource', 'wikisource', 'wiktionary', 'wikiversity',
+        'wikidata', 'mediawiki'
+):
+    usernames[fam]['*'] = os.environ['JPY_USER']
+
+del fam
 
 # If OAuth integration is available, take it
 if 'CLIENT_ID' in os.environ:
