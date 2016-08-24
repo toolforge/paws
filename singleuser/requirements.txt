@@ -25,11 +25,6 @@ scipy
 scikit-learn
 scikit-neuralnetwork
 
-# Revscoring stuff
-revscoring 
-editquality
-wikiclass
-
 # Scraping
 lxml
 beautifulsoup4
