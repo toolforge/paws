@@ -72,7 +72,9 @@ RUN apt-get install --yes \
     # For R's mysql
     libmariadb-client-lgpl-dev \
     # For R's curl
-    libcurl4-openssl-dev
+    libcurl4-openssl-dev \
+    # For R's devtools
+    libssl-dev
 
 RUN mkdir -p /srv/paws && chown 52771:52771 /srv/paws
 ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
