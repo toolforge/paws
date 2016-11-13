@@ -1,8 +1,8 @@
 #!/bin/bash
 
 echo "
-install.packages(c('crayon', 'pbdZMQ', 'devtools'), repos = c('http://cran.us.r-project.org'))
-devtools::install_github(paste0('IRkernel/', c('repr', 'IRdisplay', 'IRkernel')))
+install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest'), repos = c('http://cran.us.r-project.org'))
+devtools::install_github('IRkernel/IRkernel')
 
 IRkernel::installspec(FALSE)
 " > /tmp/install-r
