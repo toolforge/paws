@@ -5,7 +5,7 @@ sed -e '/Pillow/d' /srv/paws/paws/requirements.txt > /tmp/requirements.txt
 
 /srv/paws/bin/pip install --no-cache-dir -r /tmp/requirements.txt
 /srv/paws/bin/pip install --no-cache-dir -r /srv/paws/pwb/dev-requirements.txt
-/srv/paws/bin/pip install --no-cache-dir /srv/paws/pwb
+/srv/paws/bin/pip install --editable --no-cache-dir /srv/paws/pwb
 
 # cleanup
 rm /tmp/requirements.txt
