@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Remove 'Pillow' from requirements.txt
-sed -e '/Pillow/d' /srv/paws/paws/requirements.txt > /tmp/requirements.txt
+sed -e '/Pillow/d' /srv/paws/pwb/requirements.txt > /tmp/requirements.txt
 
 /srv/paws/bin/pip install --no-cache-dir -r /tmp/requirements.txt
 /srv/paws/bin/pip install --no-cache-dir -r /srv/paws/pwb/dev-requirements.txt
