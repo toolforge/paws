@@ -37,7 +37,7 @@ mycli
 bash_kernel
 ipython
 terminado
-https://tools.wmflabs.org/paws-support/notebook-4.2.1.tar.gz
+git+https://github.com/jupyter/notebook.git@4.x
 jupyterhub # Needed for singleuser script
 
 # Interface with other languages
