@@ -1,14 +1,14 @@
 #!/bin/bash
-/srv/paws/bin/pip install --no-cache-dir \
+pip install --no-cache-dir \
 	 pythreejs \
 	 ipyleaflet \
 	 bqplot \
 	 git+https://github.com/yuvipanda/nbresuse.git
 
 
-/srv/paws/bin/jupyter nbextension enable --py widgetsnbextension --system
-/srv/paws/bin/jupyter nbextension enable --py ipyleaflet --system
-/srv/paws/bin/jupyter nbextension enable --py bqplot --system
-/srv/paws/bin/jupyter nbextension enable --py pythreejs --system
-/srv/paws/bin/jupyter serverextension enable --py nbresuse --system
-/srv/paws/bin/jupyter nbextension enable --py nbresuse --system
+jupyter nbextension enable --py widgetsnbextension --system
+jupyter nbextension enable --py ipyleaflet --system
+jupyter nbextension enable --py bqplot --system
+jupyter nbextension enable --py pythreejs --system
+jupyter serverextension enable --py nbresuse --system
+jupyter nbextension enable --py nbresuse --system

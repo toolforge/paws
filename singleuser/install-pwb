@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Remove 'Pillow' from requirements.txt
 sed -e '/Pillow/d' /srv/paws/pwb/requirements.txt > /tmp/requirements.txt

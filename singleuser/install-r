@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 echo "
 install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'devtools', 'uuid', 'digest'), repos = c('http://cran.us.r-project.org'))

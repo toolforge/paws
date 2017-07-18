@@ -34,12 +34,5 @@ beautifulsoup4
 pymysql
 mycli
 
-# Jupyter specific things
-bash_kernel
-ipython
-terminado
-https://tools.wmflabs.org/paws-support/notebook-4.3.0.tar.gz
-jupyterhub # Needed for singleuser script
-
 # Interface with other languages
 rpy2
