@@ -23,13 +23,13 @@ WORKDIR ${HOME}
 
 # Base building utilities that'll always be required, probably
 RUN apt-get update --yes
-RUN apt-get install --yes --no-install-recommends \
+RUN apt-get install --yes \
         git \
         locales \
         pkg-config \
         build-essential \
-        gcc
-
+        gcc \
+        apt-transport-https
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
@@ -37,13 +37,20 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
+# Setup nodesource, because node on Ubuntu is far too old to be useful
+ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
+ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
+RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
+RUN apt-get update --yes
+
 # Install languages needed and their core dev packages
 RUN apt-get install --yes --no-install-recommends \
         python3 \
         python3-dev \
         python3-venv \
         r-recommended \
-        r-base-dev
+        r-base-dev \
+        nodejs
 
 # Utilities
 RUN apt-get install --yes --no-install-recommends \
@@ -91,7 +98,7 @@ RUN python3 -m venv /srv/paws
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub==0.7.2 \
+    git+https://github.com/jupyterhub/jupyterhub@master \
     notebook \
     bash_kernel
 

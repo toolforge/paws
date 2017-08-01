@@ -6,9 +6,9 @@ pip install --no-cache-dir \
 	 git+https://github.com/yuvipanda/nbresuse.git
 
 
-jupyter nbextension enable --py widgetsnbextension --system
-jupyter nbextension enable --py ipyleaflet --system
-jupyter nbextension enable --py bqplot --system
-jupyter nbextension enable --py pythreejs --system
-jupyter serverextension enable --py nbresuse --system
-jupyter nbextension enable --py nbresuse --system
+jupyter nbextension enable --py widgetsnbextension --sys-prefix
+jupyter nbextension enable --py ipyleaflet --sys-prefix
+jupyter nbextension enable --py bqplot --sys-prefix
+jupyter nbextension enable --py pythreejs --sys-prefix
+jupyter serverextension enable --py nbresuse --sys-prefix
+jupyter nbextension enable --py nbresuse --sys-prefix
