@@ -117,6 +117,11 @@ RUN pip --no-cache-dir install -r /tmp/requirements.txt
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
 COPY user-config.py /srv/paws/
 COPY user-fixes.py /srv/paws/
+
+# Boo docker can't copy as anything other than root!
+RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-config.py
+RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-fixes.py
+
 COPY install-pwb /usr/local/bin/
 RUN /usr/local/bin/install-pwb
 

@@ -74,7 +74,7 @@ jupyterhub:
       fsGid: 52771
       image:
           name: yuvipanda/paws-singleuser
-          tag: vd0b2f26
+          tag: vf34d30b
       storage:
           type: none
           extraVolumes:

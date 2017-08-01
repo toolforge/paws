@@ -20,7 +20,7 @@ for fam in (
         'wikiquote', 'wikisource', 'wikisource', 'wiktionary', 'wikiversity',
         'wikidata', 'mediawiki'
 ):
-    usernames[fam]['*'] = os.environ['JPY_USER']
+    usernames[fam]['*'] = os.environ['USER']
 
 del fam
 
