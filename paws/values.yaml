@@ -1,0 +1,65 @@
+jupyterhub:
+  hub:
+      image:
+          name:  yuvipanda/paws-hub
+          tag: vc35b266
+      extraConfig: |
+          from oauthenticator.mediawiki import MWOAuthenticator
+          from tornado import gen
+          class Auth(MWOAuthenticator):
+              enable_auth_state = True
+              @gen.coroutine
+              def pre_spawn_start(self, user, spawner):
+                  auth_state = yield user.get_auth_state()
+                  spawner.environment['ACCESS_KEY'] = auth_state['ACCESS_TOKEN_KEY']
+                  spawner.environment['ACCESS_SECRET'] = auth_state['ACCESS_TOKEN_SECRET']
+                  spawner.environment['CLIENT_ID'] = self.client_id
+                  spawner.environment['CLIENT_SECRET'] = self.client_secret
+                  spawner.environment['USER'] = auth_state['MEDIAWIKI_USER_NAME']
+                  spawner.volumes.extend([{
+                      'name': 'home',
+                      'hostPath': { 'path': '/data/project/paws/userhomes/{}'.format(auth_state['MEDIAWIKI_USER_ID']) }
+                  }])
+                  spawner.volume_mounts.extend([{
+                      'name': 'home',
+                      'mountPath': '/home/paws'
+                  }])
+
+          c.JupyterHub.authenticator_class = Auth
+      db:
+          pvc:
+              selector:
+                  matchLabels:
+                      type: hostpath
+                      kind: hubdb
+              accessModes:
+                  - ReadWriteMany
+
+  cull:
+      enabled: false
+
+  auth:
+      type: mediawiki
+
+  singleuser:
+      uid: 52771
+      fsGid: 52771
+      image:
+          name: yuvipanda/paws-singleuser
+          tag: vd0b2f26
+      storage:
+          type: none
+          extraVolumes:
+              - name: dumps
+                hostPath:
+                    path: /public/dumps
+          extraVolumeMounts:
+              - name: dumps
+                mountPath: /public/dumps
+
+  ingress:
+      enabled: true
+      host: paws.tools.wmflabs.org
+      https:
+          enabled: true
+          type: "kube-lego"

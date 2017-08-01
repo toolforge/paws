@@ -1,0 +1,3 @@
+[submodule "jupyterhub"]
+	path = jupyterhub
+	url = https://github.com/jupyterhub/helm-chart.git

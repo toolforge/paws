@@ -1,0 +1,3 @@
+dependencies:
+  - name: jupyterhub
+    repository: file://../jupyterhub/jupyterhub
