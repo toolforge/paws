@@ -1,5 +1,7 @@
-FROM docker-registry.tools.wmflabs.org/jessie-toollabs
+# Stuck at Jessie for now, mysql-proxy is dead software :(
+FROM debian:jessie
 
+RUN apt-get update 
 RUN apt-get install --yes --no-install-recommends \
     mysql-proxy \
     luarocks \
