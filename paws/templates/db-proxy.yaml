@@ -1,0 +1,40 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: db-proxy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: db-proxy
+    spec:
+      containers:
+      - name: db-proxy
+        image: {{ .Values.dbProxy.image.name }}:{{ .Values.dbProxy.image.tag }}
+        env:
+          - name: MYSQL_HOST
+            value: {{ .Values.dbProxy.mysql.host | quote }}
+          - name: MYSQL_USERNAME
+            value: {{ .Values.dbProxy.mysql.username | quote }}
+          - name: MYSQL_PASSWORD
+            value: {{ .Values.dbProxy.mysql.password | quote }}
+          - name: HMAC_KEY
+            value: {{ .Values.dbProxy.hmacKey | quote }}
+        resources:
+{{ toYaml .Values.dbProxy.resources | indent 12 }}
+        ports:
+          - containerPort: 3306
+            name: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    name: db-proxy

@@ -1,3 +1,11 @@
+dbProxy:
+  image:
+    name: yuvipanda/paws-db-proxy
+    tag: vd74f11d
+  mysql:
+    host: labsdb1001.eqiad.wmnet
+    username: s52771
+
 jupyterhub:
   hub:
       image:
