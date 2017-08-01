@@ -2,9 +2,16 @@ dbProxy:
   image:
     name: yuvipanda/paws-db-proxy
     tag: vd74f11d
-  mysql:
-    host: labsdb1001.eqiad.wmnet
-    username: s52771
+
+queryKiller:
+  image:
+    name: yuvipanda/paws-query-killer
+    tag: v98acb53
+  maxQueryTime: 1800
+
+mysql:
+  host: labsdb1001.eqiad.wmnet
+  username: s52771
 
 jupyterhub:
   hub:

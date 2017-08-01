@@ -1,10 +1,11 @@
-FROM docker-registry.tools.wmflabs.org/jessie-toollabs
+FROM ubuntu:17.04
 
-RUN apt-get install --yes --no-install-recommends \
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
     percona-toolkit
 
 CMD pt-kill \
-    --busy-time 1800 \
+    --busy-time "${MAX_QUERY_TIME}" \
     --interval 60 \
     --user "${MYSQL_USERNAME}" \
     --password "${MYSQL_PASSWORD}" \
