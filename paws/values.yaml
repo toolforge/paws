@@ -37,14 +37,29 @@ jupyterhub:
                   spawner.environment['CLIENT_ID'] = self.client_id
                   spawner.environment['CLIENT_SECRET'] = self.client_secret
                   spawner.environment['USER'] = auth_state['MEDIAWIKI_USER_NAME']
-                  spawner.volumes.extend([{
-                      'name': 'home',
-                      'hostPath': { 'path': '/data/project/paws/userhomes/{}'.format(auth_state['MEDIAWIKI_USER_ID']) }
-                  }])
-                  spawner.volume_mounts.extend([{
-                      'name': 'home',
-                      'mountPath': '/home/paws'
-                  }])
+                  # Set rather than use .extend!
+                  # Since otherwise the volumes list will grow each time
+                  # the spawner stops and starts!
+                  spawner.volumes = [
+                      {
+                          'name': 'home',
+                          'hostPath': { 'path': '/data/project/paws/userhomes/{}'.format(auth_state['MEDIAWIKI_USER_ID']) }
+                      },
+                      {
+                          'name': 'dumps',
+                          'hostPath': { 'path': '/public/dumps' }
+                      }
+                  ])
+                  spawner.volume_mounts = [
+                      {
+                          'name': 'home',
+                          'mountPath': '/home/paws'
+                      },
+                      {
+                          'name': 'dumps',
+                          'mountPath': '/public/dumps'
+                      }
+                  ])
 
                   spawner.environment['MYSQL_HOST'] = os.environ['MYSQL_SERVICE_HOST']
                   mysql_password = hmac.new(
@@ -79,13 +94,6 @@ jupyterhub:
           tag: vf9ea746
       storage:
           type: none
-          extraVolumes:
-              - name: dumps
-                hostPath:
-                    path: /public/dumps
-          extraVolumeMounts:
-              - name: dumps
-                mountPath: /public/dumps
 
   ingress:
       enabled: true
