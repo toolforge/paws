@@ -94,7 +94,7 @@ jupyterhub:
       fsGid: 52771
       image:
           name: yuvipanda/paws-singleuser
-          tag: v0d9a249
+          tag: v4db45b9
       storage:
           type: none
 
