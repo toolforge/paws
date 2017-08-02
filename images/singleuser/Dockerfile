@@ -97,6 +97,7 @@ RUN python3.6 -m venv /srv/paws
 RUN pip install --no-cache-dir \
     git+https://github.com/jupyterhub/jupyterhub@master \
     notebook \
+    jupyterlab \
     bash_kernel
 
 # Install the bash kernel
