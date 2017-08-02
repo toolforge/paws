@@ -17,7 +17,7 @@ jupyterhub:
   hub:
       image:
           name:  yuvipanda/paws-hub
-          tag: vc35b266
+          tag: v6ec3aa7
       extraConfig: |
           import hmac
           import hashlib
