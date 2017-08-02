@@ -26,7 +26,7 @@ def build_images(prefix, images, push=False):
                 'docker', 'push', image_spec
             ])
 
-def deploy(prefix, images):
+def deploy(prefix, images, release, install):
     image_map = {
         'singleuser': 'jupyterhub.singleuser.image',
         'db-proxy': 'dbProxy.image',
@@ -42,9 +42,24 @@ def deploy(prefix, images):
         args.append('--set={}.name={}'.format(image_map[image], image_name))
         args.append('--set={}.tag={}'.format(image_map[image], tag))
 
-    print(' '.join(
-        ['helm', 'upgrade', 'paws-prod', 'paws/', '-f', 'secrets.yaml'] + args
-    ))
+
+
+    if install:
+        helm = [
+            'helm', 'install',
+            '--name', release,
+            '--namespace', release,
+            'paws/',
+            '-f', 'secrets.yaml'
+        ]
+    else:
+        helm = [
+            'helm', 'upgrade', release,
+            'paws/',
+            '-f', 'secrets.yaml'
+        ]
+
+    print(' '.join(helm + args))
 
 
 def main():
@@ -53,15 +68,15 @@ def main():
         '--image-prefix',
         default='quay.io/wikimedia-paws/'
     )
-    argparser.add_argument(
-        '--push',
-        action='store_true'
-    )
+    subparsers = argparser.add_subparsers(dest='action')
 
-    argparser.add_argument(
-        'action',
-        choices={'build', 'deploy'}
-    )
+    build_parser = subparsers.add_parser('build', description='Build & Push images')
+    build_parser.add_argument('--push', action='store_true')
+
+    deploy_parser = subparsers.add_parser('deploy', description='Deploy with helm')
+    deploy_parser.add_argument('release', default='prod')
+    deploy_parser.add_argument('--install', action='store_true')
+
 
     args = argparser.parse_args()
 
@@ -69,6 +84,6 @@ def main():
     if args.action == 'build':
         build_images(args.image_prefix, images, args.push)
     else:
-        deploy(args.image_prefix, images)
+        deploy(args.image_prefix, images, args.release, args.install)
 
 main()
