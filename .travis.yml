@@ -1,6 +1,8 @@
-sudo: true
+sudo: required
+
 services:
 - docker
+
 script:
 - "bash -c ${DOCKER_LOGIN}"
 - "./build.bash"
