@@ -44,16 +44,16 @@ RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
 RUN apt-get update --yes
 
 # Install languages needed and their core dev packages
-RUN apt-get install --yes --no-install-recommends \
-        python3 \
-        python3-dev \
-        python3-venv \
+RUN apt-get install --yes \
+        python3.6 \
+        python3.6-dev \
+        python3.6-venv \
         r-recommended \
         r-base-dev \
         nodejs
 
 # Utilities
-RUN apt-get install --yes --no-install-recommends \
+RUN apt-get install --yes \
         curl \
         wget \
         less \
@@ -94,7 +94,7 @@ RUN mkdir -p /srv/paws && chown ${NB_USER}:${NB_USER} /srv/paws
 ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
 
 USER ${NB_USER}
-RUN python3 -m venv /srv/paws
+RUN python3.6 -m venv /srv/paws
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
@@ -110,7 +110,12 @@ COPY install-r /usr/local/bin/install-r
 RUN /usr/local/bin/install-r
 
 # Install mass amount of python libraries!
+# Fuck you docker and your inability to do simple copy operations
 COPY requirements.txt /tmp/requirements.txt
+USER root
+RUN chown ${NB_USER}:${NB_USER} /tmp/requirements.txt
+USER ${NB_USER}
+
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
@@ -118,9 +123,11 @@ RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv
 COPY user-config.py /srv/paws/
 COPY user-fixes.py /srv/paws/
 
+USER root
 # Boo docker can't copy as anything other than root!
 RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-config.py
 RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-fixes.py
+USER ${NB_USER}
 
 COPY install-pwb /usr/local/bin/
 RUN /usr/local/bin/install-pwb
