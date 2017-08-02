@@ -87,9 +87,6 @@ RUN apt-get install --yes \
     # For R's devtools
     libssl-dev
 
-# Allow people to install their own R libraries
-RUN chown -R ${NB_USER}:${NB_USER} /usr/local/lib/R/site-library
-
 RUN mkdir -p /srv/paws && chown ${NB_USER}:${NB_USER} /srv/paws
 ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
 
@@ -107,12 +104,14 @@ RUN python -m bash_kernel.install
 
 # Install the R Kernel and libraries
 COPY install-r /usr/local/bin/install-r
+
+# We need root simply to install the kernelspec lol
+# https://github.com/IRkernel/IRkernel/issues/495
+USER root
 RUN /usr/local/bin/install-r
 
 # Install mass amount of python libraries!
-# Fuck you docker and your inability to do simple copy operations
 COPY requirements.txt /tmp/requirements.txt
-USER root
 RUN chown ${NB_USER}:${NB_USER} /tmp/requirements.txt
 USER ${NB_USER}
 
