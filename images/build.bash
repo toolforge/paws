@@ -7,8 +7,7 @@ function build (){
     WHAT="${1}"
     TAG=$(git log -n 1 --pretty=format:%H -- ${WHAT})
     NAME="${PREFIX}${WHAT}"
-    cd ${WHAT}
-    docker build -t ${NAME}:${TAG} .
+    docker build -t ${NAME}:${TAG} ${WHAT}
     docker push ${NAME}:${TAG}
 }
 
