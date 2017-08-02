@@ -85,6 +85,9 @@ jupyterhub:
 
   auth:
       type: mediawiki
+  admin:
+    users:
+      - YuviPanda
 
   singleuser:
       uid: 52771
