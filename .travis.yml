@@ -4,8 +4,8 @@ services:
 - docker
 
 script:
-- "bash -c ${DOCKER_LOGIN}"
-- "./build.bash"
+- bash -c "${DOCKER_LOGIN}"
+- ./build.bash
 
 env:
   global:
