@@ -1,11 +1,15 @@
 sudo: required
+language: python
 
 services:
 - docker
 
+python:
+  - 3.6
+
 script:
 - docker login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" quay.io
-- "cd images && ./build.bash"
+- "./build.py"
 
 env:
   global:
