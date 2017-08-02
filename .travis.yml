@@ -5,7 +5,7 @@ services:
 
 script:
 - docker login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" quay.io
-- "./images/build.bash"
+- "cd images && ./build.bash"
 
 env:
   global:
