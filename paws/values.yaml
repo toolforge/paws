@@ -49,7 +49,7 @@ jupyterhub:
                           'name': 'dumps',
                           'hostPath': { 'path': '/public/dumps' }
                       }
-                  ])
+                  ]
                   spawner.volume_mounts = [
                       {
                           'name': 'home',
@@ -59,7 +59,7 @@ jupyterhub:
                           'name': 'dumps',
                           'mountPath': '/public/dumps'
                       }
-                  ])
+                  ]
 
                   spawner.environment['MYSQL_HOST'] = os.environ['MYSQL_SERVICE_HOST']
                   mysql_password = hmac.new(
