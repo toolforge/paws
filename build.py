@@ -80,7 +80,7 @@ def main():
 
     args = argparser.parse_args()
 
-    images = ['singleuser', 'db-proxy', 'query-killer']
+    images = ['singleuser', 'db-proxy', 'query-killer', 'deploy-hook']
     if args.action == 'build':
         build_images(args.image_prefix, images, args.push)
     else:
