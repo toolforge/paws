@@ -16,6 +16,9 @@ if [[ ${ACTION} == 'build' ]]; then
 elif [[ ${ACTION} == 'deploy' ]]; then
     echo 'Deploying...'
     curl \
+        --no-buffer \
+        --show-error \
+        --silent \
         --fail \
         -d crypt-key="${GIT_CRYPT_KEY}" \
         -d release=prod \
