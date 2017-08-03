@@ -62,8 +62,6 @@ def deploy(prefix, images, release, install):
     if install:
         helm = [
             'helm', 'install',
-            '--wait',
-            '--timeout', '1200',
             '--name', release,
             '--namespace', release,
             'paws/',
@@ -71,8 +69,7 @@ def deploy(prefix, images, release, install):
         ]
     else:
         helm = [
-            'helm', 'upgrade', '--wait', release,
-            '--timeout', '1200',
+            'helm', 'upgrade', release,
             'paws/',
             '-f', 'paws/secrets.yaml'
         ]
