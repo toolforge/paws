@@ -69,6 +69,7 @@ class DeployHandler(tornado.web.RequestHandler):
                     git_dir
             ]):
                 self.write(line)
+                self.flush()
 
             os.chdir(git_dir)
 
