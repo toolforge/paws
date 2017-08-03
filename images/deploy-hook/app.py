@@ -71,14 +71,17 @@ class DeployHandler(tornado.web.RequestHandler):
                 self.write(line)
 
             os.chdir(git_dir)
+
             for line in execute_cmd(['git', 'reset', '--hard', commit]):
                 self.write(line)
+                self.flush()
 
             with open('key', 'wb') as f:
                 f.write(crypt_key)
 
             for line in execute_cmd(['git', 'crypt', 'unlock', 'key']):
                 self.write(line)
+                self.flush()
 
             for line in execute_cmd([
                     './build.py',
@@ -86,6 +89,7 @@ class DeployHandler(tornado.web.RequestHandler):
                     release
             ]):
                 self.write(line)
+                self.flush()
 
 if __name__ == "__main__":
     auth_token = os.environ['DEPLOY_HOOK_TOKEN']
