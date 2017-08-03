@@ -5,6 +5,7 @@ import tornado.ioloop
 import tornado.web
 import tempfile
 import os
+import base64
 from tornado.log import enable_pretty_logging
 
 
@@ -52,20 +53,31 @@ class DeployHandler(tornado.web.RequestHandler):
         if auth_header != 'Bearer {}'.format(self.auth_token):
             raise tornado.web.HTTPError(403)
 
-    def get(self, user, repo, commit, release):
-        # Validate token!
+    def post(self):
+        repo = self.get_argument('repo')
+        commit = self.get_argument('commit')
+        release = self.get_argument('release')
+        # We might lose some '+' (part of base64) into spaces from our
+        # POST processing. Put 'em back.
+        crypt_key = base64.standard_b64decode(self.get_argument('crypt-key').replace(' ', '+'))
         with tempfile.TemporaryDirectory() as git_dir:
             for line in execute_cmd([
                     'git',
                     'clone',
                     '--recursive',
-                    'https://github.com/{}/{}'.format(user, repo),
+                    repo,
                     git_dir
             ]):
                 self.write(line)
 
             os.chdir(git_dir)
             for line in execute_cmd(['git', 'reset', '--hard', commit]):
+                self.write(line)
+
+            with open('key', 'wb') as f:
+                f.write(crypt_key)
+
+            for line in execute_cmd(['git', 'crypt', 'unlock', 'key']):
                 self.write(line)
 
             for line in execute_cmd([
@@ -78,7 +90,7 @@ class DeployHandler(tornado.web.RequestHandler):
 if __name__ == "__main__":
     auth_token = os.environ['DEPLOY_HOOK_TOKEN']
     app = tornado.web.Application([
-        (r"/deploy/(.*)/(.*)/(.*)/(.*)", DeployHandler,
+        (r"/deploy", DeployHandler,
          {'auth_token': auth_token}),
     ])
     app.listen(8888)
