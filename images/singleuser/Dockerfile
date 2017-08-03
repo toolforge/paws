@@ -85,7 +85,10 @@ RUN apt-get install --yes \
     # For R's curl
     libcurl4-openssl-dev \
     # For R's devtools
-    libssl-dev
+    libssl-dev \
+    # For PDFs and stuff
+    pandoc \
+    texlive-latex-recommended
 
 RUN mkdir -p /srv/paws && chown ${NB_USER}:${NB_USER} /srv/paws
 ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
