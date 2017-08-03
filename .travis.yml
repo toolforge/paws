@@ -5,11 +5,10 @@ services:
 python:
 - 3.4
 script:
-- docker login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" quay.io
-- "./build.py build --push --commit-range ${TRAVIS_COMMIT_RANGE}"
+  - ./travis-script.bash build
 deploy:
   provider: script
-  script: "./travis-push-deploy.bash"
+  script: ./travis-script.bash deploy
   on:
     branch: master
 env:
