@@ -6,6 +6,8 @@ import tornado.web
 import tempfile
 import os
 from tornado.log import enable_pretty_logging
+
+
 def execute_cmd(cmd, **kwargs):
     """
     Call given command, yielding output line by line
@@ -41,7 +43,17 @@ def execute_cmd(cmd, **kwargs):
 
 
 class DeployHandler(tornado.web.RequestHandler):
+    def initialize(self, auth_token):
+        self.auth_token = auth_token
+
+    def prepare(self):
+        super().prepare()
+        auth_header = self.request.headers.get('Authorization', '')
+        if auth_header != 'Bearer {}'.format(self.auth_token):
+            raise tornado.web.HTTPError(403)
+
     def get(self, user, repo, commit, release):
+        # Validate token!
         with tempfile.TemporaryDirectory() as git_dir:
             for line in execute_cmd([
                     'git',
@@ -64,8 +76,10 @@ class DeployHandler(tornado.web.RequestHandler):
                 self.write(line)
 
 if __name__ == "__main__":
+    auth_token = os.environ['DEPLOY_HOOK_TOKEN']
     app = tornado.web.Application([
-        (r"/deploy/(.*)/(.*)/(.*)/(.*)", DeployHandler),
+        (r"/deploy/(.*)/(.*)/(.*)/(.*)", DeployHandler,
+         {'auth_token': auth_token}),
     ])
     app.listen(8888)
     enable_pretty_logging()
