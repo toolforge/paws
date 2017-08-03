@@ -14,11 +14,13 @@ if [[ ${ACTION} == 'build' ]]; then
 
     ./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} ${PUSH}
 elif [[ ${ACTION} == 'deploy' ]]; then
+    echo 'Deploying...'
     curl \
+        --fail \
         -d crypt-key="${GIT_CRYPT_KEY}" \
         -d release=prod \
         -d commit=${TRAVIS_COMMIT} \
         -d repo=https://github.com/yuvipanda/paws \
-        -H 'Authorization: Bearer ${DEPLOY_HOOK_KEY}' \
+        -H "Authorization: Bearer ${DEPLOY_HOOK_KEY}" \
         https://paws-deploy-hook.tools.wmflabs.org/deploy
 fi
