@@ -67,7 +67,7 @@ def deploy(prefix, images, release, install):
         helm = [
             'helm', 'upgrade', release,
             'paws/',
-            '-f', 'secrets.yaml'
+            '-f', 'paws/secrets.yaml'
         ]
 
     subprocess.check_call(helm + args)
