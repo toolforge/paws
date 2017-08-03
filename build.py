@@ -46,6 +46,8 @@ def deploy(prefix, images, release, install):
 
     args = []
 
+    # Run helm dep up, to package chart
+    subprocess.check_call(['helm', 'dep', 'up'], cwd='paws')
     for image in images:
         image_path = os.path.join('images', image)
         image_name = prefix + image
