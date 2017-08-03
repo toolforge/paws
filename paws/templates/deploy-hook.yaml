@@ -45,8 +45,8 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: proxy-public
-              servicePort: 80
+              serviceName: deploy-hook
+              servicePort: 8888
       host: {{ .Values.deployHook.host }}
   tls:
     - secretName: kubelego-deploy-hook-{{ .Release.Name }}
