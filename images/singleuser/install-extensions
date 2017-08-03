@@ -12,3 +12,4 @@ jupyter nbextension enable --py bqplot --sys-prefix
 jupyter nbextension enable --py pythreejs --sys-prefix
 jupyter serverextension enable --py nbresuse --sys-prefix
 jupyter nbextension enable --py nbresuse --sys-prefix
+jupyter serverextension enable --py jupyterlab --sys-prefix
