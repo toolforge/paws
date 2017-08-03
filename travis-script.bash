@@ -12,7 +12,7 @@ if [[ ${ACTION} == 'build' ]]; then
         docker login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" quay.io
     fi
 
-    ./build.py --commit-range ${TRAVIS_COMMIT_RANGE} ${PUSH}
+    ./build.py build --commit-range ${TRAVIS_COMMIT_RANGE} ${PUSH}
 elif [[ ${ACTION} == 'deploy' ]]; then
     curl \
         -d crypt-key="${GIT_CRYPT_KEY}" \
