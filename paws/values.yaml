@@ -13,6 +13,9 @@ mysql:
   host: labsdb1001.eqiad.wmnet
   username: s52771
 
+deployHook:
+  host: paws-deploy-hook.tools.wmflabs.org
+
 jupyterhub:
   hub:
       uid: 52771

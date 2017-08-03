@@ -1,0 +1,54 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: deploy-hook
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: deploy-hook
+    spec:
+      containers:
+      - name: deploy-hook
+        image: {{ .Values.deployHook.image.name }}:{{ .Values.deployHook.image.tag }}
+        env:
+          - name: DEPLOY_HOOK_TOKEN
+            value: {{ .Values.deployHook.token | quote }}
+        resources:
+{{ toYaml .Values.dbProxy.resources | indent 12 }}
+        ports:
+          - containerPort: 8888
+            name: web
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deploy-hook
+spec:
+  ports:
+  - port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    name: deploy-hook
+--
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: deploy-hook
+  annotations:
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: proxy-public
+              servicePort: 80
+      host: {{ .Values.deployHook.host }}
+  tls:
+    - secretName: kubelego-deploy-hook-{{ .Release.Name }}
+      hosts:
+        - {{ .Values.deployHook.host }}
