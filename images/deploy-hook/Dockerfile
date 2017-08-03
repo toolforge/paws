@@ -5,7 +5,8 @@ RUN apt-get install --yes \
       python3 \
       python3-pip \
       git \
-      curl
+      curl \
+      git-crypt
 
 # Install helm!
 RUN curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.5.1-linux-amd64.tar.gz | tar -xz -C /usr/local/bin --strip-components 1 linux-amd64/helm
