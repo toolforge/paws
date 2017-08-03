@@ -6,6 +6,11 @@ python:
 - 3.4
 script:
   - ./travis-script.bash build
+branches:
+  # We want PR builds to happen for everything, but branch builds only
+  # for master
+  only:
+    - master
 deploy:
   provider: script
   script: ./travis-script.bash deploy
