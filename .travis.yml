@@ -9,7 +9,7 @@ python:
 
 script:
 - docker login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" quay.io
-- "./build.py build --push"
+- "./build.py build --push --commit-range ${TRAVIS_COMMIT_RANGE}"
 
 env:
   global:

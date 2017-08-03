@@ -13,11 +13,21 @@ def last_git_modified(path):
         path
     ]).decode('utf-8')
 
-def build_images(prefix, images, push=False):
+def image_touched(image, commit_range):
+    return subprocess.check_output([
+        'git', 'diff', '--name-only', commit_range, os.path.join('images', image)
+    ]).decode('utf-8').strip() != ''
+
+def build_images(prefix, images, commit_range=None, push=False):
     for image in images:
+        if commit_range:
+            if not image_touched(image, commit_range):
+                print("Skipping {}, not touched in {}".format(image, commit_range))
+                continue
         image_path = os.path.join('images', image)
         tag = last_git_modified(image_path)
         image_spec = '{}{}:{}'.format(prefix, image, tag)
+
         subprocess.check_call([
             'docker', 'build', '-t', image_spec, image_path
         ])
@@ -72,6 +82,7 @@ def main():
     subparsers = argparser.add_subparsers(dest='action')
 
     build_parser = subparsers.add_parser('build', description='Build & Push images')
+    build_parser.add_argument('--commit-range', help='Range of commits to consider when building images')
     build_parser.add_argument('--push', action='store_true')
 
     deploy_parser = subparsers.add_parser('deploy', description='Deploy with helm')
@@ -83,7 +94,7 @@ def main():
 
     images = ['singleuser', 'db-proxy', 'query-killer', 'deploy-hook']
     if args.action == 'build':
-        build_images(args.image_prefix, images, args.push)
+        build_images(args.image_prefix, images, args.commit_range, args.push)
     else:
         deploy(args.image_prefix, images, args.release, args.install)
 
