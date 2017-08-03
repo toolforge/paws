@@ -60,37 +60,41 @@ class DeployHandler(tornado.web.RequestHandler):
         # We might lose some '+' (part of base64) into spaces from our
         # POST processing. Put 'em back.
         crypt_key = base64.standard_b64decode(self.get_argument('crypt-key').replace(' ', '+'))
-        with tempfile.TemporaryDirectory() as git_dir:
-            for line in execute_cmd([
-                    'git',
-                    'clone',
-                    '--recursive',
-                    repo,
-                    git_dir
-            ]):
-                self.write(line)
-                self.flush()
+        curdir = os.getcwd()
+        try:
+            with tempfile.TemporaryDirectory() as git_dir:
+                for line in execute_cmd([
+                        'git',
+                        'clone',
+                        '--recursive',
+                        repo,
+                        git_dir
+                ]):
+                    self.write(line)
+                    self.flush()
 
-            os.chdir(git_dir)
+                os.chdir(git_dir)
 
-            for line in execute_cmd(['git', 'reset', '--hard', commit]):
-                self.write(line)
-                self.flush()
+                for line in execute_cmd(['git', 'reset', '--hard', commit]):
+                    self.write(line)
+                    self.flush()
 
-            with open('key', 'wb') as f:
-                f.write(crypt_key)
+                with open('key', 'wb') as f:
+                    f.write(crypt_key)
 
-            for line in execute_cmd(['git', 'crypt', 'unlock', 'key']):
-                self.write(line)
-                self.flush()
+                for line in execute_cmd(['git', 'crypt', 'unlock', 'key']):
+                    self.write(line)
+                    self.flush()
 
-            for line in execute_cmd([
-                    './build.py',
-                    'deploy',
-                    release
-            ]):
-                self.write(line)
-                self.flush()
+                for line in execute_cmd([
+                        './build.py',
+                        'deploy',
+                        release
+                ]):
+                    self.write(line)
+                    self.flush()
+        finally:
+            os.chdir(curdir)
 
 if __name__ == "__main__":
     auth_token = os.environ['DEPLOY_HOOK_TOKEN']
