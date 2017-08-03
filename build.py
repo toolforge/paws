@@ -51,7 +51,7 @@ def deploy(prefix, images, release, install):
             '--name', release,
             '--namespace', release,
             'paws/',
-            '-f', 'secrets.yaml'
+            '-f', 'paws/secrets.yaml'
         ]
     else:
         helm = [
@@ -60,7 +60,7 @@ def deploy(prefix, images, release, install):
             '-f', 'secrets.yaml'
         ]
 
-    print(' '.join(helm + args))
+    subprocess.check_call(helm + args)
 
 
 def main():
