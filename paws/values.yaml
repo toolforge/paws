@@ -22,7 +22,7 @@ jupyterhub:
       fsGid: 52771
       image:
           name:  yuvipanda/paws-hub
-          tag: vbea6cab
+          tag: vd95c5ca
       extraConfig: |
           import hmac
           import hashlib
