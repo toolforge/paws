@@ -104,7 +104,7 @@ RUN pip install --no-cache-dir \
     bash_kernel
 
 # Install the bash kernel
-RUN python -m bash_kernel.install --prefix=/srv/paws
+RUN python -m bash_kernel.install --sys-prefix
 
 # Install the R Kernel and libraries
 COPY install-r /usr/local/bin/install-r
