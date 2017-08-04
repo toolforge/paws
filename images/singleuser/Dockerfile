@@ -88,7 +88,7 @@ RUN apt-get install --yes \
     libssl-dev \
     # For PDFs and stuff
     pandoc \
-    texlive-latex-recommended
+    texlive-xetex
 
 RUN mkdir -p /srv/paws && chown ${NB_USER}:${NB_USER} /srv/paws
 ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
