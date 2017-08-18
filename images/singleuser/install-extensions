@@ -1,15 +1,28 @@
 #!/bin/bash
 pip install --no-cache-dir \
-	 pythreejs \
-	 ipyleaflet \
-	 bqplot \
-	 git+https://github.com/yuvipanda/nbresuse.git
+    pythreejs \
+    ipyleaflet \
+    bqplot \
+    RISE \
+    git+https://github.com/yuvipanda/nbresuse.git
 
 
+jupyter nbextension install --py widgetsnbextension --sys-prefix
 jupyter nbextension enable --py widgetsnbextension --sys-prefix
+
+jupyter nbextension install --py ipyleaflet --sys-prefix
 jupyter nbextension enable --py ipyleaflet --sys-prefix
+
+jupyter nbextension install --py bqplot --sys-prefix
 jupyter nbextension enable --py bqplot --sys-prefix
+
+jupyter nbextension install --py pythreejs --sys-prefix
 jupyter nbextension enable --py pythreejs --sys-prefix
+
+jupyter nbextension install --py rise --sys-prefix
+jupyter nbextension enable --py rise --sys-prefix
+
 jupyter serverextension enable --py nbresuse --sys-prefix
 jupyter nbextension enable --py nbresuse --sys-prefix
+
 jupyter serverextension enable --py jupyterlab --sys-prefix
