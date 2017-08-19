@@ -24,7 +24,7 @@ for fam in (
     usernames[fam]['*'] = os.environ['USER']
     if 'ACCESS_KEY' in os.environ:
         # If OAuth integration is available, take it
-        authenticate[fam]['*'] = (
+        authenticate.setdefault(fam, {})['*'] = (
             os.environ['CLIENT_ID'],
             os.environ['CLIENT_SECRET'],
             os.environ['ACCESS_KEY'],
