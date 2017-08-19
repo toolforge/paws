@@ -23,7 +23,7 @@ jupyterhub:
       baseUrl: "/paws/"
       image:
           name:  yuvipanda/paws-hub
-          tag: v9aa4f4e
+          tag: v3ee17ec
       extraConfig: |
           import hmac
           import hashlib
