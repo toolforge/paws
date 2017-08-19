@@ -20,6 +20,7 @@ jupyterhub:
   hub:
       uid: 52771
       fsGid: 52771
+      baseUrl: "/paws/"
       image:
           name:  yuvipanda/paws-hub
           tag: v6efe347
