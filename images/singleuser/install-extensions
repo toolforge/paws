@@ -4,6 +4,7 @@ pip install --no-cache-dir \
     ipyleaflet \
     bqplot \
     RISE \
+    py-heat-magic \
     git+https://github.com/yuvipanda/nbresuse.git
 
 
