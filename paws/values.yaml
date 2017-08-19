@@ -106,5 +106,5 @@ jupyterhub:
       enabled: true
       host: paws.wmflabs.org
       https:
-          enabled: true
+          enabled: false
           type: "kube-lego"
