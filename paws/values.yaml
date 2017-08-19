@@ -103,7 +103,7 @@ jupyterhub:
 
   ingress:
       enabled: true
-      host: paws.tools.wmflabs.org
+      host: paws.wmflabs.org
       https:
           enabled: true
           type: "kube-lego"
