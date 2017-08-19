@@ -10,4 +10,7 @@ IRkernel::installspec(FALSE)
 
 R -f /tmp/install-r
 
+# What do you mean, 'isolated environment'?
+chown -R ${NB_USER}:${NB_USER} /usr/local/lib/R/site-library
+
 rm /tmp/install-r
