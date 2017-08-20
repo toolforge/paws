@@ -20,16 +20,15 @@ for fam in (
         'wikiquote', 'wikisource', 'wikisource', 'wiktionary', 'wikiversity',
         'wikidata', 'mediawiki'
 ):
-
     usernames[fam]['*'] = os.environ['USER']
-    if 'ACCESS_KEY' in os.environ:
-        # If OAuth integration is available, take it
-        authenticate.setdefault(fam, {})['*'] = (
-            os.environ['CLIENT_ID'],
-            os.environ['CLIENT_SECRET'],
-            os.environ['ACCESS_KEY'],
-            os.environ['ACCESS_SECRET']
-        )
-
 
 del fam
+
+# If OAuth integration is available, take it
+if 'CLIENT_ID' in os.environ:
+    authenticate['*'] = (
+        os.environ['CLIENT_ID'],
+        os.environ['CLIENT_SECRET'],
+        os.environ['ACCESS_KEY'],
+        os.environ['ACCESS_SECRET']
+    )
