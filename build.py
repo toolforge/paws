@@ -4,14 +4,15 @@ import argparse
 import subprocess
 
 
-def last_git_modified(path):
+def last_git_modified(path, n=1):
     return subprocess.check_output([
         'git',
         'log',
-        '-n', '1',
+        '-n', str(n),
         '--pretty=format:%h',
         path
-    ]).decode('utf-8')
+    ]).decode('utf-8').split('\n')[-1]
+
 
 def image_touched(image, commit_range):
     return subprocess.check_output([
@@ -24,12 +25,26 @@ def build_images(prefix, images, commit_range=None, push=False):
             if not image_touched(image, commit_range):
                 print("Skipping {}, not touched in {}".format(image, commit_range))
                 continue
+
+        # Pull last available version of image to maximize cache use
+        try_count = 0
+        while try_count < 50:
+            last_image_tag = last_git_modified(os.path.join('images', image), try_count + 2)
+            last_image_spec = '{}{}:{}'.format(prefix, image, last_image_tag)
+            try:
+                subprocess.check_call([
+                    'docker', 'pull', last_image_spec
+                ])
+                break
+            except subprocess.CalledProcessError:
+                try_count += 1
+                pass
         image_path = os.path.join('images', image)
         tag = last_git_modified(image_path)
         image_spec = '{}{}:{}'.format(prefix, image, tag)
 
         subprocess.check_call([
-            'docker', 'build', '-t', image_spec, image_path
+            'docker', 'build', '-t', image_spec, '--cache-from', last_image_spec, image_path
         ])
         if push:
             subprocess.check_call([
