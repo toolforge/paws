@@ -141,6 +141,11 @@ RUN /usr/local/bin/install-extensions
 
 COPY banner /etc/bash.bashrc
 
+# Install nbpawspublic as a hack
+RUN pip install git+https://github.com/yuvipanda/nbpawspublic@023c27b &&
+    jupyter nbextension install --py nbpawspublic --sys-prefix &&
+    jupyter nbextension enable --py nbpawspublic --sys-prefix
+
 USER ${NB_USER}
 
 EXPOSE 8888
