@@ -91,6 +91,7 @@ jupyterhub:
     users:
       - yuvipanda
       - bdavis_(wmf)
+      - andrewbogott
 
   singleuser:
       uid: 52771
