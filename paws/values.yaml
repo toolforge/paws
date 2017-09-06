@@ -89,7 +89,8 @@ jupyterhub:
       type: mediawiki
   admin:
     users:
-      - YuviPanda
+      - yuvipanda
+      - bdavis_(wmf)
 
   singleuser:
       uid: 52771
