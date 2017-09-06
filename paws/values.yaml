@@ -85,9 +85,6 @@ jupyterhub:
               accessModes:
                   - ReadWriteMany
 
-  cull:
-      enabled: false
-
   auth:
       type: mediawiki
   admin:
