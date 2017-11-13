@@ -10,7 +10,9 @@ queryKiller:
   maxQueryTime: 1800
 
 mysql:
-  host: labsdb1001.eqiad.wmnet
+  # The hostname is only used to establish a database connection by db-proxy,
+  # it doesn't actually select enwiki as the database connected to.
+  host: enwiki.analytics.db.svc.eqiad.wmflabs
   username: s52771
 
 deployHook:
