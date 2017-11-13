@@ -2,7 +2,7 @@ FROM ubuntu:17.04
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
-    percona-toolkit
+    percona-toolkit ca-certificates
 
 CMD pt-kill \
     --busy-time "${MAX_QUERY_TIME}" \
