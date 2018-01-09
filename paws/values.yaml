@@ -23,6 +23,8 @@ jupyterhub:
       uid: 52771
       fsGid: 52771
       baseUrl: "/paws/"
+      extraEnv:
+        USER: 'tools.paws'
       extraConfig: |
           import hmac
           import hashlib
