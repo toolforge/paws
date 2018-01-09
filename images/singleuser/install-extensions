@@ -5,7 +5,8 @@ pip install --no-cache-dir \
     bqplot \
     RISE \
     py-heat-magic \
-    git+https://github.com/yuvipanda/nbresuse.git
+    git+https://github.com/yuvipanda/nbresuse.git \
+    git+https://github.com/yuvipanda/nbpawspublic@023c27b \
 
 
 jupyter nbextension install --py widgetsnbextension --sys-prefix
@@ -27,3 +28,8 @@ jupyter serverextension enable --py nbresuse --sys-prefix
 jupyter nbextension enable --py nbresuse --sys-prefix
 
 jupyter serverextension enable --py jupyterlab --sys-prefix
+
+jupyter nbextension install --py nbpawspublic --sys-prefix
+jupyter nbextension enable --py nbpawspublic --sys-prefix
+
+pip install --no-cache-dir git+https://github.com/yuvipanda/ipynb-paws@60c94e3
