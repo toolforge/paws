@@ -23,9 +23,6 @@ jupyterhub:
       uid: 52771
       fsGid: 52771
       baseUrl: "/paws/"
-      image:
-          name:  yuvipanda/paws-hub
-          tag: v58e8ef6
       extraConfig: |
           import hmac
           import hashlib
