@@ -1,4 +1,4 @@
-FROM ubuntu:17.04
+FROM ubuntu:17.10
 
 MAINTAINER Yuvi Panda <yuvipanda@gmail.com>
 
@@ -45,9 +45,9 @@ RUN apt-get update --yes
 
 # Install languages needed and their core dev packages
 RUN apt-get install --yes \
-        python3.6 \
-        python3.6-dev \
-        python3.6-venv \
+        python3 \
+        python3-dev \
+        python3-venv \
         r-recommended \
         r-base-dev \
         nodejs
