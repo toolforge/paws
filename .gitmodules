@@ -1,3 +1,0 @@
-[submodule "jupyterhub"]
-	path = jupyterhub
-	url = https://github.com/jupyterhub/zero-to-jupyterhub-k8s.git
