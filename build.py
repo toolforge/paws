@@ -63,6 +63,10 @@ def deploy(prefix, images, release, install):
 
     # Set up helm!
     subprocess.check_call(['helm', 'init', '--client-only'])
+    subprocess.check_call([
+        'helm', 'repo', 'add',
+        'jupyterhub', 'https://jupyterhub.github.io/helm-chart'
+    ])
     subprocess.check_call(['helm', 'dep', 'up'], cwd='paws')
 
     for image in images:
