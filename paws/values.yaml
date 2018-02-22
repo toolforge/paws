@@ -96,6 +96,8 @@ jupyterhub:
       - yuvipanda
       - bdavis_(wmf)
       - andrewbogott
+      - chicocvenancio
+      - zhuyifei1999
 
   singleuser:
       uid: 52771
