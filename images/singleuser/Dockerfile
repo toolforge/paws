@@ -148,6 +148,11 @@ RUN pip install --no-cache-dir git+https://github.com/yuvipanda/nbpawspublic@023
 
 RUN pip install --no-cache-dir git+https://github.com/yuvipanda/ipynb-paws@60c94e3
 
+# use custom css to hide clusters tab
+COPY hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
+USER root
+RUN chown ${NB_USER}:${NB_USER} /home/paws/.jupyter/custom/custom.css
+
 USER ${NB_USER}
 
 EXPOSE 8888
