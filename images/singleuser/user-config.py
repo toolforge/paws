@@ -16,9 +16,9 @@ del custom_path
 
 # Things that should be non-easily-overridable
 for fam in (
-        'wikipedia', 'commons', 'meta', 'wikiboots', 'wikimedia',
+        'wikipedia', 'commons', 'meta', 'wikibooks', 'wikimedia',
         'wikiquote', 'wikisource', 'wikisource', 'wiktionary', 'wikiversity',
-        'wikidata', 'mediawiki'
+        'wikidata', 'mediawiki', 'wikivoyage', 'wikinews'
 ):
     usernames[fam]['*'] = os.environ['USER']
 
