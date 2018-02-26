@@ -3,11 +3,11 @@ dbProxy:
     name: yuvipanda/paws-db-proxy
     tag: vd74f11d
 
-queryKiller:
-  image:
-    name: yuvipanda/paws-query-killer
-    tag: v98acb53
-  maxQueryTime: 1800
+# queryKiller:
+#   image:
+#     name: yuvipanda/paws-query-killer
+#     tag: v98acb53
+#   maxQueryTime: 1800
 
 mysql:
   # The hostname is only used to establish a database connection by db-proxy,
