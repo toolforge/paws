@@ -12,7 +12,7 @@ if [[ ${ACTION} == 'build' ]]; then
         docker login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" quay.io
     fi
 
-    ./build.py --image-prefix quay.io/wikimedia-paws-beta build --commit-range ${TRAVIS_COMMIT_RANGE} ${PUSH}
+    ./build.py --image-prefix quay.io/wikimedia-paws-beta/ build --commit-range ${TRAVIS_COMMIT_RANGE} ${PUSH}
 elif [[ ${ACTION} == 'deploy' ]]; then
     echo 'Deploying...'
     curl \
@@ -21,7 +21,6 @@ elif [[ ${ACTION} == 'deploy' ]]; then
         --silent \
         --fail \
         -d crypt-key="${GIT_CRYPT_KEY}" \
-        -d image-prefix=quay.io/wikimedia-paws-beta \
         -d release=prod \
         -d commit=${TRAVIS_COMMIT} \
         -d repo=https://github.com/chicocvenancio/paws \

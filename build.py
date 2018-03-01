@@ -99,7 +99,7 @@ def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         '--image-prefix',
-        default='quay.io/wikimedia-paws/'
+        default='quay.io/wikimedia-paws-beta/'
     )
     subparsers = argparser.add_subparsers(dest='action')
 
