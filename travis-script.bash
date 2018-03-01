@@ -21,6 +21,7 @@ elif [[ ${ACTION} == 'deploy' ]]; then
         --silent \
         --fail \
         -d crypt-key="${GIT_CRYPT_KEY}" \
+        -d image-prefix=quay.io/wikimedia-paws-beta \
         -d release=prod \
         -d commit=${TRAVIS_COMMIT} \
         -d repo=https://github.com/chicocvenancio/paws \
