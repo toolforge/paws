@@ -25,5 +25,5 @@ elif [[ ${ACTION} == 'deploy' ]]; then
         -d commit=${TRAVIS_COMMIT} \
         -d repo=https://github.com/chicocvenancio/paws \
         -H "Authorization: Bearer ${DEPLOY_HOOK_KEY}" \
-        https://paws-beta-deploy-hook.tools.wmflabs.org/deploy
+        https://paws-beta-deploy-hook.wmflabs.org/deploy
 fi
