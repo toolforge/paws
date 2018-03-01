@@ -23,7 +23,7 @@ elif [[ ${ACTION} == 'deploy' ]]; then
         -d crypt-key="${GIT_CRYPT_KEY}" \
         -d release=prod \
         -d commit=${TRAVIS_COMMIT} \
-        -d repo=https://github.com/yuvipanda/paws \
+        -d repo=https://github.com/chicocvenancio/paws \
         -H "Authorization: Bearer ${DEPLOY_HOOK_KEY}" \
-        https://paws-deploy-hook.tools.wmflabs.org/deploy
+        https://paws-beta-deploy-hook.tools.wmflabs.org/deploy
 fi

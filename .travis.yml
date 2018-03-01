@@ -10,12 +10,12 @@ branches:
   # We want PR builds to happen for everything, but branch builds only
   # for master
   only:
-    - master
+    - dev 
 deploy:
   provider: script
   script: ./travis-script.bash deploy
   on:
-    branch: master
+    branch: dev
 env:
   global:
   - secure: q63NFSX2EKwgJZJAsb4X0x05WjOpFfW4GqPW22AFhHpx5crJGc7YJ32lfwQZcFtR0iAMt+iJGKWb8vr0I+3vDA6ifr844U0tJr23o5+6kz7eImoYAm1CdQs2kjbFcDsbHaRZW+EUmcyhO2inw/TW2cEPou8KhQ6Ze6lZhaIpZwxt8AaMH6mbXTJISlLdpfUuilJBSkO9zxeMr6upOySpGGiHA6H2sTZvp7tzwKtCCzAH1WtExRb+k3WoBXtUUjoCxKVqB5cl629krp2PuQG1+41u5SpDUmF1vkJRdIvq8XgTC932VcKwnY2wx3tw6HpA0fgInhFqTsISuN/OU2qNXQHd4U896VPssnQL/f+gwI6EiaPpwW2Uvwrzyx59N/un6nLgPBaKQDjrqABJyGPFfxnkQbOVwAhrC7ORI0WEVmCFHcTTiERQ3lkIYGo4nPoZl7KbwT5PEy+3gVTjEbOMxOVWphmVMH2Qiyb+LmCYyvwXoq0fx59dsRKReBiIBtnFm496E05AGA0fbDNq5rcHW7X45wo3rQg+9L18J1Ud13R2FRiKCUiouVZx2fLSIdD18GhhdbzVG55EwtbKFAPC/gTPlPSesY+g4YR7NDccnh0mpLmCw/q2D+AyzhDbpLN193Hw+j07c7T3MzNHeKNFFN0jwQixC9Q00Cb1WBr03DE=
