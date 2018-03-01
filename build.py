@@ -55,7 +55,6 @@ def deploy(prefix, images, release, install):
     image_map = {
         'singleuser': 'jupyterhub.singleuser.image',
         'db-proxy': 'dbProxy.image',
-        'query-killer': 'query-killer.image',
         'deploy-hook': 'deployHook.image'
     }
 
