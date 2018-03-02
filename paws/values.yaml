@@ -91,7 +91,8 @@ jupyterhub:
 
   auth:
       type: mediawiki
-      admin_users:
+  admin:
+    users:
       - yuvipanda
       - bdavis_(wmf)
       - andrewbogott
