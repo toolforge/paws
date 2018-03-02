@@ -91,13 +91,13 @@ jupyterhub:
 
   auth:
       type: mediawiki
-  admin:
-    users:
-      - yuvipanda
-      - bdavis_(wmf)
-      - andrewbogott
-      - chicocvenancio
-      - zhuyifei1999
+      admin:
+          users:
+          - yuvipanda
+          - bdavis_(wmf)
+          - andrewbogott
+          - chicocvenancio
+          - zhuyifei1999
 
   singleuser:
       uid: 52771
