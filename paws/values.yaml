@@ -88,6 +88,7 @@ jupyterhub:
 
   auth:
       type: mediawiki
+  Authenticator:
       admin_users:
       - yuvipanda
       - bdavis_(wmf)
