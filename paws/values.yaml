@@ -80,7 +80,12 @@ jupyterhub:
                   ).hexdigest()
                   spawner.environment['MYSQL_USERNAME'] = identity['username']
                   spawner.environment['MYSQL_PASSWORD'] = mysql_password
-                  subprocess.run(['chown', '52771:52771', homedir])
+
+                  def chown_homedir(spawner, pod):
+                      subprocess.run(['chown', '52771:52771', homedir])
+                      return(pod)
+
+                  spawner.modify_pod_hook = chown_homedir
 
           c.JupyterHub.authenticator_class = Auth
       db:
