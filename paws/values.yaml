@@ -81,7 +81,7 @@ jupyterhub:
                   spawner.environment['MYSQL_USERNAME'] = identity['username']
                   spawner.environment['MYSQL_PASSWORD'] = mysql_password
 
-                  spawner.singleuser_lifecycle_hooks = {'postStart' : ['chown', '52771:52771', homedir]
+                  spawner.singleuser_lifecycle_hooks = {'postStart' : ['chown', '52771:52771', homedir]}
 
           c.JupyterHub.authenticator_class = Auth
       db:
