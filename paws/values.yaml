@@ -23,11 +23,12 @@ jupyterhub:
       # FIXME: Stop running hub as root.
       # Currently this is required to get the culler to work, which
       # is ridiculous
-      uid: 0
-      fsGid: 0
+      uid: 52771
+      fsGid: 52771
       baseUrl: "/paws/"
       extraEnv:
         USER: 'tools.paws'
+        HOME: '/home/paws'
       extraConfig: |
           import hmac
           import hashlib
