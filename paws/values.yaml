@@ -29,11 +29,48 @@ jupyterhub:
       extraEnv:
         USER: 'tools.paws'
       extraConfig: |
+          import contextlib
           import hmac
           import hashlib
           import os
           from oauthenticator.mediawiki import MWOAuthenticator
           from tornado import gen
+
+          @contextlib.contextmanager
+          def acquire_privileges(euid=True, egid=False):
+              olduid, oldgid = os.geteuid(), os.egid()
+              if euid: os.seteuid(0)
+              if egid: os.setegid(0)
+
+              try:
+                  yield
+              finally:
+                  if egid: os.setegid(oldgid)
+                  if euid: os.seteuid(olduid)
+
+          @contextlib.contextmanager
+          def drop_privileges(euid=None, egid=None):
+              setuid = os.geteuid() == 0 and euid is not None
+              setgid = os.getegid() == 0 and egid is not None
+              # set egid first, we may lose ability to set it after our euid != 0
+              if setgid:
+                  try:
+                      os.setresgid(-1, egid, 0)
+                  except OSError:
+                      # we aren't privileged in effective uid to drop egid,
+                      # let's try if either real or saved uid is privileged,
+                      # and drop it immediately after we got gid dropped.
+                      with acquire_privileges():
+                          os.setresgid(-1, egid, 0)
+              if setuid:
+                  os.setresuid(-1, euid, 0)
+
+              try:
+                  yield
+              finally:
+                  # acquire the privilege back from saved user/group id
+                  if setuid: os.seteuid(0)
+                  if setgid: os.setegid(0)
 
           class Auth(MWOAuthenticator):
               enable_auth_state = True
@@ -46,13 +83,19 @@ jupyterhub:
                   spawner.environment['CLIENT_ID'] = self.client_id
                   spawner.environment['CLIENT_SECRET'] = self.client_secret
                   spawner.environment['USER'] = identity['username']
+
+                  homedir = '/data/project/paws/userhomes/{}'.format(identity['sub'])
+                  with drop_privileges(52771, 52771):
+                      if os.path.exists(homedir):
+                          os.mkdir(homedir)
+
                   # Set rather than use .extend!
                   # Since otherwise the volumes list will grow each time
                   # the spawner stops and starts!
                   spawner.volumes = [
                       {
                           'name': 'home',
-                          'hostPath': { 'path': '/data/project/paws/userhomes/{}'.format(identity['sub']) }
+                          'hostPath': { 'path': homedir }
                       },
                       {
                           'name': 'dumps',
