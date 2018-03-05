@@ -24,7 +24,7 @@ jupyterhub:
       # Currently this is required to get the culler to work, which
       # is ridiculous
       uid: 0
-      fsGid: 52771
+      fsGid: 0
       baseUrl: "/paws/"
       extraEnv:
         USER: 'tools.paws'
