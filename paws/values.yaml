@@ -23,7 +23,7 @@ jupyterhub:
       # FIXME: Stop running hub as root.
       # Currently this is required to get the culler to work, which
       # is ridiculous
-      uid: 52771
+      uid: 0
       fsGid: 52771
       baseUrl: "/paws/"
       extraEnv:
