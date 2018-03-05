@@ -28,7 +28,7 @@ jupyterhub:
       baseUrl: "/paws/"
       extraEnv:
         USER: 'tools.paws'
-        HOME: '/home/paws'
+        HOME: '/home/joyvan'
       extraConfig: |
           import hmac
           import hashlib
