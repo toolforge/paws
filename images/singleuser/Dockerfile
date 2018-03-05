@@ -130,6 +130,7 @@ USER root
 # Boo docker can't copy as anything other than root!
 RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-config.py
 RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-fixes.py
+RUN chown ${NB_USER}:${NB_USER} /home/paws
 USER ${NB_USER}
 
 COPY install-pwb /usr/local/bin/
