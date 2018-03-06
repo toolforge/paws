@@ -114,6 +114,9 @@ COPY install-r /usr/local/bin/install-r
 USER root
 RUN /usr/local/bin/install-r
 
+# Attempt to chown home
+RUN chown ${NB_USER}:${NB_USER} /home/paws
+
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 USER ${NB_USER}
