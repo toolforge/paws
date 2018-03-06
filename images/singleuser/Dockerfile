@@ -115,15 +115,15 @@ USER root
 RUN /usr/local/bin/install-r
 
 # Install mass amount of python libraries!
-COPY --chown=${NB_USER}:${NB_USER} requirements.txt /tmp/requirements.txt
+COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 USER ${NB_USER}
 
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
-COPY --chown=${NB_USER}:${NB_USER} user-config.py /srv/paws/
-COPY --chown=${NB_USER}:${NB_USER} user-fixes.py /srv/paws/
+COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
+COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 
 COPY install-pwb /usr/local/bin/
 RUN /usr/local/bin/install-pwb
