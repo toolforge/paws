@@ -20,6 +20,9 @@ deployHook:
 
 jupyterhub:
   hub:
+      image:
+          name: wikimedia-paws-beta/paws-hub
+          tag: d3e049f
       uid: 52771
       fsGid: 52771
       baseUrl: "/paws/"
