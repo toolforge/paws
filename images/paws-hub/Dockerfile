@@ -16,4 +16,4 @@ RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 
 USER ${NB_USER}
 
-CMD ["jupyterhub","--debug", "--config", "/srv/jupyterhub_config.py"]
+CMD ["jupyterhub", "--config", "/srv/jupyterhub_config.py"]
