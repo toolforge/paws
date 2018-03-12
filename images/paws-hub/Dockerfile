@@ -9,8 +9,10 @@ RUN adduser --disabled-password \
     --home ${HOME} \
     --force-badname \
     ${NB_USER}
+COPY cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 
 RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 
 USER ${NB_USER}
+
 CMD ["jupyterhub", "--config", "/srv/jupyterhub_config.py"]
