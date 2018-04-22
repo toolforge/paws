@@ -62,7 +62,8 @@ RUN apt-get install --yes \
         links \
         nano \
         vim \
-        mariadb-client
+        mariadb-client \
+        libmysqlclient-dev
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
