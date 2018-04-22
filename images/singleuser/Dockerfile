@@ -62,7 +62,8 @@ RUN apt-get install --yes \
         links \
         nano \
         vim \
-        mariadb-client
+        mariadb-client \
+        libmysqlclient-dev
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
@@ -101,7 +102,8 @@ RUN pip install --no-cache-dir \
     jupyterhub \
     notebook \
     jupyterlab \
-    bash_kernel
+    bash_kernel \
+    sparqlkernel
 
 # Install the bash kernel
 RUN python -m bash_kernel.install --sys-prefix
@@ -114,6 +116,8 @@ COPY install-r /usr/local/bin/install-r
 USER root
 RUN /usr/local/bin/install-r
 
+# install the SPARQLkernel
+RUN jupyter sparqlkernel install
 # Attempt to chown home
 RUN chown ${NB_USER}:${NB_USER} /home/paws
 
