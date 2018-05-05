@@ -87,13 +87,7 @@ jupyterhub:
 
           c.JupyterHub.authenticator_class = Auth
       db:
-          pvc:
-              selector:
-                  matchLabels:
-                      type: hostpath
-                      kind: hubdb
-              accessModes:
-                  - ReadWriteMany
+          type: mysql
 
   auth:
       type: mediawiki
