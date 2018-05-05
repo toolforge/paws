@@ -11,6 +11,8 @@ RUN adduser --disabled-password \
     ${NB_USER}
 COPY cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 
+RUN pip install git+https://github.com/chicocvenancio/jupyterhub@dynamic_tables
+
 RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 
 USER ${NB_USER}
