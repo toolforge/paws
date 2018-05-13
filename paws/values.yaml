@@ -88,6 +88,7 @@ jupyterhub:
           c.JupyterHub.authenticator_class = Auth
       db:
           type: mysql
+          upgrade: true
 
   auth:
       type: mediawiki
