@@ -11,7 +11,7 @@ RUN adduser --disabled-password \
     ${NB_USER}
 COPY cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 
-RUN pip3 install --upgrade --no-cache-dir --no-deps --force-reinstall https://github.com/chicocvenancio/jupyterhub/raw/dynamic_tables/dist/jupyterhub-0.8.1-py3-none-any.whl
+RUN pip3 install --upgrade --no-cache-dir --force-reinstall jupyterhub==0.9.0b1
 
 RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 USER ${NB_USER}
