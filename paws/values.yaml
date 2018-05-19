@@ -37,6 +37,9 @@ jupyterhub:
 
           class Auth(MWOAuthenticator):
               enable_auth_state = True
+              def normalize_username(self, username):
+                  return username
+
               @gen.coroutine
               def pre_spawn_start(self, user, spawner):
                   auth_state = yield user.get_auth_state()
@@ -81,13 +84,7 @@ jupyterhub:
 
           c.JupyterHub.authenticator_class = Auth
       db:
-          pvc:
-              selector:
-                  matchLabels:
-                      type: hostpath
-                      kind: hubdb
-              accessModes:
-                  - ReadWriteMany
+          type: mysql
 
   auth:
       type: mediawiki
