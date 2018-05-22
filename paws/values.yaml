@@ -9,6 +9,11 @@ deployHook:
       nodePort: 32612
     type: NodePort
 jupyterhub: 
+  proxy: 
+    service: 
+      nodePorts: 
+        http: 32611
+      type: NodePort
   auth: 
     admin: 
       users: 
@@ -101,11 +106,6 @@ jupyterhub:
 mysql: 
   host: enwiki.analytics.db.svc.eqiad.wmflabs
   username: s52771
-proxy: 
-  service: 
-    nodePorts: 
-      http: 32611
-    type: NodePort
 queryKiller: 
   image: 
     name: yuvipanda/paws-query-killer
