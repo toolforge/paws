@@ -31,7 +31,7 @@ spec:
   - port: 8888
     protocol: TCP
     targetPort: 8888
-    {{ if .Values.deploy-hook.service.ports.nodePort -}}
+    {{ if .Values.deploy-hook.service.ports.nodePort }}
     nodePort: {{ .Values.deploy-hook.service.ports.nodePort }}
     {{- end }}
   selector:
