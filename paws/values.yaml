@@ -1,3 +1,4 @@
+---
 dbProxy:
   image:
     name: yuvipanda/paws-db-proxy
@@ -15,8 +16,11 @@ mysql:
   host: enwiki.analytics.db.svc.eqiad.wmflabs
   username: s52771
 
-deployHook:
-  host: paws-deploy-hook.tools.wmflabs.org
+deployHook: 
+  service: 
+    ports: 
+      nodePort: 32612
+    type: NodePort
 
 jupyterhub:
   hub:
@@ -106,14 +110,4 @@ jupyterhub:
           type: none
 
   ingress:
-      enabled: true
-      annotations:
-        ingress.kubernetes.io/proxy-body-size: 64m
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-      hosts:
-        - paws.wmflabs.org
-      tls:
-        - secretName: kubelego-tls-jupyterhub-prod
-          hosts:
-            - paws.wmflabs.org
+      enabled: false
