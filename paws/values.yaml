@@ -19,7 +19,7 @@ deployHook:
   service:
     type: NodePort
     ports:
-      NodePort: 32612
+      nodePort: 32612
 
 jupyterhub:
   hub:
