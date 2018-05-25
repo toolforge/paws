@@ -110,7 +110,8 @@ jupyterhub:
         volumeMounts:
           - name: home
             mountPath: /home/paws
-
+        securityContext: 
+          runAsUser: 0 
 mysql: 
   host: enwiki.analytics.db.svc.eqiad.wmflabs
   username: s52771
