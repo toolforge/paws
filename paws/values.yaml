@@ -103,6 +103,10 @@ jupyterhub:
     storage: 
       type: none
     uid: 52771
+    initContainers:
+      - name: chown-userhome
+        image: busybox
+        command: ['sh', '-c', 'chown 52771:52771 /home/paws']
 mysql: 
   host: enwiki.analytics.db.svc.eqiad.wmflabs
   username: s52771
