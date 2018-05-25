@@ -108,6 +108,9 @@ jupyterhub:
         - name: chown-userhome
           image: busybox
           command: ['sh', '-c', 'chown 52771:52771 /home/paws']
+          volumeMounts:
+            - name: home
+            mountPath: /home/paws
 
   ingress:
       enabled: true
