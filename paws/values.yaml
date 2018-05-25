@@ -104,6 +104,10 @@ jupyterhub:
           tag: v4db45b9
       storage:
           type: none
+      initContainers:
+        - name: chown-userhome
+          image: busybox
+          command: ['sh', '-c', 'chown 52771:52771 /home/paws']
 
   ingress:
       enabled: true
