@@ -107,7 +107,7 @@ jupyterhub:
       initContainers:
         - name: chown-userhome
           image: busybox
-          command: ['sh', '-c', 'chown 52771:52771 /home/paws']
+          command: ['chown', '-R', '52771:52771', '/home/paws']
           volumeMounts:
             - name: home
               mountPath: /home/paws
