@@ -103,7 +103,7 @@ jupyterhub:
     storage: 
       type: none
     uid: 52771
-    lifecycle-hooks:
+    lifecycleHooks:
       postStart:
         exec:
         command: ["cd", "/srv/paws/pwb", "&&", "git", "pull"]
