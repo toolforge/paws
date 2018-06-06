@@ -103,6 +103,10 @@ jupyterhub:
     storage: 
       type: none
     uid: 52771
+    lifecycle-hooks:
+      postStart:
+        exec:
+        command: ["cd", "/srv/paws/pwb", "&&", "git", "pull"]
     initContainers:
       - name: chown-userhome
         image: busybox
