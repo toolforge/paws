@@ -106,7 +106,7 @@ jupyterhub:
     lifecycleHooks:
       postStart:
         exec:
-        command: ["cd", "/srv/paws/pwb", "&&", "git", "pull"]
+          command: ["sh", "-c", "cd /srv/paws/pwb && git pull"]
     initContainers:
       - name: chown-userhome
         image: busybox
