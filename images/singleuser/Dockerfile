@@ -99,7 +99,7 @@ RUN python3.6 -m venv /srv/paws
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub==0.9.0b3 \
+    jupyterhub==0.9.0rc1 \
     notebook \
     jupyterlab \
     bash_kernel \

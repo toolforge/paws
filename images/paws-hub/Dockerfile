@@ -9,11 +9,10 @@ RUN adduser --disabled-password \
     --home ${HOME} \
     --force-badname \
     ${NB_USER}
-ADD https://raw.githubusercontent.com/jupyterhub/jupyterhub/0.9.0b3/examples/cull-idle/cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
+ADD https://raw.githubusercontent.com/jupyterhub/jupyterhub/0.9.0rc1/examples/cull-idle/cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 RUN chmod +rx /usr/local/bin/cull_idle_servers.py
-RUN pip3 install --upgrade --no-cache-dir --force-reinstall jupyterhub==0.9.0b3
+RUN pip3 install --upgrade --no-cache-dir --force-reinstall jupyterhub==0.9.0rc1
 
-ADD https://raw.githubusercontent.com/minrk/jupyterhub/505a6eb4e33216e3694d5ddd806150e4212012ec/jupyterhub/user.py /usr/local/lib/python3.6/dist-packages/jupyterhub/user.py
 RUN chmod 644 /usr/local/lib/python3.6/dist-packages/jupyterhub/user.py
 RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
 USER ${NB_USER}
