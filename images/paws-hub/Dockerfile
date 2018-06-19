@@ -12,8 +12,9 @@ RUN adduser --disabled-password \
 ADD https://raw.githubusercontent.com/jupyterhub/jupyterhub/0.9.0/examples/cull-idle/cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
 RUN chmod +rx /usr/local/bin/cull_idle_servers.py
 RUN pip3 install --upgrade --no-cache-dir --force-reinstall jupyterhub==0.9.0
+COPY paws.svg /srv/jupyterhub
 
-RUN chown ${NB_USER}:${NB_USER} /srv/jupyterhub
+RUN chown -R ${NB_USER}:${NB_USER} /srv/jupyterhub
 USER ${NB_USER}
 
 CMD ["jupyterhub","--debug", "--config", "/srv/jupyterhub_config.py"]
