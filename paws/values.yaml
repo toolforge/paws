@@ -87,7 +87,7 @@ jupyterhub:
         c.KubeSpawner.singleuser_fs_gid = 52771
         
         c.JupyterHub.authenticator_class = Auth
-        c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg.png'
+        c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg'
         c.JupyterHub.template_vars = {
             'announcement': ('<span class="alert-success">'
                              '<a href="//www.mediawiki.org/wiki/PAWS/News/'
