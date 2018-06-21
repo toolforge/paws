@@ -88,6 +88,14 @@ jupyterhub:
         
         c.JupyterHub.authenticator_class = Auth
         c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg.png'
+        c.JupyterHub.template_vars = {
+            'announcement': ('<span class="alert-success">'
+                             '<a href="//www.mediawiki.org/wiki/PAWS/News/'
+                             '2018-06-21">'
+                             'PAWS has been upgraded and now has a logo! </a>'
+                             'Please <a href="//phabricator.wikimedia.org/tag'
+                             '/paws/"> report any issues on Phabricator </a>'
+                             '</span>')}
     extraEnv: 
       USER: tools.paws
     fsGid: 52771
