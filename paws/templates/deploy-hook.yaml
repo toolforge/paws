@@ -45,14 +45,14 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-  - http:
-    paths:
-    - path: /
-      backend:
-        serviceName: deploy-hook
-        servicePort: 8888
-    host: {{ .Values.deployHook.host }}
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: deploy-hook
+              servicePort: 8888
+      host: {{ .Values.deployHook.host }}
   tls:
-  - hosts:
-    - {{ .Values.deployHook.host }}
-    secretName: kubelego-deploy-hook-{{ .Release.Name }}
+    - secretName: kubelego-deploy-hook-{{ .Release.Name }}
+      hosts:
+        - {{ .Values.deployHook.host }}
