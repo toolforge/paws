@@ -87,7 +87,7 @@ jupyterhub:
         c.KubeSpawner.singleuser_fs_gid = 52771
         
         c.JupyterHub.authenticator_class = Auth
-        c.JupyterHub.logo_file = '/srv/jupyterhub/paws.svg'
+        c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg.png'
     extraEnv: 
       USER: tools.paws
     fsGid: 52771
