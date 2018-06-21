@@ -19,7 +19,7 @@ jupyterhub:
     admin: 
       users: 
         - yuvipanda
-        - bdavis_(wmf)
+        - BDavis_(WMF)
         - andrewbogott
         - chicocvenancio
         - zhuyifei1999
