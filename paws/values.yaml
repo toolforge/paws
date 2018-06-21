@@ -1,119 +1,131 @@
-dbProxy:
-  image:
+--- 
+dbProxy: 
+  image: 
     name: yuvipanda/paws-db-proxy
     tag: vd74f11d
-
-# queryKiller:
-#   image:
-#     name: yuvipanda/paws-query-killer
-#     tag: v98acb53
-#   maxQueryTime: 1800
-
-mysql:
-  # The hostname is only used to establish a database connection by db-proxy,
-  # it doesn't actually select enwiki as the database connected to.
+deployHook: 
+  host: paws-deploy-hook.tools.wmflabs.org
+  service: 
+    ports: 
+      nodePort: 32612
+    type: NodePort
+jupyterhub: 
+  proxy: 
+    service: 
+      nodePorts: 
+        http: 32611
+      type: NodePort
+  auth: 
+    admin: 
+      users: 
+        - yuvipanda
+        - bdavis_(wmf)
+        - andrewbogott
+        - chicocvenancio
+        - zhuyifei1999
+    type: mediawiki
+  hub: 
+    baseUrl: /paws/
+    db: 
+      type: mysql
+      upgrade: true
+    extraConfig: |
+        import hmac
+        import hashlib
+        import subprocess
+        import os
+        from oauthenticator.mediawiki import MWOAuthenticator
+        from tornado import gen
+        
+        class Auth(MWOAuthenticator):
+            enable_auth_state = True
+            def normalize_username(self, username):
+                return username
+        
+            @gen.coroutine
+            def pre_spawn_start(self, user, spawner):
+                auth_state = yield user.get_auth_state()
+                identity = auth_state['MEDIAWIKI_USER_IDENTITY']
+                spawner.environment['ACCESS_KEY'] = auth_state['ACCESS_TOKEN_KEY']
+                spawner.environment['ACCESS_SECRET'] = auth_state['ACCESS_TOKEN_SECRET']
+                spawner.environment['CLIENT_ID'] = self.client_id
+                spawner.environment['CLIENT_SECRET'] = self.client_secret
+                spawner.environment['USER'] = identity['username']
+                # Set rather than use .extend!
+                # Since otherwise the volumes list will grow each time
+                # the spawner stops and starts!
+                homedir = '/data/project/paws/userhomes/{}'.format(identity['sub'])
+                spawner.volumes = [
+                    {
+                        'name': 'home',
+                        'hostPath': { 'path': homedir }
+                    },
+                    {
+                        'name': 'dumps',
+                        'hostPath': { 'path': '/public/dumps' }
+                    }
+                ]
+                spawner.volume_mounts = [
+                    {
+                        'name': 'home',
+                        'mountPath': '/home/paws'
+                    },
+                    {
+                        'name': 'dumps',
+                        'mountPath': '/public/dumps'
+                    }
+                ]
+        
+                spawner.environment['MYSQL_HOST'] = os.environ['MYSQL_SERVICE_HOST']
+                mysql_password = hmac.new(
+                    os.environ['MYSQL_HMAC_KEY'].encode('utf-8'),
+                    identity['username'].encode('utf-8'),
+                    hashlib.sha256
+                ).hexdigest()
+                spawner.environment['MYSQL_USERNAME'] = identity['username']
+                spawner.environment['MYSQL_PASSWORD'] = mysql_password
+        c.KubeSpawner.singleuser_fs_gid = 52771
+        
+        c.JupyterHub.authenticator_class = Auth
+        c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg.png'
+        c.JupyterHub.template_vars = {
+            'announcement': ('<span class="alert-success">'
+                             '<a href="//www.mediawiki.org/wiki/PAWS/News/'
+                             '2018-06-21">'
+                             'PAWS has been upgraded and now has a logo! </a>'
+                             'Please <a href="//phabricator.wikimedia.org/tag'
+                             '/paws/"> report any issues on Phabricator </a>'
+                             '</span>')}
+    extraEnv: 
+      USER: tools.paws
+    fsGid: 52771
+    image: 
+      name: wikimedia-paws-prod/paws-hub
+      tag: d3e049f
+    uid: 52771
+  ingress: 
+    enabled: false
+  singleuser: 
+    fsGid: 52771
+    image: 
+      name: yuvipanda/paws-singleuser
+      tag: v4db45b9
+    storage: 
+      type: none
+    uid: 52771
+    lifecycleHooks:
+      postStart:
+        exec:
+          command: ["sh", "-c", "cd /srv/paws/pwb && git pull"]
+    initContainers:
+      - name: chown-userhome
+        image: busybox
+        command: ['chown', '52771:52771', '/home/paws']
+        volumeMounts:
+          - name: home
+            mountPath: /home/paws
+        securityContext: 
+          runAsUser: 0 
+mysql: 
   host: enwiki.analytics.db.svc.eqiad.wmflabs
   username: s52771
-
-deployHook:
-  host: paws-deploy-hook.tools.wmflabs.org
-
-jupyterhub:
-  hub:
-      # FIXME: Stop running hub as root.
-      # Currently this is required to get the culler to work, which
-      # is ridiculous
-      uid: 0
-      fsGid: 0
-      baseUrl: "/paws/"
-      extraEnv:
-        USER: 'tools.paws'
-      extraConfig: |
-          import hmac
-          import hashlib
-          import os
-          from oauthenticator.mediawiki import MWOAuthenticator
-          from tornado import gen
-
-          class Auth(MWOAuthenticator):
-              enable_auth_state = True
-              def normalize_username(self, username):
-                  return username
-
-              @gen.coroutine
-              def pre_spawn_start(self, user, spawner):
-                  auth_state = yield user.get_auth_state()
-                  identity = auth_state['MEDIAWIKI_USER_IDENTITY']
-                  spawner.environment['ACCESS_KEY'] = auth_state['ACCESS_TOKEN_KEY']
-                  spawner.environment['ACCESS_SECRET'] = auth_state['ACCESS_TOKEN_SECRET']
-                  spawner.environment['CLIENT_ID'] = self.client_id
-                  spawner.environment['CLIENT_SECRET'] = self.client_secret
-                  spawner.environment['USER'] = identity['username']
-                  # Set rather than use .extend!
-                  # Since otherwise the volumes list will grow each time
-                  # the spawner stops and starts!
-                  spawner.volumes = [
-                      {
-                          'name': 'home',
-                          'hostPath': { 'path': '/data/project/paws/userhomes/{}'.format(identity['sub']) }
-                      },
-                      {
-                          'name': 'dumps',
-                          'hostPath': { 'path': '/public/dumps' }
-                      }
-                  ]
-                  spawner.volume_mounts = [
-                      {
-                          'name': 'home',
-                          'mountPath': '/home/paws'
-                      },
-                      {
-                          'name': 'dumps',
-                          'mountPath': '/public/dumps'
-                      }
-                  ]
-
-                  spawner.environment['MYSQL_HOST'] = os.environ['MYSQL_SERVICE_HOST']
-                  mysql_password = hmac.new(
-                      os.environ['MYSQL_HMAC_KEY'].encode('utf-8'),
-                      identity['username'].encode('utf-8'),
-                      hashlib.sha256
-                  ).hexdigest()
-                  spawner.environment['MYSQL_USERNAME'] = identity['username']
-                  spawner.environment['MYSQL_PASSWORD'] = mysql_password
-
-          c.JupyterHub.authenticator_class = Auth
-      db:
-          type: mysql
-
-  auth:
-      type: mediawiki
-      admin:
-          users:
-          - yuvipanda
-          - bdavis_(wmf)
-          - andrewbogott
-          - chicocvenancio
-          - zhuyifei1999
-
-  singleuser:
-      uid: 52771
-      fsGid: 52771
-      image:
-          name: yuvipanda/paws-singleuser
-          tag: v4db45b9
-      storage:
-          type: none
-
-  ingress:
-      enabled: true
-      annotations:
-        ingress.kubernetes.io/proxy-body-size: 64m
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-      hosts:
-        - paws.wmflabs.org
-      tls:
-        - secretName: kubelego-tls-jupyterhub-prod
-          hosts:
-            - paws.wmflabs.org
