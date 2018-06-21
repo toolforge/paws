@@ -98,7 +98,7 @@ RUN python3.6 -m venv /srv/paws
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub \
+    jupyterhub==0.9.0 \
     notebook \
     jupyterlab \
     bash_kernel
@@ -115,22 +115,15 @@ USER root
 RUN /usr/local/bin/install-r
 
 # Install mass amount of python libraries!
-COPY requirements.txt /tmp/requirements.txt
-RUN chown ${NB_USER}:${NB_USER} /tmp/requirements.txt
+COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 USER ${NB_USER}
 
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
 RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
-COPY user-config.py /srv/paws/
-COPY user-fixes.py /srv/paws/
-
-USER root
-# Boo docker can't copy as anything other than root!
-RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-config.py
-RUN chown ${NB_USER}:${NB_USER} /srv/paws/user-fixes.py
-USER ${NB_USER}
+COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
+COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 
 COPY install-pwb /usr/local/bin/
 RUN /usr/local/bin/install-pwb

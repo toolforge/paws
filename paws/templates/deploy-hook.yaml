@@ -26,10 +26,14 @@ kind: Service
 metadata:
   name: deploy-hook
 spec:
+  type: NodePort
   ports:
   - port: 8888
     protocol: TCP
     targetPort: 8888
+    {{ if .Values.deployHook.service.ports.nodePort -}}
+    nodePort: {{ .Values.deployHook.service.ports.nodePort }}
+    {{- end }}
   selector:
     name: deploy-hook
 ---
@@ -41,14 +45,14 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - http:
-        paths:
-          - path: /
-            backend:
-              serviceName: deploy-hook
-              servicePort: 8888
-      host: {{ .Values.deployHook.host }}
+  - http:
+    paths:
+    - path: /
+      backend:
+        serviceName: deploy-hook
+        servicePort: 8888
+    host: {{ .Values.deployHook.host }}
   tls:
-    - secretName: kubelego-deploy-hook-{{ .Release.Name }}
-      hosts:
-        - {{ .Values.deployHook.host }}
+  - hosts:
+    - {{ .Values.deployHook.host }}
+    secretName: kubelego-deploy-hook-{{ .Release.Name }}
