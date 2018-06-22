@@ -63,6 +63,10 @@ jupyterhub:
                     {
                         'name': 'dumps',
                         'hostPath': { 'path': '/public/dumps' }
+                    },
+                    {
+                        'name': 'dumps-mnt',
+                        'hostPath': { 'path': '/mnt/nfs/dumps-labstore1006.wikimedia.org' }
                     }
                 ]
                 spawner.volume_mounts = [
@@ -73,6 +77,10 @@ jupyterhub:
                     {
                         'name': 'dumps',
                         'mountPath': '/public/dumps'
+                    },
+                    {
+                        'name': 'dumps-mnt',
+                        'mountPath': '/mnt/nfs/dumps-labstore1006.wikimedia.org'
                     }
                 ]
         
