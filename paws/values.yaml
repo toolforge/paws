@@ -29,6 +29,13 @@ jupyterhub:
     db: 
       type: mysql
       upgrade: true
+    extraVolumes:
+    - name: dumps
+      hostPath:
+      - path: /public/dumps
+    extraVolumeMounts:
+    - name: dumps
+      mountPath: /public/dumps
     extraConfig: |
         import hmac
         import hashlib
