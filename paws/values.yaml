@@ -18,11 +18,11 @@ jupyterhub:
   auth: 
     admin: 
       users: 
-        - yuvipanda
+        - Yuvipanda
         - BDavis_(WMF)
-        - andrewbogott
-        - chicocvenancio
-        - zhuyifei1999
+        - Andrewbogott
+        - Chicocvenancio
+        - Zhuyifei1999
     type: mediawiki
   hub: 
     baseUrl: /paws/
@@ -106,9 +106,7 @@ jupyterhub:
         c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg'
         c.JupyterHub.template_vars = {
             'announcement': ('<span class="alert-success">'
-                             '<a href="//www.mediawiki.org/wiki/PAWS/News/'
-                             '2018-06-21">'
-                             'PAWS has been upgraded and now has a logo! </a>'
+                             'Welcome to PAWS. '
                              'Please <a href="//phabricator.wikimedia.org/tag'
                              '/paws/"> report any issues on Phabricator </a>'
                              '</span>')}
