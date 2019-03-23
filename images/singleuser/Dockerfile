@@ -121,7 +121,7 @@ USER ${NB_USER}
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
-RUN git clone --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
+RUN git clone --branch stable --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
 COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 
