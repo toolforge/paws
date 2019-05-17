@@ -4,6 +4,7 @@ MAINTAINER Yuvi Panda <yuvipanda@gmail.com>
 
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT2_DIR=/srv/paws
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Use bash as default shell, rather than sh
 ENV SHELL /bin/bash
