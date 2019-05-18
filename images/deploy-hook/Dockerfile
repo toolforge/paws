@@ -10,7 +10,7 @@ RUN apt-get install --yes --no-install-recommends \
       git-crypt
 
 # Install helm!
-RUN curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.5.1-linux-amd64.tar.gz | tar -xz -C /usr/local/bin --strip-components 1 linux-amd64/helm
+RUN curl -ssL https://storage.googleapis.com/kubernetes-helm/helm-v2.14.0-linux-amd64.tar.gz | tar -xz -C /usr/local/bin --strip-components 1 linux-amd64/helm
 
 RUN chmod +x /usr/local/bin/helm
 
