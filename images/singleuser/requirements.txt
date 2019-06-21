@@ -9,6 +9,7 @@ mwoauth
 mwtypes
 mwpersistence
 mwparserfromhell
+mwviews
 git+https://github.com/yuvipanda/python-wdqs.git
 
 # visualization libraries
