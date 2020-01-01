@@ -107,8 +107,8 @@ jupyterhub:
         c.JupyterHub.template_vars = {
             'announcement': ('<span class="alert-success">'
                              'Welcome to PAWS. '
-                             'Please <a href="//phabricator.wikimedia.org/tag'
-                             '/paws/"> report any issues on Phabricator </a>'
+                             'Please <a href="//phabricator.wikimedia.org/maniphest/task/edit
+                             '/form/1/?projects=PAWS"> report any issues on Phabricator </a>'
                              '</span>')}
     extraEnv: 
       USER: tools.paws
