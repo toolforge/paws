@@ -1,4 +1,4 @@
-FROM docker-registry.tools.wmflabs.org/jessie-toollabs
+FROM docker-registry.tools.wmflabs.org/toolforge-buster-sssd
 
 RUN apt-get install --yes --no-install-recommends \
         python3 \

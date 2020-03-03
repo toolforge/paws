@@ -1,10 +1,7 @@
-FROM docker-registry.tools.wmflabs.org/jessie-toollabs
-
-RUN echo lol
-RUN echo 'deb http://ftp.debian.org/debian jessie-backports main' >> /etc/apt/sources.list
+FROM docker-registry.tools.wmflabs.org/toolforge-buster-sssd
 
 RUN apt-get update
-RUN apt-get install --yes --no-install-recommends -t jessie-backports \
+RUN apt-get install --yes --no-install-recommends \
             nginx-extras \
             luarocks \
             unzip \
