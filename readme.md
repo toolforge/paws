@@ -1,4 +1,4 @@
-PAWS
+#PAWS
 
 
 A Web Shell (PAWS) is a Jupyter notebooks deployment that has been customized to make interacting with Wikimedia wikis easier. It allows users to create and share documents that contain live code, visualizations such as graphs, rich text, etc. The user created notebooks are a powerful tool that enables data analysis and scientific research, and also transforms the way in which programmers write code - by enabling an exploratory environment with a quick feedback loop, and a low barrier for entry through it's easy to use graphical interface. 
@@ -9,7 +9,7 @@ git clone https://github.com/toolforge/paws.git
 
 cd paws
 
-AWS provides some very core features on top of which people can build stuff.
+PAWS provides some very core features on top of which people can build stuff.
 Notebooks
 
 It provides Jupyter notebooks (previously known as IPython Notebooks)
