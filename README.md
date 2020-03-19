@@ -13,7 +13,6 @@ If you have push access to the project, we ask that new changes be reviewed by o
 project member by using either a feature branch on the  https://github.com/toolforge/paws repo
 to trigger a pull request or using a fork to set up a pull request.
 
-
 ## Useful libraries
 ### Accessing Database Replicas With Pandas and Sqlalchemy
 
@@ -30,6 +29,7 @@ con = create_engine(constr)
 
 df = pd.read_sql('select * from plwiki_p.logging limit 10', con)
 ```
+
 ### Storage space
 Publishing space
 

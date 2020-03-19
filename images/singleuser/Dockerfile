@@ -99,7 +99,7 @@ RUN python3.6 -m venv /srv/paws
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub==0.9.0 \
+    jupyterhub==1.1.0 \
     notebook \
     jupyterlab \
     bash_kernel
@@ -136,11 +136,11 @@ RUN /usr/local/bin/install-extensions
 COPY banner /etc/bash.bashrc
 
 # Install nbpawspublic as a hack
-RUN pip install --no-cache-dir git+https://github.com/yuvipanda/nbpawspublic@023c27b && \
+RUN pip install --no-cache-dir git+https://github.com/toolforge/nbpawspublic@main && \
     jupyter nbextension install --py nbpawspublic --sys-prefix && \
     jupyter nbextension enable --py nbpawspublic --sys-prefix
 
-RUN pip install --no-cache-dir git+https://github.com/yuvipanda/ipynb-paws@60c94e3
+RUN pip install --no-cache-dir git+https://github.com/toolforge/ipynb-paws@147bbeb4dda35e
 
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css

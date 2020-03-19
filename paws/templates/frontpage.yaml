@@ -1,0 +1,21 @@
+{{ if .Values.paws.frontPageEnabled }}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    name: paws-front-page
+    ingress.paws.wmcloud.org: front
+  annotations:
+    nginx.ingress.kubernetes.io/permanent-redirect: {{ .Values.paws.ingress.frontRedirect | quote }}
+  name: paws-front-page
+spec:
+  rules:
+  - host: {{ .Values.paws.ingress.frontHost | quote }}
+    http:
+      paths:
+      # The backend portion is just there for the validator. It isn't used.
+      - backend:
+          serviceName: paws-public
+          servicePort: 8000
+        path: /
+{{ end }}
