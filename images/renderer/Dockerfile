@@ -9,6 +9,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install git+https://github.com/jupyter/nbconvert.git ipython werkzeug
+RUN pip install git+https://github.com/Python-Markdown/markdown.git
+RUN pip install docutils
 
 COPY renderer.py /srv/renderer.py
 COPY basic.tpl /srv/basic.tpl

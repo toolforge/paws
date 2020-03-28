@@ -2,6 +2,8 @@ from werkzeug.wrappers import Request, Response
 from nbconvert.exporters import HTMLExporter
 
 import os
+import markdown
+import docutils.core
 
 BASE_PATH = os.environ['BASE_PATH']
 URL_PREFIX = os.environ['URL_PREFIX']
@@ -28,9 +30,27 @@ def render_ipynb(full_path, format):
         html, res = exporter.from_file(file_handle)
     return Response(html, mimetype='text/html')
 
+def render_md(full_path, format):
+    """
+    Render a given .md file
+    """
+    md = markdown.markdownFromFile(filename)
+    rmd = md.convert()
+    return rmd
+
+def render_rst(full_path, format):
+    """
+    Render a given .rst file
+    """
+    docutils.core.publish_file(source_path=full_path, destination path="output.html", writer_name="html")
+    html = open("output.html").read()
+    return html
+
 # Map of extensions to functions to call for handling them
 handlers = {
     'ipynb': render_ipynb,
+    'md' : render_md,
+    'rst' : render_rst
 }
 
 
