@@ -1,0 +1,24 @@
+Pip is one of the most famous and widely used package management system to install and manage software packages written in Python and found in Python Package Index (PyPI)
+pip is the preferred installer program. Starting with Python 3.4, it is included by default with the Python binary installers
+
+#How to install libraries
+Downloading a library/package is very easy,while using an interactive shell, tell pip to download the library and install it through the following steps.
+1. Go to link https://wikitech.wikimedia.org/wiki/PAWS
+2. Open a new nottebook
+3. Run !pip install tensorflow
+
+If you are working in a notebook rather than an interactive shell, you would typically add something like this to the start of your work to make sure that tensorflow was available:
+#Install tensorflow in the current Jupyter kernel
+
+import sys
+!{sys.executable} -m pip install tensorflow
+
+This will either install the package or print something like Requirement already satisfied: colorama in /srv/paws/lib/python3.6/site-
+packages. I think the same workflow should reasonably be expected for terminal sessions. Every time you start your terminal you should install the
+libraries you will need (probably from a requirements.txt file or something similar). This will either install the libraries or exit gracefully because they are
+already installed.
+
+One can also use venv to create a python virtual environment and activate it to not go though the package install each time. 
+ See [venv](https://docs.python.org/3/library/venv.html for details)
+
+ 
