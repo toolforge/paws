@@ -2,10 +2,10 @@
 
 [PAWS](https://www.mediawiki.org/wiki/PAWS): A Web Shell (PAWS) is a Jupyter notebooks deployment that has been customized to make interacting with Wikimedia wikis easier. It allows users to create and share documents that contain live code, visualizations such as graphs, rich text, etc. The user created notebooks are a powerful tool that enables data analysis and scientific research, and also transforms the way in which programmers write code - by enabling an exploratory environment with a quick feedback loop, and a low barrier for entry through it's easy to use graphical interface. 
 
-It is a customized JupyterHub on Kubernetes running inside Wikimedia Cloud Services. It provides a simple way to use Python and pywikibot interact with the Wikimedia Projects, including the various wikis via OAuth, the Wiki Replicas Cloud service, and others. 
+In addition, PAWS is a customized JupyterHub on Kubernetes running inside Wikimedia Cloud Services. It provides quite a simple way to use Python and pywikibot to interact with Wikimedia Projects,via OAuth, the Wiki Replicas Cloud service, and others. 
 
 # How to contribute
-1. Just simply clone on your computer by writing the following command: git clone https://github.com/toolforge/paws.git 
+1. Just simply clone the project repo to your computer by using the command: 'git clone https://github.com/toolforge/paws.git' 
 2. cd paws
 3. open up the files you would want to change and edit them
 4. check the status of the repo by typing  'git status' in the terminal
@@ -47,11 +47,10 @@ If you want to run the copy yourself, or do interactive changes, you must downlo
 
 Note that a notebook will always be published, as the link can be guessed, so don't add any private information. 
 # chat
- Applicants can get help and feedback from both mentors and community members. Community members discuss their contributions in a public chat.
-Please introduce yourself on the public project chat, follow the link  [IRC chat](https://webchat.freenode.net/#wikimedia-cloud)
+ Contributors can get help and feedback from the community members in the public IRC channel,[IRC chat](https://webchat.freenode.net/#wikimedia-cloud),they should introduce themselves on the public project chat, and specifically state their questions. 
 
 # Try paws yourself
-Try out paws yourself inorder to familiarise your self with it, all you need is to login with your wikimedia account and you're good to go. Follow the link [create a note book](https://paws.wmflabs.org/paws/hub/login) 
+Try out paws yourself in order to familiarise your self with it, all you need is to login with your wikimedia account and you're good to go. Follow the link [create a note book](https://paws.wmflabs.org/paws/hub/login) 
 
 
 
