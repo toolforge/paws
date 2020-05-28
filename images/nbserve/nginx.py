@@ -125,7 +125,7 @@ http {
                         local apiurl = "https://meta.wikimedia.org/w/api.php?" ..
                                        "action=query&format=json&formatversion=2" ..
                                        "&prop=&list=users&meta=&usprop=centralids" ..
-                                       "&ususers=" .. m[1];
+                                       "&ususers=" .. ngx.escape_uri(m[1]);
 
                         local res, err = httpc:request_uri(apiurl);
                         local cjson = require "cjson";
