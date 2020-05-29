@@ -1,8 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import os
 
 
 CONFIG = """
+# Load modules
+include /etc/nginx/modules-enabled/*.conf;
+
 # Let nginx automatically determine the number of worker processes
 # to run. This defaults to number of cores on the host.
 worker_processes auto;
