@@ -2,17 +2,18 @@
 
 PAWS: A Web Shell (PAWS) is a Jupyter notebooks deployment that has been customized to make interacting with Wikimedia wikis easier. It allows users to create and share documents that contain live code, visualizations such as graphs, rich text, etc. The user created notebooks are a powerful tool that enables data analysis and scientific research, and also transforms the way in which programmers write code - by enabling an exploratory environment with a quick feedback loop, and a low barrier for entry through it's easy to use graphical interface. 
 
-How to contribute? Just simply clone on your computer by writing the following command: 
+## Contributing
 
-` git clone https://github.com/toolforge/paws.git `
+Bugs, issues and feature requests are found on [Wikimedia Foundation's Phabricator](https://phabricator.wikimedia.org/).
+There is a [workboard](https://phabricator.wikimedia.org/project/view/1648/) and a project tag of `#paws` to use for related work. You can reference code and commits from this repo at the Phabricator mirror of the code [here](https://phabricator.wikimedia.org/diffusion/PAWS/browse/master/), but please do not clone or try to use that mirror directly.
 
-`cd paws`
+To contribute to this project's code, please fork the repo on [GitHub](https://github.com/toolforge/paws/) and submit a pull request.
 
-PAWS provides some very core features on top of which people can build stuff.
-Notebooks
+If you have push access to the project, we ask that new changes be reviewed by one other
+project member by using either a feature branch on the  https://github.com/toolforge/paws repo
+to trigger a pull request or using a fork to set up a pull request.
 
-It provides Jupyter notebooks (previously known as IPython Notebooks)
-Web based Terminal
+
 ## Useful libraries
 ### Accessing Database Replicas With Pandas and Sqlalchemy
 
