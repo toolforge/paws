@@ -130,7 +130,7 @@ jupyterhub:
     lifecycleHooks:
       postStart:
         exec:
-          command: ["sh", "-c", "cd /srv/paws/pwb && git fetch -t && git checkout stable || exit 0"]
+          command: ["sh", "-c", "cd /srv/paws/pwb && git pull "origin" stable || exit 0"]
     initContainers:
       - name: chown-userhome
         image: busybox
