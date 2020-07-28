@@ -83,9 +83,9 @@ http {
     server {
         listen 0.0.0.0:8000;
 
-        # location ~ \/\. {
-        #     deny all;
-        # }
+        location ~ \/\. {
+            deny all;
+        }
 
         # No port numbes in redirects
         port_in_redirect off;
