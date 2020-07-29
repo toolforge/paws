@@ -5,7 +5,7 @@ set -e
 sed -e '/Pillow/d' /srv/paws/pwb/requirements.txt > /tmp/requirements.txt
 
 # To prevent breakage on older python
-/srv/paws/bin/pip install --no-cache-dir -U pip setuptools
+/srv/paws/bin/pip install --no-cache-dir -U pip setuptools wheel
 
 /srv/paws/bin/pip install --no-cache-dir -r /tmp/requirements.txt
 /srv/paws/bin/pip install --no-cache-dir -r /srv/paws/pwb/dev-requirements.txt

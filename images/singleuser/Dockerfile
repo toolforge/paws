@@ -135,7 +135,7 @@ RUN /usr/local/bin/install-extensions
 
 COPY banner /etc/bash.bashrc
 
-# Install nbpawspublic as a hack
+# Install nbpawspublic as a hack (why here as well as in 'install-extensions'?)
 RUN pip install --no-cache-dir git+https://github.com/toolforge/nbpawspublic@main && \
     jupyter nbextension install --py nbpawspublic --sys-prefix && \
     jupyter nbextension enable --py nbpawspublic --sys-prefix
