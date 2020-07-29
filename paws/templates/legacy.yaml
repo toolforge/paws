@@ -5,7 +5,7 @@ metadata:
     name: paws-public-legacy
     ingress.paws.wmcloud.org: legacy
   annotations:
-    nginx.ingress.kubernetes.io/temporal-redirect: $scheme://{{ .Values.pawspublic.ingress.host }}/$2
+    nginx.ingress.kubernetes.io/temporal-redirect: $scheme://{{ .Values.pawspublic.ingress.host }}/$2$is_args$args
   name: paws-public-legacy
 spec:
   rules:
