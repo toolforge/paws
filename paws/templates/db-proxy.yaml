@@ -1,17 +1,22 @@
-apiVersion: extensions/v1beta1
+{{ if .Values.mysqlProxy }}
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: db-proxy
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: db-proxy
   template:
     metadata:
       labels:
         name: db-proxy
+        app: db-proxy
     spec:
       containers:
       - name: db-proxy
-        image: {{ .Values.dbProxy.image.name }}:{{ .Values.dbProxy.image.tag }}
+        image: {{ tpl .Values.dbProxy.image.template . | quote }}
         env:
           - name: MYSQL_HOST
             value: {{ .Values.mysql.host | quote }}
@@ -38,3 +43,14 @@ spec:
     targetPort: 3306
   selector:
     name: db-proxy
+{{ else }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: wikireplicas
+spec:
+  type: ExternalName
+  externalName: {{ .Values.mysql.host | quote }}
+{{ end }}

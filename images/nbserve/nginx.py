@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import os
 
 
-CONFIG = """
+CONFIG = r"""
 # Let nginx automatically determine the number of worker processes
 # to run. This defaults to number of cores on the host.
 worker_processes auto;
@@ -65,8 +65,8 @@ http {
     # See https://www.nginx.com/resources/admin-guide/reverse-proxy/
     # for more details.
     map $http_upgrade $connection_upgrade {
-            default upgrade;
-            ''      close;
+        default upgrade;
+        ''      close;
     }
 
     # Shared memory area for caching username to id mappings
@@ -76,7 +76,7 @@ http {
     lua_ssl_verify_depth 10;
 
     # Serve things with appropriate mimetypes
-    include /etc/nginx/mime.types;
+    include /usr/local/openresty/nginx/conf/mime.types;
 
     # This is the 'regular' server, that sees all public
     # traffic and proxies them to the appropriate backend server.
@@ -90,33 +90,33 @@ http {
         # No port numbes in redirects
         port_in_redirect off;
 
-        location ~ ^/paws-public/user/([^/]+)/notebooks/(.*)$ {
-            rewrite /paws-public/user/([^/]+)/notebooks/(.*)$ /paws-public/User:$1/$2 permanent;
+        location ~ ^/user/([^/]+)/notebooks/(.*)$ {
+            rewrite /user/([^/]+)/notebooks/(.*)$ /User:$1/$2 permanent;
         }
 
         # Only after the User: redirect! Otherwise our backend can't find the file.
-        location ~ ^/paws-public/\d+/.*\.ipynb$ {
-            include /etc/nginx/uwsgi_params;
+        location ~ ^/\d+/.*\.ipynb$ {
+            include /usr/local/openresty/nginx/conf/uwsgi_params;
             uwsgi_pass uwsgi://%s:8000;
         }
 
-        location /paws-public {
+        location / {
             index index.html index.ipynb Index.ipynb;
             fancyindex on;
 
-            alias /data/project/paws/userhomes;
+            alias /data/project/paws/userhomes/;
         }
 
 
-	location /accelredir {
+        location /accelredir {
             internal;
 
-            alias /data/project/paws/userhomes;
+            alias /data/project/paws/userhomes/;
         }
 
-        location /paws-public/User: {
-            rewrite_by_lua '
-                local m = ngx.re.match(ngx.var.uri, "/paws-public/User:([^/]+)(.*)");
+        location /User: {
+            rewrite_by_lua_block {
+                local m = ngx.re.match(ngx.var.uri, "/User:([^/]+)(.*)");
                 if m then
                     local userid = ngx.shared.usernamemapping:get(m[1]);
                     if userid == nil then
@@ -139,9 +139,9 @@ http {
 
                         ngx.shared.usernamemapping:set(m[1], userid);
                     end
-                    ngx.req.set_uri("/paws-public/" .. userid  .. m[2], true);
+                    ngx.req.set_uri("/" .. userid  .. m[2], true, true);
                 end
-            ';
+            }
 
             proxy_http_version 1.1;
 
@@ -159,6 +159,7 @@ http {
 }
 """
 
+
 def get_nameservers(ipv4only=True):
     """
     Return a list of nameservers from parsing /etc/resolv.conf.
@@ -175,6 +176,7 @@ def get_nameservers(ipv4only=True):
         nameservers = [n for n in nameservers if ':' not in n]
     return nameservers
 
+
 with open('/tmp/nginx.conf', 'w') as f:
     # Not using the nicer .format since it gets confused by the { } in the
     # nginx config itself :(
@@ -184,4 +186,4 @@ with open('/tmp/nginx.conf', 'w') as f:
     )
     f.write(CONFIG % params)
 
-os.execl('/usr/sbin/nginx', '/usr/sbin/nginx', '-c', '/tmp/nginx.conf')
+os.execl('/usr/local/openresty/bin/openresty', '/usr/local/openresty/bin/openresty', '-c', '/tmp/nginx.conf')

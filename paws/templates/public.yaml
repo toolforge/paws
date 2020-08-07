@@ -1,0 +1,118 @@
+{{ if .Values.pawsPublicEnabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: nbserve
+  name: nbserve
+spec:
+  replicas: {{ .Values.pawspublic.nbserve.replicas }}
+  selector:
+    matchLabels:
+      name: nbserve
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: nbserve
+    spec:
+      containers:
+      - image: {{ tpl .Values.pawspublic.nbserve.image.template . | quote }}
+        imagePullPolicy: Always
+        name: nbserve
+        ports:
+        - containerPort: 8000
+          name: nbserve
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /data/project/paws/userhomes
+          name: pawshomes
+      volumes:
+      - hostPath:
+          path: /data/project/paws/userhomes
+        name: pawshomes
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: renderer
+  name: renderer
+spec:
+  replicas: {{ .Values.pawspublic.renderer.replicas }}
+  selector:
+    matchLabels:
+      name: renderer
+  template:
+    metadata:
+      labels:
+        name: renderer
+    spec:
+      containers:
+      - env:
+        - name: BASE_PATH
+          value: /data/project/paws/userhomes/
+        - name: URL_PREFIX
+          value: /
+        image: {{ tpl .Values.pawspublic.renderer.image.template . | quote }}
+        imagePullPolicy: Always
+        name: renderer
+        ports:
+        - containerPort: 8000
+          name: nbserve
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /data/project/paws/userhomes
+          name: pawshomes
+      volumes:
+      - hostPath:
+          path: /data/project/paws/userhomes
+        name: pawshomes
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: paws-public
+  name: paws-public
+spec:
+  ports:
+  - name: http
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    name: nbserve
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: renderer
+  name: renderer
+spec:
+  ports:
+  - name: http
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    name: renderer
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    name: paws-public-custom
+    ingress.paws.wmcloud.org: public
+  name: paws-public-custom
+spec:
+  rules:
+  - host: {{ .Values.pawspublic.ingress.host | quote }}
+    http:
+      paths:
+      - backend:
+          serviceName: paws-public
+          servicePort: 8000
+{{ end }}
