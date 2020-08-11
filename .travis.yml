@@ -3,17 +3,21 @@ language: python
 services:
 - docker
 python:
-- 3.4
+- "3.6"
+install:
+- pip install tox
 script:
+- tox
 - "./travis-script.bash build"
 branches:
   only:
   - master
-deploy:
-  provider: script
-  script: "./travis-script.bash deploy"
-  on:
-    branch: master
+# Commented out pending some improvements
+# deploy:
+#   provider: script
+#   script: "./travis-script.bash deploy"
+#   on:
+#     branch: master
 env:
   global:
   - secure: G3sUntx4dFWsZQHUU1Xacxfw7YGtiiSCcZbZ+F9RYg+RMfwG2Q0G8KBhCtjMl9CA3MgjeFa/xKMojH5LPtoMUbhNi/4ejxBj05RazQuLxbUM1bTRAtktnpoXDQY2OVx6yKX+F+4ts8H++6wscieRirpBdMJDAfXUcexxzKOLjJjyO1fFkih1Er3JzkBMlCHzYC4+cGDKTj45EuwroMUkifZ8G3sLEmXopjD3+89F8euF6y5xrH2nBXufydEpkV+27hHW1853WVejurvajYFr/Zlwdf+g1xbn4zn5JLOQ4Exbi7oxCbJvwVWG3Fs+hRRsWX3WFWqxVgorBqgf3PUHZ1KR5QUmtMulkJ2IrvHe4FK0urjmRbuy/QcQGEutrWDxNTvOaZyHTG2iH+FzrnkRFUjCozS2qeKtpUp8DVCPNIqlvegxOXZ29ib1Qf8yk9nmWPXWmG73z1k8MS2ycLo0suDE6JHy8NeUy2CZFEHemAFGm9/AXCt6+SudJ1o+rG0MA33d0BXmJBuQX85Uaca7oBcJZePSPa0iJ6uJCcv52TwTo22BLJgnQQLNR2+Q79pAH5UU402q/rubMWHuPOBScGO7KW3GMxz0O0Ilushs5gFXFaES3zm3OpKnhmn5MUfB9qmZmDe1Hjeo9fpjd6ZvtgOrwi5mhQhYdj1ZbjJUWSY=
