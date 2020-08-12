@@ -38,3 +38,5 @@ jobs:
       script: "./travis-script.bash build"
     - name: Kubernetes validation
       script: kubeval -v $K8S_VERSION --strict ingress/* manifests/*
+    - name: Helm lint
+      script: helm lint paws/
