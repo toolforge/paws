@@ -32,7 +32,7 @@ stages:
   - test
   - docker
   - name: deploy
-    if: branch = master
+    if: branch = master AND type = push
 
 jobs:
   include:
