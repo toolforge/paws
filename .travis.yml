@@ -48,5 +48,10 @@ jobs:
       stage: docker
       script: "./travis-script.bash build"
     - stage: deploy
-      script: echo "I am a placeholder"
+      script: skip
+      deploy:
+        provider: script
+        script: echo "I am a placeholder"
+        on:
+          branch: master
 
