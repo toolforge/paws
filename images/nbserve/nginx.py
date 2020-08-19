@@ -45,7 +45,6 @@ http {
     scgi_temp_path /tmp;
 
     # access_log does not support 'stderr' directive directly
-    # FIXME: This does not work in docker < 1.9 https://github.com/docker/docker/issues/6880
     access_log /dev/stderr;
 
     # nginx needs an async way to resolve hostnames to IPs, and
@@ -168,22 +167,27 @@ def get_nameservers(ipv4only=True):
     freaks out in some formats of ipv6 that otherwise seem ok.
     """
     nameservers = []
-    with open('/etc/resolv.conf') as f:
+    with open("/etc/resolv.conf") as f:
         for line in f:
-            if line.strip().startswith('nameserver'):
-                nameservers += line.strip().split(' ')[1:]
+            if line.strip().startswith("nameserver"):
+                nameservers += line.strip().split(" ")[1:]
     if ipv4only:
-        nameservers = [n for n in nameservers if ':' not in n]
+        nameservers = [n for n in nameservers if ":" not in n]
     return nameservers
 
 
-with open('/tmp/nginx.conf', 'w') as f:
+with open("/tmp/nginx.conf", "w") as f:
     # Not using the nicer .format since it gets confused by the { } in the
     # nginx config itself :(
     params = (
-        ' '.join(get_nameservers()),
-        os.environ['RENDERER_PORT_8000_TCP_ADDR']
+        " ".join(get_nameservers()),
+        os.environ["RENDERER_PORT_8000_TCP_ADDR"],
     )
     f.write(CONFIG % params)
 
-os.execl('/usr/local/openresty/bin/openresty', '/usr/local/openresty/bin/openresty', '-c', '/tmp/nginx.conf')
+os.execl(
+    "/usr/local/openresty/bin/openresty",
+    "/usr/local/openresty/bin/openresty",
+    "-c",
+    "/tmp/nginx.conf",
+)

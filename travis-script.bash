@@ -6,7 +6,7 @@ set -euo pipefail
 ACTION="${1}"
 PUSH=''
 if [[ ${ACTION} == 'build' ]]; then
-    if [[ ${TRAVIS_PULL_REQUEST} == 'false' ]]; then
+    if [[ ${TRAVIS_PULL_REQUEST} == 'false' ]] && [[ ${TRAVIS_BRANCH} == 'master' ]]; then
         PUSH='--push'
         # Assume we're in master and have secrets!
         docker login -u $DOCKER_USERNAME -p "$DOCKER_PASSWORD" quay.io

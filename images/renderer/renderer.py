@@ -3,19 +3,19 @@ from nbconvert.exporters import HTMLExporter
 
 import os
 
-BASE_PATH = os.environ['BASE_PATH']
-URL_PREFIX = os.environ['URL_PREFIX']
+BASE_PATH = os.environ["BASE_PATH"]
+URL_PREFIX = os.environ["URL_PREFIX"]
 
 
 def get_extension(path, format):
     """
     Return the extension of the path, if any
     """
-    splits = path.split('.')
+    splits = path.split(".")
     if len(splits) == 1:
         # This means there's no two parts - so either no ., or nothing before
-        # or after the .. Easier to handle by just saying we found no extensions.
-        return ''
+        # or after the .. Easier to handle by just saying we found no extensions
+        return ""
     return splits[-1]
 
 
@@ -24,29 +24,30 @@ def render_ipynb(full_path, format):
     Render a given ipynb file
     """
     exporter = HTMLExporter()
-    with open(full_path, encoding='utf-8') as file_handle:
-        html, res = exporter.from_file(file_handle)
-    return Response(html, mimetype='text/html')
+    with open(full_path, encoding="utf-8") as file_handle:
+        html, _ = exporter.from_file(file_handle)
+    return Response(html, mimetype="text/html")
+
 
 # Map of extensions to functions to call for handling them
 handlers = {
-    'ipynb': render_ipynb,
+    "ipynb": render_ipynb,
 }
 
 
 @Request.application
 def application(request):
-    file_path = request.path.lstrip(URL_PREFIX) 
+    file_path = request.path.lstrip(URL_PREFIX)
     full_path = os.path.join(BASE_PATH, file_path)
     # Protect against path traversal attacks, if they make it this far.
     if not full_path.startswith(BASE_PATH):
         # DANGER!
         return Response("Suspicious url", status=403)
-    format = request.args.get('format', None)
-    if format == 'raw':
+    format = request.args.get("format", None)
+    if format == "raw":
         # Let nginx serve raw files
-        accel_path = os.path.join('/accelredir/', file_path)
-        return Response('', headers={'X-Accel-Redirect': accel_path})
+        accel_path = os.path.join("/accelredir/", file_path)
+        return Response("", headers={"X-Accel-Redirect": accel_path})
 
     try:
         extension = get_extension(full_path, format)
@@ -58,6 +59,8 @@ def application(request):
         return Response("Not found", status=404)
     return Response(full_path)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     from werkzeug.serving import run_simple
-    run_simple('localhost', 4000, application)
+
+    run_simple("localhost", 4000, application)
