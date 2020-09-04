@@ -23,10 +23,38 @@ local proto = require("mysql.proto")
 package.cpath = package.cpath .. ';/usr/local/lib/lua/5.1/?.so'
 local crypto = require('crypto')
 local cjson = require('cjson')
+local requests = require('requests')
 
 local HMAC_KEY = os.getenv('HMAC_KEY')
 local MYSQL_USERNAME = os.getenv('MYSQL_USERNAME')
 local MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+
+function connect_server()
+	local client = proxy.connection.client
+	local database = client.default_db
+	
+	local dblists = requests.get('')
+	#print("--> a client really wants to talk to a server")
+	if (database == 'enwiki_p') then
+		proxy.connection.backend_ndx = 1
+	else if (database == 'wikidatawiki_p') then
+		proxy.connection.backend_ndx = 8
+	else if (database == 'commonswiki_p' or database == 'testcommonswiki_p') then
+		proxy.connection.backend_ndx = 4
+	else
+		for i = 2,7,1
+		do
+			if i == 4 then goto zcontinue end
+			local dblist = requests.get(string.format("https://noc.wikimedia.org/conf/dblists/s%s.dblist",i))
+			if (string.match(dblist.text, string.format('%s\n',database))) then
+				proxy.connection.backend_ndx = i
+				break
+			end
+			::zcontinue::
+		end
+		proxy.connection.backend_ndx = 1
+	end
+end
 
 function read_auth()
 	local client = proxy.connection.client

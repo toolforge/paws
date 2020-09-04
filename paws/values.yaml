@@ -235,6 +235,6 @@ jupyterhub:
         exec:
           command: ["sh", "-c", "cd /srv/paws/pwb && git pull origin stable || exit 0"]
 # mysql configures the wiki replica backend variables
-mysql: 
-  host: enwiki.analytics.db.svc.eqiad.wmflabs
+mysql:
+  domain: analytics.db.svc.eqiad.wmflabs
   username: s52771

@@ -18,8 +18,14 @@ spec:
       - name: db-proxy
         image: {{ tpl .Values.dbProxy.image.template . | quote }}
         env:
-          - name: MYSQL_HOST
-            value: {{ .Values.mysql.host | quote }}
+          {{- with .Values.mysql }}
+          {{- $sections := untilStep 1 9 1 | toStrings }}
+          {{- $domain := .domain }}
+          {{- range $sections }}
+          - name: {{ printf "SEC%s_HOST" . | quote }}
+            value: {{ printf "s%s.%s" . $domain | quote }}
+          {{- end }}
+          {{- end }}
           - name: MYSQL_USERNAME
             value: {{ .Values.mysql.username | quote }}
           - name: MYSQL_PASSWORD
