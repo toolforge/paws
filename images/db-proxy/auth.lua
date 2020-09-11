@@ -41,12 +41,15 @@ function connect_server()
 		proxy.connection.backend_ndx = 8
 	else if (database == 'commonswiki_p' or database == 'testcommonswiki_p') then
 		proxy.connection.backend_ndx = 4
+	else if (database == 'meta_p') then
+		proxy.connection.backend_ndx = 7
 	else
 		for i = 2,7,1
 		do
 			if i == 4 then goto zcontinue end
 			local dblist = requests.get(string.format("https://noc.wikimedia.org/conf/dblists/s%s.dblist",i))
-			if (string.match(dblist.text, string.format('%s\n',database))) then
+			local source_db = string.gsub(database, "_p", "")
+			if (string.match(dblist.text, string.format('%s\n',source_db))) then
 				proxy.connection.backend_ndx = i
 				break
 			end
