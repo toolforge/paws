@@ -11,7 +11,7 @@ RUN apt-get install --yes --no-install-recommends \
 
 RUN luarocks install luacrypto
 RUN luarocks install lua-cjson
-RUN luarocks install lua-requests
+RUN luarocks install luasocket
 
 ADD auth.lua /srv/auth.lua
 

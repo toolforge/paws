@@ -23,18 +23,18 @@ local proto = require("mysql.proto")
 package.cpath = package.cpath .. ';/usr/local/lib/lua/5.1/?.so'
 local crypto = require('crypto')
 local cjson = require('cjson')
-local requests = require('requests')
+local socket = require('socket')
 
 local HMAC_KEY = os.getenv('HMAC_KEY')
 local MYSQL_USERNAME = os.getenv('MYSQL_USERNAME')
 local MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+local MYSQL_DOMAIN = os.getenv('MYSQL_DOMAIN') 
 
 function connect_server()
 	local client = proxy.connection.client
 	local database = client.default_db
-	
-	local dblists = requests.get('')
-	#print("--> a client really wants to talk to a server")
+	local dns = socket.dns
+
 	if (database == 'enwiki_p') then
 		proxy.connection.backend_ndx = 1
 	else if (database == 'wikidatawiki_p') then
@@ -44,18 +44,13 @@ function connect_server()
 	else if (database == 'meta_p') then
 		proxy.connection.backend_ndx = 7
 	else
-		for i = 2,7,1
-		do
-			if i == 4 then goto zcontinue end
-			local dblist = requests.get(string.format("https://noc.wikimedia.org/conf/dblists/s%s.dblist",i))
-			local source_db = string.gsub(database, "_p", "")
-			if (string.match(dblist.text, string.format('%s\n',source_db))) then
-				proxy.connection.backend_ndx = i
-				break
-			end
-			::zcontinue::
-		end
-		proxy.connection.backend_ndx = 1
+		-- If this isn't a well-known db, ask DNS!
+		local source_db = string.gsub(database, "_p", "")
+		local db_host = source_db .. '.' .. MYSQLDOMAIN
+		local db_address, address_info = dns.toip(db_host)
+		-- backend_address should be the canonical name (eg. s4.analytics...)
+		local backend_address = address_info.name
+		proxy.connection.backend_ndx = tonumber(backend_address:sub(2,2))
 	end
 end
 

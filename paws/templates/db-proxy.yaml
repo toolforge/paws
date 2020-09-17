@@ -32,6 +32,8 @@ spec:
             value: {{ .Values.mysql.password | quote }}
           - name: HMAC_KEY
             value: {{ .Values.dbProxy.hmacKey | quote }}
+          - name: MYSQL_DOMAIN
+            value: {{ .Values.mysql.domain | quote }}
         resources:
 {{ toYaml .Values.dbProxy.resources | indent 12 }}
         ports:
