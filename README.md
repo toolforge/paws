@@ -13,6 +13,28 @@ If you have push access to the project, we ask that new changes be reviewed by o
 project member by using either a feature branch on the  https://github.com/toolforge/paws repo
 to trigger a pull request or using a fork to set up a pull request.
 
+### Settings up a development environment
+
+It is possible to run a fully-functioning PAWS system inside [minikube](https://minikube.sigs.k8s.io/docs/)! You don't need
+access to the secrets.yaml file to do it either, since the defaults mostly support it.
+
+You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working,
+you need to create a new namespace for paws (`kubectl create namespace paws-dev` for instance) and then install into it
+with helm (from the top level of this repo):
+`helm -n paws-dev install dev paws/`
+
+The rest of the setup instructions will display on screen as long as the install is successful.
+Please refer to the helm documentation from there.
+
+NOTE: By default the mariadb chart keeps a PersistentVolumeClaim around for its storage even after
+uninstall. If you intend on rebuilding your dev environment later, you will need to use all the same
+values for DB and DB passwords if you don't delete that claim and volume (and the data from your
+last wiki will be in there--which means you keep your oauth grant!). The PVC for mediawiki gets cleaned up on uninstall.
+
+If minikube is acting weird, it might be worth it to upgrade minikube or even to
+ increase the default memory:
+`minikube config set memory 4096`
+
 ## Useful libraries
 ### Accessing Database Replicas With Pandas and Sqlalchemy
 

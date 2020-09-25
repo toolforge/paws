@@ -23,7 +23,7 @@ local proto = require("mysql.proto")
 package.cpath = package.cpath .. ';/usr/local/lib/lua/5.1/?.so'
 local crypto = require('crypto')
 local cjson = require('cjson')
-local socket = require('socket')
+local socket = require('socket.core')
 
 local HMAC_KEY = os.getenv('HMAC_KEY')
 local MYSQL_USERNAME = os.getenv('MYSQL_USERNAME')
@@ -37,16 +37,16 @@ function connect_server()
 
 	if (database == 'enwiki_p') then
 		proxy.connection.backend_ndx = 1
-	else if (database == 'wikidatawiki_p') then
+	elseif (database == 'wikidatawiki_p') then
 		proxy.connection.backend_ndx = 8
-	else if (database == 'commonswiki_p' or database == 'testcommonswiki_p') then
+	elseif (database == 'commonswiki_p' or database == 'testcommonswiki_p') then
 		proxy.connection.backend_ndx = 4
-	else if (database == 'meta_p') then
+	elseif (database == 'meta_p') then
 		proxy.connection.backend_ndx = 7
 	else
 		-- If this isn't a well-known db, ask DNS!
 		local source_db = string.gsub(database, "_p", "")
-		local db_host = source_db .. '.' .. MYSQLDOMAIN
+		local db_host = source_db .. '.' .. MYSQL_DOMAIN
 		local db_address, address_info = dns.toip(db_host)
 		-- backend_address should be the canonical name (eg. s4.analytics...)
 		local backend_address = address_info.name
