@@ -97,7 +97,10 @@ def cull_idle(
     auth_header = {
         "Authorization": "token %s" % api_token,
     }
-    req = HTTPRequest(url=url + "/users", headers=auth_header,)
+    req = HTTPRequest(
+        url=url + "/users",
+        headers=auth_header,
+    )
     now = datetime.now(timezone.utc)
     client = AsyncHTTPClient()
 
@@ -210,7 +213,8 @@ def cull_idle(
         resp = yield fetch(req)
         if resp.code == 202:
             app_log.warning(
-                "Server %s is slow to stop", log_name,
+                "Server %s is slow to stop",
+                log_name,
             )
             # return False to prevent culling user with pending shutdowns
             return False
