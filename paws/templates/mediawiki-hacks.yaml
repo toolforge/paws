@@ -143,5 +143,8 @@ spec:
       volumes:
         - name: mediawiki-data
           persistentVolumeClaim:
-            claimName: {{ if .Values.mediawiki.persistence.existingClaim }}{{ .Values.mediawiki.persistence.existingClaim }}{{- else }}{{ template "mediawiki.fullname" . }}-mediawiki-mediawiki{{- end }}
+            {{ $mwFullname := include "mediawiki.fullname" . -}}
+            {{ with .Values.mediawiki.persistence -}}
+            claimName: {{ if .existingClaim }}{{ .existingClaim }}{{- else }}{{ $mwFullname }}-mediawiki-mediawiki{{- end }}
+            {{ end -}}
 {{ end }}
