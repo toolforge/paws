@@ -19,7 +19,12 @@ It is possible to run a fully-functioning PAWS system inside [minikube](https://
 access to the secrets.yaml file to do it either, since the defaults mostly support it.
 
 You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working,
-you need to create a new namespace for paws (`kubectl create namespace paws-dev` for instance) and then install into it
+install the dependencies for the PAWS dev environment with these steps:
+ - `helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/`
+ - `helm repo add bitnami https://charts.bitnami.com/bitnami`
+ - `helm dep up paws/`
+
+Then, you need to create a new namespace for paws (`kubectl create namespace paws-dev` for instance) and then install into it
 with helm (from the top level of this repo):
 `helm -n paws-dev install dev paws/`
 
