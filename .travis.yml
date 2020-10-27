@@ -8,9 +8,6 @@ before_install:
 - tar xzvf helm-v3.2.0-linux-amd64.tar.gz
 - mv linux-amd64/helm helm
 - chmod u+x helm
-- helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-- helm repo add bitnami https://charts.bitnami.com/bitnami
-- helm dependency update paws/
 - wget https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz
 - tar xf kubeval-linux-amd64.tar.gz
 - chmod u+x kubeval
@@ -46,6 +43,10 @@ jobs:
     - name: Kubernetes validation
       script: kubeval -v $K8S_VERSION --strict ingress/* manifests/*
     - name: Helm lint
+      before_script:
+      - helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+      - helm repo add bitnami https://charts.bitnami.com/bitnami
+      - helm dependency update paws/
       script: helm lint paws/
     - name: Docker build
       stage: docker
