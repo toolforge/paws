@@ -24,13 +24,15 @@ spec:
           {{- if .Values.mediawiki.enabled }}
           - {{ printf "--proxy-backend-addresses=%s-mariadb.%s:3306" .Release.Name .Release.Namespace | quote }}
           {{- else }}
-          {{- with .Values.mysql }}
-          {{- $sections := untilStep 1 9 1 | toStrings }}
-          {{- $domain := .domain }}
-          {{- range $sections }}
-          - {{ printf "--proxy-backend-addresses=s%s.%s:3306" . $domain | quote }}
-          {{- end }}
-          {{- end }}
+          - {{ printf "--proxy-backend-addresses=%s:3306" .Values.mysql.host | quote }}
+          # TODO: enable this part when the 8 IP addresses are actually different
+          # {{- with .Values.mysql }}
+          # {{- $sections := untilStep 1 9 1 | toStrings }}
+          # {{- $domain := .domain }}
+          # {{- range $sections }}
+          # - {{ printf "--proxy-backend-addresses=s%s.%s:3306" . $domain | quote }}
+          # {{- end }}
+          # {{- end }}
           {{- end }}
           - --proxy-address=0.0.0.0:3306
           - --proxy-skip-profiling
@@ -43,6 +45,8 @@ spec:
             value: {{ printf "s%s.%s" . $domain | quote }}
           {{- end }}
           {{- end }}
+          - name: MYSQL_HOST
+            value: {{ .Values.mysql.host | quote }}
           - name: MYSQL_USERNAME
             value: {{ .Values.mysql.username | quote }}
           - name: MYSQL_PASSWORD
