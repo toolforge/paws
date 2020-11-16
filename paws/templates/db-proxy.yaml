@@ -1,4 +1,3 @@
-{{ if .Values.mysqlProxy }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -17,15 +16,41 @@ spec:
       containers:
       - name: db-proxy
         image: {{ tpl .Values.dbProxy.image.template . | quote }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - mysql-proxy
+          - --plugins=proxy
+          - --proxy-lua-script=/srv/auth.lua
+          {{- if .Values.mediawiki.enabled }}
+          - {{ printf "--proxy-backend-addresses=%s-mariadb.%s:3306" .Release.Name .Release.Namespace | quote }}
+          {{- else }}
+          {{- with .Values.mysql }}
+          {{- $sections := untilStep 1 9 1 | toStrings }}
+          {{- $domain := .domain }}
+          {{- range $sections }}
+          - {{ printf "--proxy-backend-addresses=s%s.%s:3306" . $domain | quote }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          - --proxy-address=0.0.0.0:3306
+          - --proxy-skip-profiling
         env:
-          - name: MYSQL_HOST
-            value: {{ .Values.mysql.host | quote }}
+          {{- with .Values.mysql }}
+          {{- $sections := untilStep 1 9 1 | toStrings }}
+          {{- $domain := .domain }}
+          {{- range $sections }}
+          - name: {{ printf "SEC%s_HOST" . | quote }}
+            value: {{ printf "s%s.%s" . $domain | quote }}
+          {{- end }}
+          {{- end }}
           - name: MYSQL_USERNAME
             value: {{ .Values.mysql.username | quote }}
           - name: MYSQL_PASSWORD
             value: {{ .Values.mysql.password | quote }}
           - name: HMAC_KEY
             value: {{ .Values.dbProxy.hmacKey | quote }}
+          - name: MYSQL_DOMAIN
+            value: {{ .Values.mysql.domain | quote }}
         resources:
 {{ toYaml .Values.dbProxy.resources | indent 12 }}
         ports:
@@ -43,14 +68,3 @@ spec:
     targetPort: 3306
   selector:
     name: db-proxy
-{{ else }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-  labels:
-    app: wikireplicas
-spec:
-  type: ExternalName
-  externalName: {{ .Values.mysql.host | quote }}
-{{ end }}
