@@ -153,6 +153,9 @@ http {
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Original-URI $request_uri;
             proxy_set_header Host $host:$server_port;
+
+            # Some complex notebooks take a long time to render
+            proxy_read_timeout 180s;
         }
     }
 }
