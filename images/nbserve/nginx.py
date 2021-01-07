@@ -30,6 +30,10 @@ http {
     tcp_nopush on;
     tcp_nodelay on;
     keepalive_timeout 65;
+    # Some complex notebooks take a long time to render
+    proxy_read_timeout 180s;
+    proxy_connect_timeout 180s;
+    uwsgi_read_timeout 180s;
     types_hash_max_size 2048;
     # server_tokens off;
 
@@ -153,10 +157,6 @@ http {
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header X-Original-URI $request_uri;
             proxy_set_header Host $host:$server_port;
-
-            # Some complex notebooks take a long time to render
-            proxy_read_timeout 180s;
-            proxy_connect_timeout 180s;
         }
     }
 }
