@@ -156,6 +156,7 @@ http {
 
             # Some complex notebooks take a long time to render
             proxy_read_timeout 180s;
+            proxy_connect_timeout 180s;
         }
     }
 }
