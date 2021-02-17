@@ -63,7 +63,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: beta-mysql
 spec:
   ports:
   - port: 3306
