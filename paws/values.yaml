@@ -183,6 +183,7 @@ jupyterhub:
                   ]
           
                   spawner.environment['MYSQL_HOST'] = os.environ['MYSQL_SERVICE_HOST']
+                  spawner.environment['BETA_MYSQL_HOST'] = os.environ['BETA_MYSQL_SERVICE_HOST']
                   mysql_password = hmac.new(
                       os.environ['MYSQL_HMAC_KEY'].encode('utf-8'),
                       identity['username'].encode('utf-8'),
@@ -247,6 +248,17 @@ mysql:
   domain: "svc.cluster.local"
   username: s52771
   password: "iAmNotSecret0"
+# beta is for live testing features not ready for production use
+beta:
+  mysql:
+    enabled: false
+    domain: "svc.cluster.local"
+  dbProxy:
+    image: 
+      name: quay.io/wikimedia-paws-prod/db-proxy
+      tag: multiinstance
+      # dbProxy.image.template safely defines image:tag name in yaml
+      template: "{{ .Values.dbProxy.image.name}}:{{.Values.dbProxy.image.tag }}"
 # If not deployed for prod use, we use the Bitnami mediawiki chart for testing
 mediawikiHacks:
   image:
