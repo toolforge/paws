@@ -1,0 +1,74 @@
+{{ if .Values.beta.mysql.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beta-db-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beta-db-proxy
+  template:
+    metadata:
+      labels:
+        name: beta-db-proxy
+        app: beta-db-proxy
+    spec:
+      containers:
+      - name: beta-db-proxy
+        image: {{ tpl .Values.beta.dbProxy.image.template . | quote }}
+        imagePullPolicy: IfNotPresent
+        command:
+          - mysql-proxy
+          - --plugins=proxy
+          - --proxy-lua-script=/srv/auth.lua
+          {{- if .Values.mediawiki.enabled }}
+          - {{ printf "--proxy-backend-addresses=%s-mariadb.%s:3306" .Release.Name .Release.Namespace | quote }}
+          {{- else }}
+          {{- with .Values.beta.mysql }}
+          {{- $sections := untilStep 1 9 1 | toStrings }}
+          {{- $domain := .domain }}
+          {{- range $sections }}
+          - {{ printf "--proxy-backend-addresses=s%s.%s:3306" . $domain | quote }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          - --proxy-address=0.0.0.0:3306
+          - --proxy-skip-profiling
+        env:
+          {{- with .Values.beta.mysql }}
+          {{- $sections := untilStep 1 9 1 | toStrings }}
+          {{- $domain := .domain }}
+          {{- range $sections }}
+          - name: {{ printf "SEC%s_HOST" . | quote }}
+            value: {{ printf "s%s.%s" . $domain | quote }}
+          {{- end }}
+          {{- end }}
+          - name: MYSQL_HOST
+            value: {{ .Values.mysql.host | quote }}
+          - name: MYSQL_USERNAME
+            value: {{ .Values.mysql.username | quote }}
+          - name: MYSQL_PASSWORD
+            value: {{ .Values.mysql.password | quote }}
+          - name: HMAC_KEY
+            value: {{ .Values.dbProxy.hmacKey | quote }}
+          - name: MYSQL_DOMAIN
+            value: {{ .Values.beta.mysql.domain | quote }}
+        resources:
+{{ toYaml .Values.dbProxy.resources | indent 12 }}
+        ports:
+          - containerPort: 3306
+            name: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beta-mysql
+spec:
+  ports:
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    name: beta-db-proxy
+{{ end }}
