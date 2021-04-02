@@ -25,14 +25,6 @@ spec:
           - {{ printf "--proxy-backend-addresses=%s-mariadb.%s:3306" .Release.Name .Release.Namespace | quote }}
           {{- else }}
           - {{ printf "--proxy-backend-addresses=%s:3306" .Values.mysql.host | quote }}
-          # TODO: enable this part when the 8 IP addresses are actually different
-          # {{- with .Values.mysql }}
-          # {{- $sections := untilStep 1 9 1 | toStrings }}
-          # {{- $domain := .domain }}
-          # {{- range $sections }}
-          # - {{ printf "--proxy-backend-addresses=s%s.%s:3306" . $domain | quote }}
-          # {{- end }}
-          # {{- end }}
           {{- end }}
           - --proxy-address=0.0.0.0:3306
           - --proxy-skip-profiling
