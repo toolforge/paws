@@ -1,33 +1,15 @@
 #!/bin/bash
+set -euo pipefail
+
 pip install --no-cache-dir \
     pythreejs \
     ipyleaflet \
     bqplot \
     RISE \
     py-heat-magic \
-    nbresuse \
+    jupyter-resource-usage \
     git+https://github.com/toolforge/nbpawspublic@main \
 
-
-jupyter nbextension install --py widgetsnbextension --sys-prefix
-jupyter nbextension enable --py widgetsnbextension --sys-prefix
-
-jupyter nbextension install --py ipyleaflet --sys-prefix
-jupyter nbextension enable --py ipyleaflet --sys-prefix
-
-jupyter nbextension install --py bqplot --sys-prefix
-jupyter nbextension enable --py bqplot --sys-prefix
-
-jupyter nbextension install --py pythreejs --sys-prefix
-jupyter nbextension enable --py pythreejs --sys-prefix
-
-jupyter nbextension install --py rise --sys-prefix
-jupyter nbextension enable --py rise --sys-prefix
-
-jupyter serverextension enable --py nbresuse --sys-prefix
-jupyter nbextension enable --py nbresuse --sys-prefix
-
-jupyter serverextension enable --py jupyterlab --sys-prefix
 
 jupyter nbextension install --py nbpawspublic --sys-prefix
 jupyter nbextension enable --py nbpawspublic --sys-prefix

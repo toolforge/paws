@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT2_DIR=/srv/paws
@@ -21,14 +21,15 @@ RUN adduser --disabled-password \
 WORKDIR ${HOME}
 
 # Base building utilities that'll always be required, probably
-RUN apt-get update --yes
-RUN apt-get install --yes \
+RUN apt-get update > /dev/null && \
+    apt-get install --yes \
         git \
         locales \
         pkg-config \
         build-essential \
         gcc \
-        apt-transport-https
+        apt-transport-https > /dev/null
+
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
@@ -40,16 +41,23 @@ ENV LANGUAGE en_US.UTF-8
 ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
 ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
 RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
-RUN apt-get update --yes
+
+# Use newer version of R
+# Binary packages from packagemanager.rstudio.com work against this.
+# Base R from Focal is only 3.6.
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" > /etc/apt/sources.list.d/cran.list
 
 # Install languages needed and their core dev packages
-RUN apt-get install --yes \
+RUN apt-get update --yes > /dev/null && \
+    apt-get install --yes \
         python3 \
         python3-dev \
         python3-venv \
         r-recommended \
         r-base-dev \
-        nodejs
+        r-cran-littler \
+        nodejs > /dev/null
 
 # Utilities
 RUN apt-get install --yes \
@@ -61,7 +69,7 @@ RUN apt-get install --yes \
         links \
         nano \
         vim \
-        mariadb-client
+        mariadb-client > /dev/null
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
@@ -80,42 +88,49 @@ RUN apt-get install --yes \
     libzmq3-dev \
     libreadline-dev \
     # For R's mysql
-    libmariadb-client-lgpl-dev \
+    libmariadb-dev \
     # For R's curl
     libcurl4-openssl-dev \
     # For R's devtools
     libssl-dev \
     # For PDFs and stuff
     pandoc \
-    texlive-xetex
+    texlive-xetex > /dev/null
 
-RUN mkdir -p /srv/paws && chown ${NB_USER}:${NB_USER} /srv/paws
+# Create user owned R libs dir
+# This lets users temporarily install packages
+ENV R_LIBS_USER /srv/r
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${R_LIBS_USER}
+
+# Create venv directory, and let users install into it
+ENV VENV_DIR /srv/paws
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${VENV_DIR}
+
 ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
 
 USER ${NB_USER}
-RUN python3.6 -m venv /srv/paws
+RUN python3 -m venv /srv/paws
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
     jupyterhub==1.1.0 \
-    notebook \
-    jupyterlab \
+    notebook==6.3.* \
+    jupyterlab==3.* \
     bash_kernel
 
 # Install the bash kernel
 RUN python -m bash_kernel.install --sys-prefix
 
-# Install the R Kernel and libraries
-COPY install-r /usr/local/bin/install-r
+# Set CRAN mirror to rspm before we install anything
+COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
 
-# We need root simply to install the kernelspec lol
-# https://github.com/IRkernel/IRkernel/issues/495
-USER root
-RUN /usr/local/bin/install-r
+# Install the R Kernel
+RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
+    r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
+    rm -rf /tmp/downloaded_packages
 
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
-USER ${NB_USER}
 
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
@@ -130,12 +145,9 @@ RUN /usr/local/bin/install-pwb
 COPY install-extensions /usr/local/bin/
 RUN /usr/local/bin/install-extensions
 
-
 COPY banner /etc/bash.bashrc
 
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
-
-USER ${NB_USER}
 
 EXPOSE 8888
