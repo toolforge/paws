@@ -78,6 +78,8 @@ jupyterhub:
         - Zhuyifei1999
     type: mediawiki
   hub:
+    cull:
+      timeout: 86400
     db:
       # jupyterhub.hub.db values are overridden in Cloud VPS
       url: sqlite://
