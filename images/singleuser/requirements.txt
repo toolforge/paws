@@ -36,3 +36,6 @@ mycli
 
 # Interface with other languages
 rpy2
+
+# RStudio
+jupyter-rsession-proxy

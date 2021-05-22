@@ -71,6 +71,24 @@ RUN apt-get install --yes \
         vim \
         mariadb-client > /dev/null
 
+
+# Needed by RStudio
+RUN apt-get update -qq --yes && \
+    apt-get install --yes --no-install-recommends -qq \
+        psmisc \
+        sudo \
+        libapparmor1 \
+        lsb-release \
+        libclang-dev  > /dev/null
+# Install RStudio
+# 1.3.959 is latest version that works with jupyter-rsession-proxy
+# See https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93#issuecomment-725874693
+ENV RSTUDIO_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.959-amd64.deb
+RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
+    dpkg -i /tmp/rstudio.deb && \
+    rm /tmp/rstudio.deb
+
+
 # Machine-learning type stuff
 RUN apt-get install --yes \
     # For scipy & friends
@@ -102,6 +120,14 @@ RUN apt-get install --yes \
 ENV R_LIBS_USER /srv/r
 RUN install -d -o ${NB_USER} -g ${NB_USER} ${R_LIBS_USER}
 
+# R_LIBS_USER is set by default in /etc/R/Renviron, which RStudio loads.
+# We uncomment the default, and set what we wanna - so it picks up
+# the packages we install. Without this, RStudio doesn't see the packages
+# that R does.
+# Stolen from https://github.com/jupyterhub/repo2docker/blob/6a07a48b2df48168685bb0f993d2a12bd86e23bf/repo2docker/buildpacks/r.py
+RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
+    echo "R_LIBS_USER=${R_LIBS_USER}" >> /etc/R/Renviron
+
 # Create venv directory, and let users install into it
 ENV VENV_DIR /srv/paws
 RUN install -d -o ${NB_USER} -g ${NB_USER} ${VENV_DIR}
@@ -123,6 +149,9 @@ RUN python -m bash_kernel.install --sys-prefix
 
 # Set CRAN mirror to rspm before we install anything
 COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
+# RStudio needs its own config
+COPY rsession.conf /etc/rstudio/rsession.conf
+
 
 # Install the R Kernel
 RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
