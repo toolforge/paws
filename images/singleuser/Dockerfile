@@ -149,6 +149,7 @@ RUN pip install --no-cache-dir \
     notebook==6.3.* \
     jupyterlab==3.* \
     nbgitpuller==0.9.0 \
+    voila==0.2.* \
     bash_kernel
 
 # Install the bash kernel
