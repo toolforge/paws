@@ -1,3 +1,5 @@
+# Disable flake8 for this file, since it's a config file not just python
+# flake8: noqa
 import os
 
 openrefine_path = os.path.join(os.environ['OPENREFINE_DIR'], 'refine')
