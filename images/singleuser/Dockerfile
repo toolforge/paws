@@ -116,6 +116,7 @@ RUN pip install --no-cache-dir \
     jupyterhub==1.1.0 \
     notebook==6.3.* \
     jupyterlab==3.* \
+    nbgitpuller==0.9.0 \
     bash_kernel
 
 # Install the bash kernel
