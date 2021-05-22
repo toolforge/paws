@@ -57,6 +57,7 @@ RUN apt-get update --yes > /dev/null && \
         r-recommended \
         r-base-dev \
         r-cran-littler \
+        openjdk-11-jdk \
         nodejs > /dev/null
 
 # Utilities
@@ -88,6 +89,11 @@ RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
     dpkg -i /tmp/rstudio.deb && \
     rm /tmp/rstudio.deb
 
+# Setup OpenRefine
+ENV OPENREFINE_DIR /srv/openrefine
+RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
+    curl -L https://github.com/OpenRefine/OpenRefine/releases/download/3.4.1/openrefine-linux-3.4.1.tar.gz | tar xzf - --strip=1
+COPY proxies/openrefine-logo.svg ${OPENREFINE_DIR}}/openrefine-logo.svg
 
 # Machine-learning type stuff
 RUN apt-get install --yes \
@@ -178,5 +184,8 @@ COPY banner /etc/bash.bashrc
 
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
+
+# Setup custom config as needed
+COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
 
 EXPOSE 8888
