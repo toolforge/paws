@@ -111,6 +111,8 @@ RUN apt-get install --yes \
     # for ipython kernels
     libzmq3-dev \
     libreadline-dev \
+    # For sparql kernel
+    graphviz \
     # For R's mysql
     libmariadb-dev \
     # For R's curl
@@ -153,6 +155,9 @@ RUN pip install --no-cache-dir \
 
 # Install the bash kernel
 RUN python -m bash_kernel.install --sys-prefix
+
+# Install the SPARQL kernel
+RUN python3 -m jupyter sparqlkernel install --sys-prefix
 
 # Set CRAN mirror to rspm before we install anything
 COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
