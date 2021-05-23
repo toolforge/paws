@@ -22,12 +22,12 @@ jobs:
         run: |
           mkdir kubeval
           cd kubeval
-          curl -Lf https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xf -f
+          curl -Lf https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xf -
           chmod +x kubeval
       - name: Run kubeval
         run: |
           export KUBERNETES_VERSION=1.17
-          kubeval -v $KUBERNETES_VERSION --strict ingress/* manifests/*
+          ./kubeval/kubeval -v $KUBERNETES_VERSION --strict ingress/* manifests/*
       - uses: azure/setup-helm@v1
       - name: Helm lint
         run: |
