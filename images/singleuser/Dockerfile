@@ -159,7 +159,6 @@ COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
 # RStudio needs its own config
 COPY rsession.conf /etc/rstudio/rsession.conf
 
-
 # Install the R Kernel
 RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
     r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
