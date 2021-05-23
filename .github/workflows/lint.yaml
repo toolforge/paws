@@ -22,7 +22,7 @@ jobs:
         run: |
           mkdir kubeval
           cd kubeval
-          curl -Lf https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xf -
+          curl -Lf https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xzf -
           chmod +x kubeval
       - name: Run kubeval
         run: |
