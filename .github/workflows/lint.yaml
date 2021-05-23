@@ -1,0 +1,37 @@
+name: Python lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  flake8_py3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install tox
+        run: pip install tox
+      - name: Run tox
+        run: |
+          tox
+      - name: Install kubeval
+        run: |
+          mkdir kubeval
+          cd kubeval
+          curl -Lf https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xf -f
+          chmod +x kubeval
+      - name: Run kubeval
+        run: |
+          export KUBERNETES_VERSION=1.17
+          kubeval -v $KUBERNETES_VERSION --strict ingress/* manifests/*
+      - uses: azure/setup-helm@v1
+      - name: Helm lint
+        run: |
+          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm dependency update paws/
+          helm lint paws/
