@@ -26,7 +26,7 @@ jobs:
           chmod +x kubeval
       - name: Run kubeval
         run: |
-          export KUBERNETES_VERSION=1.17
+          export KUBERNETES_VERSION=1.16.0
           ./kubeval/kubeval -v $KUBERNETES_VERSION --strict ingress/* manifests/*
       - uses: azure/setup-helm@v1
       - name: Helm lint
