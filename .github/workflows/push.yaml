@@ -4,7 +4,7 @@ on:
   push:
     branches: master
     paths:
-      - images/singleuser/
+      - images/singleuser/**
 
 jobs:
   login:
