@@ -50,6 +50,59 @@ spec:
       readOnly: false
     - pathPrefix: '/data/project'
       readOnly: false
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
+  name: paws-psp-public
+spec:
+  requiredDropCapabilities:
+    - ALL
+  allowPrivilegeEscalation: false
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      # GID for tools.paws only
+      - min: 52903
+        max: 52903
+  hostIPC: false
+  hostNetwork: false
+  hostPID: false
+  privileged: false
+  readOnlyRootFilesystem: false
+  runAsUser:
+    rule: 'MustRunAs'
+    ranges:
+      # UID for tools.paws-public only
+      - min: 52903
+        max: 52903
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'hostPath'
+    - 'persistentVolumeClaim'
+  allowedHostPaths:
+    - pathPrefix: '/public/dumps'
+      readOnly: true
+    - pathPrefix: '/mnt/nfs'
+      readOnly: true
+    - pathPrefix: '/var/lib/sss/pipes'
+      readOnly: false
+    - pathPrefix: '/data/project'
+      readOnly: false
 
 ---
 
@@ -69,6 +122,21 @@ rules:
   - use
 
 ---
+# Cluster role which grants access to the paws pod security policy
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: paws-psp-public
+rules:
+- apiGroups:
+  - policy
+  resourceNames:
+  - paws-psp-public
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+---
 
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -80,11 +148,32 @@ roleRef:
   kind: ClusterRole
   name: paws-psp
 subjects:
-# For all service accounts in the prod (paws) namespace
-- apiGroup: rbac.authorization.k8s.io
-  kind: Group
-  name: system:serviceaccounts:prod
+# For all most accounts in the prod (paws) namespace
+- kind: ServiceAccount
+  name: hub
+  namespace: prod
+- kind: ServiceAccount
+  name: default
+  namespace: prod
+- kind: ServiceAccount
+  name: hook-image-awaiter
+  namespace: prod
 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: paws-psp-public
+  namespace: prod
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: paws-psp-public
+subjects:
+# For the paws-public service account in the prod (paws) namespace
+- kind: ServiceAccount
+  name: paws-public
+  namespace: prod
 ---
 # The deploy service account for the deploy hook needs a freer hand, I'm afraid
 # We could also experiment with giving this lesser privs than this.
