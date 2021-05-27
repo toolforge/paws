@@ -9,11 +9,12 @@ openrefine_logo_path = os.path.join(
 c.ServerProxy.servers = {
     "openrefine": {
         "command": [
-            openrefine_path,
-            "-p",
-            "{port}",
-            "-d",
-            os.path.expanduser("~"),
+            "sh",
+            "-c",
+            "umask 077 && exec "
+            + openrefine_path
+            + " -p {port} -d "
+            + os.path.expanduser("~"),
         ],
         "port": 3333,
         "timeout": 120,
