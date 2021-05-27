@@ -1,4 +1,9 @@
 {{ if .Values.pawsPublicEnabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: paws-public
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,6 +21,7 @@ spec:
       labels:
         name: nbserve
     spec:
+      serviceAccount: paws-public
       containers:
       - image: {{ tpl .Values.pawspublic.nbserve.image.template . | quote }}
         imagePullPolicy: Always
@@ -49,6 +55,7 @@ spec:
       labels:
         name: renderer
     spec:
+      serviceAccount: paws-public
       containers:
       - env:
         - name: BASE_PATH
