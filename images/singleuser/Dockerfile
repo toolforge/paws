@@ -70,6 +70,7 @@ RUN apt-get install --yes \
         links \
         nano \
         vim \
+        lsof \
         mariadb-client > /dev/null
 
 
