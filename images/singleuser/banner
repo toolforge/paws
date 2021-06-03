@@ -13,5 +13,5 @@ PS1='${JPY_USER}@PAWS:\w$ '
 echo "Welcome to PAWS!"
 echo "Please behave responsibly"
 echo "Getting Started: https://www.mediawiki.org/wiki/Manual:Pywikibot/PAWS"
-echo "Questions? Need help? Find us on #wikimedia-cloud on IRC on freenode!"
+echo "Questions? Need help? Find us on #wikimedia-cloud on IRC on libera.chat!"
 echo "File bugs at https://phabricator.wikimedia.org/maniphest/task/create/?projects=PAWS"
