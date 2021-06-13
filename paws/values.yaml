@@ -260,7 +260,7 @@ mediawikiHacks:
     template: "{{ .Values.mediawikiHacks.image.name}}:{{.Values.mediawikiHacks.image.tag }}"
 mediawiki:
   enabled: true
-  mediawikiHost: wiki.mediawiki.local
+  mediawikiHost: wiki.mediawiki.local:30002
   mediawikiUser: TheAdmin
   mediawikiPassword: 59202f7c94f01de9200f7a920193e8
   mariadb:
@@ -271,11 +271,69 @@ mediawiki:
       user: s52771
       password: iAmNotSecret0
   service:
-    type: NodePort
+    type: ClusterIP
   ingress:
     enabled: true
     hosts:
       - name: wiki.mediawiki.local
         tls: false
         certManager: false
-
+ingress-nginx:
+  controller:
+    name: controller
+    image:
+      repository: docker-registry.tools.wmflabs.org/nginx-ingress-controller
+      tag: "v0.46.0"
+      digest: sha256:be724c71b4ad5086a734b777a9478e44e68dea1bdd00fbed345a122fb141274b
+      pullPolicy: IfNotPresent
+    config:
+      # T241310: pass the incoming X-Forwarded-* headers to upstreams
+      use-forwarded-headers: "true"
+      # T243580: set default client_max_body_size to match dynamicproxy's setting
+      proxy-body-size: 128M
+      # T245426: set proxy_read_timeout to match dynamicproxy's setting
+      proxy-read-timeout: "3600"
+    resources:
+      limits:
+        cpu: 1
+        memory: 2G
+      requests:
+        cpu: 0.5
+        memory: 1G
+    tolerations:
+      - key: "ingressgen2"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+    affinity:
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+                - key: kubernetes.io/role
+                  operator: In
+                  values:
+                    - ingressgen2
+    admissionWebhooks:
+      enabled: false
+    service:
+      type: NodePort
+      enableHttp: true
+      enableHttps: false
+      ports:
+        http: 80
+      nodePorts:
+        http: 30002
+        tcp:
+          80: 30002
+        udp: {}
+    metrics:
+      port: 10254
+      enabled: true
+    defaultBackend:
+      enabled: false
+    podSecurityPolicy:
+      enabled: true
+    replicaCount: 2
+    minAvailable: 1
