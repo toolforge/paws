@@ -19,6 +19,10 @@ seaborn
 ipyleaflet
 pythreejs
 bqplot
+plotly
+holoviews[recommended]
+streamlit
+jupyter-dash
 
 # scientific stuff
 pandas
@@ -39,3 +43,7 @@ rpy2
 
 # RStudio
 jupyter-rsession-proxy
+
+# Web dev stuff
+flask
+fastapi

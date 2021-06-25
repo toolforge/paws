@@ -14,4 +14,8 @@ pip install --no-cache-dir \
 jupyter nbextension install --py nbpawspublic --sys-prefix
 jupyter nbextension enable --py nbpawspublic --sys-prefix
 
+# Rebuild JupyterLab for plotly-dash extension
+# Should be fixed by https://github.com/plotly/jupyter-dash/issues/49
+jupyter lab build
+
 pip install --no-cache-dir git+https://github.com/toolforge/ipynb-paws@147bbeb4dda35e
