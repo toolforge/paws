@@ -21,7 +21,6 @@ access to the secrets.yaml file to do it either, since the defaults mostly suppo
 You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working,
 install the dependencies for the PAWS dev environment with these steps:
  - `helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/`
- - `helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx`
  - `helm repo add bitnami https://charts.bitnami.com/bitnami`
  - `helm dep up paws/`
 

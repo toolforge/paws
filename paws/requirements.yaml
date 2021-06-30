@@ -2,9 +2,6 @@ dependencies:
   - name: jupyterhub
     version: "0.9.0"
     repository: "https://jupyterhub.github.io/helm-chart"
-  - name: ingress-nginx
-    version: "3.32.0"
-    repository: "https://kubernetes.github.io/ingress-nginx"
   - name: mediawiki
     version: "10.x.x"
     repository: "https://charts.bitnami.com/bitnami"

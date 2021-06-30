@@ -13,7 +13,7 @@ Mediawiki instance. If this is true, you might want to delete the mediawiki pod 
 with the new config (just in case) with:
 kubectl -n {{ .Release.Namespace }} delete $(kubectl get pods -n {{ .Release.Namespace }} -l app=mediawiki -o name)
 
-After giving that a chance to start back up, go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}:30002/mw_config/
+After giving that a chance to start back up, go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/mw_config/
 
 From here follow the instructions at https://www.mediawiki.org/wiki/Manual:Upgrading#Web_browser
 to run the update.php script via your browser. This will create the necessary tables.
@@ -27,9 +27,9 @@ Your wiki login will be
 username: {{ .Values.mediawiki.mediawikiUser }}
 password: {{ .Values.mediawiki.mediawikiPassword }}
 
-If you have been following these directions, go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}:30002/wiki/Special:OAuthConsumerRegistration to create one.
+If you have been following these directions, go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/wiki/Special:OAuthConsumerRegistration to create one.
 You must write down the output from that request setup or you won't get a second look at your secret easily.
-You'll need to approve it at http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}:30002/wiki/Special:OAuthManageConsumers after that.
+You'll need to approve it at http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/wiki/Special:OAuthManageConsumers after that.
 
 Now create a file called dev-values.yaml and add to it:
 jupyterhub:
