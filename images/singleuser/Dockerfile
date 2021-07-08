@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 ENV EDITOR=/bin/nano
-ENV PYWIKIBOT2_DIR=/srv/paws
+ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Use bash as default shell, rather than sh
