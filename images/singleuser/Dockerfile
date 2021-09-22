@@ -176,6 +176,10 @@ RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 
+# Use setuptools<58 until all dependencies no longer have use_2to3
+# https://setuptools.pypa.io/en/latest/history.html#v58-0-0
+# https://github.com/vpelletier/pprofile/issues/41
+RUN pip --no-cache-dir install -U pip 'setuptools<58' wheel
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
