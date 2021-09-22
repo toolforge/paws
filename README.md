@@ -40,6 +40,16 @@ If minikube is acting weird, it might be worth it to upgrade minikube or even to
  increase the default memory:
 `minikube config set memory 4096`
 
+#### Working with images
+There are 8 images that are part of PAWS, in particular in the images/ directory. If you start a dev environment, it will pull those images from quay.io by default, just like in Wikimedia Cloud Services. If you are making changes to the images and testing those locally, you'll need to build them and tag them for your local environment, possibly setting them in your local values file with the tags you set.
+
+If you are using minikube, you need to make sure you are using minikube's docker, not your system's docker with `eval $(minikube docker-env)`. Now your docker commands will operate on the minikube environment.
+
+For example, let's say you wanted to update the singleuser image (which is the actual notebook server image):
+- `cd images/singleuser`
+- `docker build -t tag-you-are-going-to-use:whatever .`
+
+And then you should have the image with a tag of `tag-you-are-going-to-use:whatever` that you could edit into your values.yaml file for local helm work. If you were aiming to aggressively push a tag for deployment, dodging around the CI system to do so, you'd tag with `quay.io/wikimedia-paws-prod/singleuser:latest`, which will cause a later `docker push quay.io/wikimedia-paws-prod/singleuser:latest` to actually push that tag directly to the repo for deployment in Cloud Services. Don't do that unless you really know what you are doing.
 ## Useful libraries
 ### Accessing Database Replicas With Pandas and Sqlalchemy
 
