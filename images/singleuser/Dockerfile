@@ -45,7 +45,8 @@ RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
 # Use newer version of R
 # Binary packages from packagemanager.rstudio.com work against this.
 # Base R from Focal is only 3.6.
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+COPY E298A3A825C0D65DFD57CBB651716619E084DAB9.asc /tmp/
+RUN apt-key add /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc && rm /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc
 RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" > /etc/apt/sources.list.d/cran.list
 
 # Install languages needed and their core dev packages
@@ -175,6 +176,10 @@ RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 
+# Use setuptools<58 until all dependencies no longer have use_2to3
+# https://setuptools.pypa.io/en/latest/history.html#v58-0-0
+# https://github.com/vpelletier/pprofile/issues/41
+RUN pip --no-cache-dir install -U pip 'setuptools<58' wheel
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
