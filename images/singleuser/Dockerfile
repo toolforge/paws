@@ -21,14 +21,14 @@ RUN adduser --disabled-password \
 WORKDIR ${HOME}
 
 # Base building utilities that'll always be required, probably
-RUN apt-get update > /dev/null && \
+RUN apt-get update && \
     apt-get install --yes \
         git \
         locales \
         pkg-config \
         build-essential \
         gcc \
-        apt-transport-https > /dev/null
+        apt-transport-https
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -50,7 +50,7 @@ RUN apt-key add /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc && rm /tmp/E29
 RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" > /etc/apt/sources.list.d/cran.list
 
 # Install languages needed and their core dev packages
-RUN apt-get update --yes > /dev/null && \
+RUN apt-get update --yes && \
     apt-get install --yes \
         python3 \
         python3-dev \
@@ -59,7 +59,7 @@ RUN apt-get update --yes > /dev/null && \
         r-base-dev \
         r-cran-littler \
         openjdk-11-jdk \
-        nodejs > /dev/null
+        nodejs
 
 # Utilities
 RUN apt-get install --yes \
@@ -71,7 +71,7 @@ RUN apt-get install --yes \
         links \
         nano \
         vim \
-        mariadb-client > /dev/null
+        mariadb-client
 
 
 # Needed by RStudio
@@ -81,7 +81,7 @@ RUN apt-get update -qq --yes && \
         sudo \
         libapparmor1 \
         lsb-release \
-        libclang-dev  > /dev/null
+        libclang-dev
 # Install RStudio
 # 1.3.959 is latest version that works with jupyter-rsession-proxy
 # See https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93#issuecomment-725874693
@@ -122,7 +122,7 @@ RUN apt-get install --yes \
     libssl-dev \
     # For PDFs and stuff
     pandoc \
-    texlive-xetex > /dev/null
+    texlive-xetex
 
 # Create user owned R libs dir
 # This lets users temporarily install packages
