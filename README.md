@@ -16,7 +16,10 @@ to trigger a pull request or using a fork to set up a pull request.
 ### Settings up a development environment
 
 It is possible to run a fully-functioning PAWS system inside [minikube](https://minikube.sigs.k8s.io/docs/)! You don't need
-access to the secrets.yaml file to do it either, since the defaults mostly support it.
+access to the secrets.yaml file to do it either, since the defaults mostly support it. At this time, you need to
+set it up with a cluster version before 1.22, most likely.
+
+Once minikube is working, you need to run `minikube addons enable ingress` to have ingress controller support.
 
 You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working,
 install the dependencies for the PAWS dev environment with these steps:
