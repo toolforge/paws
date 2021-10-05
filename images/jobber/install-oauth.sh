@@ -1,6 +1,6 @@
 #!/bin/ash
 
-extension_url=$(curl 'https://www.mediawiki.org/w/api.php?action=query&list=extdistbranches&edbexts=OAuth&formatversion=2&format=json' | jq -r .query.extdistbranches.extensions.OAuth.REL1_34)
+extension_url=$(curl 'https://www.mediawiki.org/w/api.php?action=query&list=extdistbranches&edbexts=OAuth&formatversion=2&format=json' | jq -r .query.extdistbranches.extensions.OAuth.REL1_35)
 /usr/bin/curl -o OAuth.tar.gz "$extension_url"
 
 # Wait until the mediawiki pod creates the extensions dir in the PVC

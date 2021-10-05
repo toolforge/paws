@@ -260,6 +260,7 @@ mediawikiHacks:
     template: "{{ .Values.mediawikiHacks.image.name}}:{{.Values.mediawikiHacks.image.tag }}"
 mediawiki:
   enabled: true
+  fullnameOverride: pawswiki
   mediawikiHost: wiki.mediawiki.local
   mediawikiUser: TheAdmin
   mediawikiPassword: 59202f7c94f01de9200f7a920193e8

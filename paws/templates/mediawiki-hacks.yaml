@@ -1,43 +1,91 @@
 {{ if .Values.mediawiki.enabled }}
 # We assume mediawiki is only enabled in a local dev environment, so...
-apiVersion: batch/v1
-kind: Job
+---
+apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: scary-host-vol-builder
-  labels:
-    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-    app.kubernetes.io/instance: {{ .Release.Name | quote }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "0"
-    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+  name: userhomes
 spec:
-  template:
-    metadata:
-      name: {{ printf "host-vols-%s" .Release.Name | quote }}
-      labels:
-        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
-        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    spec:
-      restartPolicy: Never
-      containers:
-      - name: creating-host-vols
-        image: {{ tpl .Values.mediawikiHacks.image.template . | quote }}
-        command: 
-          - mkdir
-          - -p
-          - /mnt/mnt/nfs/dumps-labstore1006.wikimedia.org
-          - /mnt/mnt/nfs/dumps-labstore1007.wikimedia.org
-          - /mnt/public/dumps
-          - /mnt/data/project/paws/userhomes
-        volumeMounts:
-          - mountPath: /mnt
-            name: security-disaster-only-for-minikube
-      volumes:
-        - name: security-disaster-only-for-minikube
-          hostPath:
-            path: /
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /data/project/paws/userhomes
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: dumps1
+spec:
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /mnt/nfs/dumps-labstore1006.wikimedia.org
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: dumps2
+spec:
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /mnt/nfs/dumps-labstore1007.wikimedia.org
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: dumps
+spec:
+  accessModes:
+    - ReadOnlyMany
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /public/dumps
+# apiVersion: batch/v1
+# kind: Job
+# metadata:
+#   name: scary-host-vol-builder
+#   labels:
+#     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+#     app.kubernetes.io/instance: {{ .Release.Name | quote }}
+#   annotations:
+#     "helm.sh/hook": pre-install
+#     "helm.sh/hook-weight": "0"
+#     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+# spec:
+#   template:
+#     metadata:
+#       name: {{ printf "host-vols-%s" .Release.Name | quote }}
+#       labels:
+#         app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+#         app.kubernetes.io/instance: {{ .Release.Name | quote }}
+#         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+#     spec:
+#       restartPolicy: Never
+#       containers:
+#       - name: creating-host-vols
+#         image: {{ tpl .Values.mediawikiHacks.image.template . | quote }}
+#         command: 
+#           - mkdir
+#           - -p
+#           - /mnt/mnt/nfs/dumps-labstore1006.wikimedia.org
+#           - /mnt/mnt/nfs/dumps-labstore1007.wikimedia.org
+#           - /mnt/public/dumps
+#           - /mnt/data/project/paws/userhomes
+#         volumeMounts:
+#           - mountPath: /mnt
+#             name: security-disaster-only-for-minikube
+#       volumes:
+#         - name: security-disaster-only-for-minikube
+#           hostPath:
+#             path: /
 ---
 apiVersion: batch/v1
 kind: Job
@@ -47,8 +95,8 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
   annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "1"
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-1"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   template:
@@ -67,14 +115,14 @@ spec:
           - chown
           - -R
           - 52771:52771
-          - /mnt/data/project/paws/userhomes
+          - /data/project/paws/userhomes
         volumeMounts:
-          - mountPath: /mnt
+          - mountPath: /data/project/paws/userhomes
             name: security-disaster-only-for-minikube
       volumes:
         - name: security-disaster-only-for-minikube
           hostPath:
-            path: /
+            path: /data/project/paws/userhomes
 ---
 # minikube provisions a hostpath where extensions and config can be placed
 apiVersion: batch/v1
@@ -109,7 +157,7 @@ spec:
       volumes:
         - name: mediawiki-data
           persistentVolumeClaim:
-            claimName: {{ if .Values.mediawiki.persistence.existingClaim }}{{ .Values.mediawiki.persistence.existingClaim }}{{- else }}{{ template "mediawiki.fullname" . }}-mediawiki-mediawiki{{- end }}
+            claimName: {{ if .Values.mediawiki.persistence.existingClaim }}{{ .Values.mediawiki.persistence.existingClaim }}{{- else }}{{ .Values.mediawiki.fullnameOverride }}-mediawiki{{- end }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -143,5 +191,5 @@ spec:
       volumes:
         - name: mediawiki-data
           persistentVolumeClaim:
-            claimName: {{ if .Values.mediawiki.persistence.existingClaim }}{{ .Values.mediawiki.persistence.existingClaim }}{{- else }}{{ template "mediawiki.fullname" . }}-mediawiki-mediawiki{{- end }}
+            claimName: {{ if .Values.mediawiki.persistence.existingClaim }}{{ .Values.mediawiki.persistence.existingClaim }}{{- else }}{{ .Values.mediawiki.fullnameOverride }}-mediawiki{{- end }}
 {{ end }}
