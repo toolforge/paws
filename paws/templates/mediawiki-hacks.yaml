@@ -48,44 +48,6 @@ spec:
     storage: 1Gi
   hostPath:
     path: /public/dumps
-# apiVersion: batch/v1
-# kind: Job
-# metadata:
-#   name: scary-host-vol-builder
-#   labels:
-#     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-#     app.kubernetes.io/instance: {{ .Release.Name | quote }}
-#   annotations:
-#     "helm.sh/hook": pre-install
-#     "helm.sh/hook-weight": "0"
-#     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
-# spec:
-#   template:
-#     metadata:
-#       name: {{ printf "host-vols-%s" .Release.Name | quote }}
-#       labels:
-#         app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-#         app.kubernetes.io/instance: {{ .Release.Name | quote }}
-#         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-#     spec:
-#       restartPolicy: Never
-#       containers:
-#       - name: creating-host-vols
-#         image: {{ tpl .Values.mediawikiHacks.image.template . | quote }}
-#         command: 
-#           - mkdir
-#           - -p
-#           - /mnt/mnt/nfs/dumps-labstore1006.wikimedia.org
-#           - /mnt/mnt/nfs/dumps-labstore1007.wikimedia.org
-#           - /mnt/public/dumps
-#           - /mnt/data/project/paws/userhomes
-#         volumeMounts:
-#           - mountPath: /mnt
-#             name: security-disaster-only-for-minikube
-#       volumes:
-#         - name: security-disaster-only-for-minikube
-#           hostPath:
-#             path: /
 ---
 apiVersion: batch/v1
 kind: Job
