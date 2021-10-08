@@ -19,9 +19,9 @@ It is possible to run a fully-functioning PAWS system inside [minikube](https://
 access to the secrets.yaml file to do it either, since the defaults mostly support it. At this time, you need to
 set it up with a cluster version before 1.22, most likely.
 
-Once minikube is working, you need to run `minikube addons enable ingress` to have ingress controller support.
-
-You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working,
+You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working, start minikube with:
+ - `minikube start --kubernetes-version=v1.20.11`
+ - `minikube addons enable ingress`
 install the dependencies for the PAWS dev environment with these steps:
  - `helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/`
  - `helm repo add bitnami https://charts.bitnami.com/bitnami`

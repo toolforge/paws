@@ -11,36 +11,28 @@ Add these lines to your hosts file:
 If you have never run the DB updates for the OAuth extension for your local
 Mediawiki instance. If this is true, you might want to delete the mediawiki pod to restart it
 with the new config (just in case) with:
-kubectl -n {{ .Release.Namespace }} delete $(kubectl get pods -n {{ .Release.Namespace }} -l app=mediawiki -o name)
-
-After giving that a chance to start back up, go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/mw_config/
-
-From here follow the instructions at https://www.mediawiki.org/wiki/Manual:Upgrading#Web_browser
-to run the update.php script via your browser. This will create the necessary tables.
-
-You will need the value of $wgUpgradeKey from LocalSettings.php to run it. To get that,
-you can try running the following:
-kubectl -n {{ .Release.Namespace }} exec $(kubectl get pods -n {{ .Release.Namespace }} -l app=mediawiki -o name) -- cat /opt/bitnami/mediawiki/LocalSettings.php | grep wgUpgradeKey
+kubectl -n {{ .Release.Namespace }} delete $(kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/name=mediawiki -o name)
 
 When that is done, you'll need to make an OAuth consumer in your local wiki.
 Your wiki login will be 
 username: {{ .Values.mediawiki.mediawikiUser }}
 password: {{ .Values.mediawiki.mediawikiPassword }}
 
-If you have been following these directions, go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/wiki/Special:OAuthConsumerRegistration to create one.
+Go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/wiki/Special:OAuthConsumerRegistration to create one.
+ - OAUTH callback is: http://hub.paws.local/hub/oauth_callback
 You must write down the output from that request setup or you won't get a second look at your secret easily.
 You'll need to approve it at http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/wiki/Special:OAuthManageConsumers after that.
 
 Now create a file called dev-values.yaml and add to it:
 jupyterhub:
   hub:
+    config:
+      MWOAuthenticator:
+        client_id: <the client ID from your OAuth Consumer request>
+        client_secret: <the client secret from your OAuth Consumer request>
+        index_url: http://mediawiki.local/index.php
     extraEnv:
-      MW_INDEX_URL: http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/index.php
-  auth:
-    mediawiki:
-      clientId: <the client ID from your OAuth Consumer request>
-      clientSecret: <the client secret from your OAuth Consumer request>
-      indexUrl: http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/index.php
+      MW_INDEX_URL: http://mediawiki.local/index.php
 
 Now run:
 helm -n {{ .Release.Namespace }} upgrade {{ .Release.Name }} paws/ -f dev-values.yaml

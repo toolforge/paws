@@ -64,9 +64,10 @@ jupyterhub:
       nodePorts: 
         http: 32611
       type: NodePort
-  auth: 
-    admin: 
-      users: 
+  hub:
+    config:
+      Authenticator:
+        admin_users:
         - Yuvipanda
         - BDavis_(WMF)
         - BStorm_(WMF)
@@ -76,14 +77,12 @@ jupyterhub:
         - Andrewbogott
         - Chicocvenancio
         - Zhuyifei1999
-    type: mediawiki
-  hub:
-    cull:
-      timeout: 86400
+      JupyterHub:
+        authenticator_class: mediawiki
     db:
       # jupyterhub.hub.db values are overridden in Cloud VPS
       url: sqlite://
-      type: sqlite
+      type: sqlite-memory
       upgrade: true
     extraVolumes:
     - name: homes
@@ -96,11 +95,11 @@ jupyterhub:
     - name: dumps-src1
       hostPath:
         path: /mnt/nfs/dumps-labstore1007.wikimedia.org
-        type: Directory
+        type: DirectoryOrCreate
     - name: dumps-src2
       hostPath:
         path: /mnt/nfs/dumps-labstore1006.wikimedia.org
-        type: Directory
+        type: DirectoryOrCreate
     extraVolumeMounts:
     - name: homes
       mountPath: /data/project
@@ -210,11 +209,12 @@ jupyterhub:
       MYSQL_HMAC_KEY: "9a33d49db4bb823e87187a11e4f6296bee41bc35c41dc195634dff440c1870f0"
     cookieSecret: 827902ad187337f83adc565dadfb4c095ce1962442aae043ac78948f9b216a8f
     fsGid: 52771
-    gid: 52771
     image:
-      name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: latest
-    uid: 52771
+      name: paws-hub-local
+      #name: quay.io/wikimedia-paws-prod/paws-hub
+      tag: 1.1.3
+    containerSecurityContext:
+      runAsUser: 52771
   ingress: 
     enabled: true
     hosts:
@@ -226,9 +226,12 @@ jupyterhub:
   singleuser:
     fsGid: 52771
     image:
-      name: quay.io/wikimedia-paws-prod/singleuser
-      tag: latest
-      pullPolicy: Always
+      name: singlelocal
+      #name: quay.io/wikimedia-paws-prod/singleuser
+      tag: 1.4.2
+      #tag: latest
+      pullPolicy: IfNotPresent
+      #pullPolicy: Always
     memory:
       guarantee: 1G
       limit: 3G
@@ -238,10 +241,10 @@ jupyterhub:
     storage: 
       type: none
     uid: 52771
-    gid: 52771
     # This must be enabled or it cannot work with restrictive PSP
     cloudMetadata: 
-      enabled: true
+      blockWithIptables: false
+      #enabled: true
     lifecycleHooks:
       postStart:
         exec:
@@ -261,8 +264,8 @@ mediawikiHacks:
 mediawiki:
   enabled: true
   fullnameOverride: pawswiki
-  mediawikiHost: wiki.mediawiki.local
-  mediawikiUser: TheAdmin
+  mediawikiHost: mediawiki.local
+  mediawikiUser: 7theadmin
   mediawikiPassword: 59202f7c94f01de9200f7a920193e8
   mariadb:
     rootUser:
@@ -276,7 +279,7 @@ mediawiki:
   ingress:
     enabled: true
     hosts:
-      - name: wiki.mediawiki.local
+      - name: mediawiki.local
         tls: false
         certManager: false
 
