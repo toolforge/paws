@@ -210,9 +210,8 @@ jupyterhub:
     cookieSecret: 827902ad187337f83adc565dadfb4c095ce1962442aae043ac78948f9b216a8f
     fsGid: 52771
     image:
-      name: paws-hub-local
-      #name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: 1.1.3
+      name: quay.io/wikimedia-paws-prod/paws-hub
+      tag: latest
     containerSecurityContext:
       runAsUser: 52771
   ingress: 
@@ -226,12 +225,9 @@ jupyterhub:
   singleuser:
     fsGid: 52771
     image:
-      name: singlelocal
-      #name: quay.io/wikimedia-paws-prod/singleuser
-      tag: 1.4.2
-      #tag: latest
-      pullPolicy: IfNotPresent
-      #pullPolicy: Always
+      name: quay.io/wikimedia-paws-prod/singleuser
+      tag: latest
+      pullPolicy: Always
     memory:
       guarantee: 1G
       limit: 3G
@@ -241,10 +237,9 @@ jupyterhub:
     storage: 
       type: none
     uid: 52771
-    # This must be enabled or it cannot work with restrictive PSP
-    cloudMetadata: 
+    # This must be false or this whole thing cannot work with restrictive PSP
+    cloudMetadata:
       blockWithIptables: false
-      #enabled: true
     lifecycleHooks:
       postStart:
         exec:
@@ -265,7 +260,7 @@ mediawiki:
   enabled: true
   fullnameOverride: pawswiki
   mediawikiHost: mediawiki.local
-  mediawikiUser: 7theadmin
+  mediawikiUser: TheAdmin
   mediawikiPassword: 59202f7c94f01de9200f7a920193e8
   mariadb:
     rootUser:
@@ -278,8 +273,4 @@ mediawiki:
     type: NodePort
   ingress:
     enabled: true
-    hosts:
-      - name: mediawiki.local
-        tls: false
-        certManager: false
-
+    hostname: wiki.mediawiki.local
