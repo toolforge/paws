@@ -18,10 +18,10 @@ Your wiki login will be
 username: {{ .Values.mediawiki.mediawikiUser }}
 password: {{ .Values.mediawiki.mediawikiPassword }}
 
-Go to http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/wiki/Special:OAuthConsumerRegistration to create one.
+Go to http://{{ .Values.mediawiki.ingress.hostname }}/wiki/Special:OAuthConsumerRegistration to create one.
  - OAUTH callback is: http://hub.paws.local/hub/oauth_callback
 You must write down the output from that request setup or you won't get a second look at your secret easily.
-You'll need to approve it at http://{{ (index .Values.mediawiki.ingress.hosts 0).name }}/wiki/Special:OAuthManageConsumers after that.
+You'll need to approve it at http://{{ .Values.mediawiki.ingress.hostname }}/wiki/Special:OAuthManageConsumers after that.
 
 Now create a file called dev-values.yaml and add to it:
 jupyterhub:
@@ -30,9 +30,9 @@ jupyterhub:
       MWOAuthenticator:
         client_id: <the client ID from your OAuth Consumer request>
         client_secret: <the client secret from your OAuth Consumer request>
-        index_url: http://mediawiki.local/index.php
+        index_url: http://{{ .Values.mediawiki.ingress.hostname }}/index.php
     extraEnv:
-      MW_INDEX_URL: http://mediawiki.local/index.php
+      MW_INDEX_URL: http://{{ .Values.mediawiki.ingress.hostname }}/index.php
 
 Now run:
 helm -n {{ .Release.Namespace }} upgrade {{ .Release.Name }} paws/ -f dev-values.yaml

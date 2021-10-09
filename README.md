@@ -29,7 +29,9 @@ install the dependencies for the PAWS dev environment with these steps:
 
 Then, you need to create a new namespace for paws (`kubectl create namespace paws-dev` for instance) and then install into it
 with helm (from the top level of this repo):
-`helm -n paws-dev install dev paws/`
+`helm -n paws-dev install dev paws/ --timeout=50m`
+
+With the --timeout can likely be dispensed with on future installs because it is mostly for the long downloads of images.
 
 The rest of the setup instructions will display on screen as long as the install is successful.
 Please refer to the helm documentation from there.
