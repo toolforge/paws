@@ -274,3 +274,6 @@ mediawiki:
   ingress:
     enabled: true
     hostname: wiki.mediawiki.local
+    path: "/"
+    pathType: Prefix
+
