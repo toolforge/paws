@@ -5,7 +5,7 @@ An essential part of setting up your dev environment is adding a hosts file entr
 Get the IP of minikube with:
 minikube ip
 Add these lines to your hosts file:
-<ip address> {{ (index .Values.mediawiki.ingress.hosts 0).name }}
+<ip address> {{ .Values.mediawiki.ingress.hostname }}
 <ip address> {{ index .Values.jupyterhub.ingress.hosts 0 }}
 
 If you have never run the DB updates for the OAuth extension for your local
