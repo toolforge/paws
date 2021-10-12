@@ -1,41 +1,13 @@
 Thank you for installing {{ .Chart.Name }}!
-{{- if or .Values.mediawiki.enabled }}
 
 An essential part of setting up your dev environment is adding a hosts file entry.
 Get the IP of minikube with:
 minikube ip
-Add these lines to your hosts file:
-<ip address> {{ .Values.mediawiki.ingress.hostname }}
+Add this line to your hosts file:
 <ip address> {{ index .Values.jupyterhub.ingress.hosts 0 }}
 
-If you have never run the DB updates for the OAuth extension for your local
-Mediawiki instance. If this is true, you might want to delete the mediawiki pod to restart it
-with the new config (just in case) with:
-kubectl -n {{ .Release.Namespace }} delete $(kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/name=mediawiki -o name)
+You can override any values you need in a file called dev-values.yaml.
 
-When that is done, you'll need to make an OAuth consumer in your local wiki.
-Your wiki login will be 
-username: {{ .Values.mediawiki.mediawikiUser }}
-password: {{ .Values.mediawiki.mediawikiPassword }}
-
-Go to http://{{ .Values.mediawiki.ingress.hostname }}/wiki/Special:OAuthConsumerRegistration to create one.
- - OAUTH callback is: http://hub.paws.local/hub/oauth_callback
-You must write down the output from that request setup or you won't get a second look at your secret easily.
-You'll need to approve it at http://{{ .Values.mediawiki.ingress.hostname }}/wiki/Special:OAuthManageConsumers after that.
-
-Now create a file called dev-values.yaml and add to it:
-jupyterhub:
-  hub:
-    config:
-      MWOAuthenticator:
-        client_id: <the client ID from your OAuth Consumer request>
-        client_secret: <the client secret from your OAuth Consumer request>
-        index_url: http://{{ .Values.mediawiki.ingress.hostname }}/index.php
-    extraEnv:
-      MW_INDEX_URL: http://{{ .Values.mediawiki.ingress.hostname }}/index.php
-
-Now run:
+If you create one, run:
 helm -n {{ .Release.Namespace }} upgrade {{ .Release.Name }} paws/ -f dev-values.yaml
-Then you should be able to go to {{ index .Values.jupyterhub.ingress.hosts 0 }} and log in!
 Happy hacking.
-{{- end }}

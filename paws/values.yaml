@@ -66,6 +66,11 @@ jupyterhub:
       type: NodePort
   hub:
     config:
+      # updated auth object for chart version 0.11.0+ this is the local dev values
+      MWOAuthenticator:
+        client_id: fea321f1b6b5aed9fa83d5362839cd3d
+        client_secret: 6b17e5b87ae5ee893f5d4ba8b0e2377c6c0c3fcc
+        index_url: https://meta.wikimedia.org/w/index.php
       Authenticator:
         admin_users:
         - Yuvipanda
@@ -249,31 +254,12 @@ mysql:
   domain: "svc.cluster.local"
   username: s52771
   password: "iAmNotSecret0"
-# If not deployed for prod use, we use the Bitnami mediawiki chart for testing
-mediawikiHacks:
+# If not deployed for prod use, we use the some hacks for testing
+localdev:
+  enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
     tag: latest
     # mediawikiHacks.image.template safely defines image:tag name in yaml
-    template: "{{ .Values.mediawikiHacks.image.name}}:{{.Values.mediawikiHacks.image.tag }}"
-mediawiki:
-  enabled: true
-  fullnameOverride: pawswiki
-  mediawikiHost: mediawiki.local
-  mediawikiUser: TheAdmin
-  mediawikiPassword: 59202f7c94f01de9200f7a920193e8
-  mariadb:
-    rootUser:
-      password: 06f75c9e5cf56c9a74f16f3726e29b
-    db:
-      name: enwiki_p
-      user: s52771
-      password: iAmNotSecret0
-  service:
-    type: NodePort
-  ingress:
-    enabled: true
-    hostname: wiki.mediawiki.local
-    path: "/"
-    pathType: Prefix
-
+    template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
+ 
