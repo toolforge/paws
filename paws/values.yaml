@@ -118,6 +118,12 @@ jupyterhub:
       mountPath: /mnt/nfs/dumps-labstore1006.wikimedia.org
       readOnly: true
     extraConfig: 
+      fixLabels: |
+          def fix_labels(spawner, pod):
+            del pod.metadata.labels['hub.jupyter.org/username']
+            return pod
+
+          c.KubeSpawner.modify_pod_hook = fix_labels
       myConfig: |
           import hmac
           import hashlib
