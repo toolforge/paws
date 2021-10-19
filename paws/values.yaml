@@ -87,7 +87,7 @@ jupyterhub:
     db:
       # jupyterhub.hub.db values are overridden in Cloud VPS
       url: sqlite://
-      type: sqlite-memory
+      type: sqlite-pvc
       upgrade: true
     extraVolumes:
     - name: homes
