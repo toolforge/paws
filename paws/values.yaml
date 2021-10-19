@@ -222,7 +222,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: latest
+      tag: 21.10.01
     containerSecurityContext:
       runAsUser: 52771
   ingress: 
@@ -237,7 +237,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: latest
+      tag: 21.10.01
       pullPolicy: Always
     memory:
       guarantee: 1G
