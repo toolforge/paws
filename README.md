@@ -19,19 +19,16 @@ It is possible to run a fully-functioning PAWS system inside [minikube](https://
 access to the secrets.yaml file to do it either, since the defaults mostly support it. At this time, you need to
 set it up with a cluster version before 1.22, most likely.
 
-You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working, start minikube with:
+You will need to install minikube (tested on minikube 1.23) and [helm](https://helm.sh) and kubectl on your system. When you are confident those are working, start minikube with:
  - `minikube start --kubernetes-version=v1.20.11`
  - `minikube addons enable ingress`
+(from the top level of this repo):
 install the dependencies for the PAWS dev environment with these steps:
  - `helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/`
  - `helm repo add bitnami https://charts.bitnami.com/bitnami`
  - `helm dep up paws/`
-
-Then, you need to create a new namespace for paws (`kubectl create namespace paws-dev` for instance) and then install into it
-with helm (from the top level of this repo):
-`helm -n paws-dev install dev paws/ --timeout=50m`
-
-With the --timeout can likely be dispensed with on future installs because it is mostly for the long downloads of images.
+ - `kubectl create namespace paws-dev`
+ - `helm -n paws-dev install dev paws/ --timeout=50m`
 
 The rest of the setup instructions will display on screen as long as the install is successful.
 Please refer to the helm documentation from there.
