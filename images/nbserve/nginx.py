@@ -98,7 +98,7 @@ http {
         }
 
         # Only after the User: redirect! Otherwise our backend can't find the file.
-        location ~ ^/\d+/.*\.ipynb$ {
+        location ~ ^/\d+/.*\.(rst|md|ipynb)$ {
             include /usr/local/openresty/nginx/conf/uwsgi_params;
             uwsgi_pass uwsgi://%s:8000;
         }
