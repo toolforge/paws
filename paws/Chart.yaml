@@ -4,11 +4,5 @@ name: paws
 version: "2.5"
 dependencies:
   - name: jupyterhub
-    version: "0.9.0"
+    version: "1.1.3"
     repository: "https://jupyterhub.github.io/helm-chart"
-  - name: mediawiki
-    version: "10.x.x"
-    repository: "https://charts.bitnami.com/bitnami"
-    condition: mediawiki.enabled
-    tags:
-      - testenv

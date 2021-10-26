@@ -150,7 +150,7 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub==1.1.0 \
+    jupyterhub==1.4.2 \
     notebook==6.3.* \
     jupyterlab==3.* \
     nbgitpuller==0.9.0 \

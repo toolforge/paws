@@ -21,9 +21,7 @@ spec:
           - mysql-proxy
           - --plugins=proxy
           - --proxy-lua-script=/srv/auth.lua
-          {{- if .Values.mediawiki.enabled }}
-          - {{ printf "--proxy-backend-addresses=%s-mariadb.%s:3306" .Release.Name .Release.Namespace | quote }}
-          {{- else }}
+          {{- if not .Values.localdev.enabled }}
           - {{ printf "--proxy-backend-addresses=%s:3306" .Values.mysql.host | quote }}
           {{- end }}
           - --proxy-address=0.0.0.0:3306
