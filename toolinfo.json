@@ -1,9 +1,31 @@
 {
-    "name" : "paws",
+    "name" : "wikimedia-paws",
     "title" : "PAWS",
-    "description" : "PAWS: A Web Shell",
-    "url" : "https://paws.wmflabs.org",
+    "description" : "PAWS: A Web Shell (PAWS) is a Jupyter notebook deployment hosted by Wikimedia.\n\nA Jupyter notebook is a popular Open Source tool that allows to create and share documents that contain live code. You can use Jupyter notebooks to run scripts that help you perform essential technical tasks on wikis, use data to create visualizations, graphs, and more, and to write techinical documentation and tutorials that help others work on Wikimedia projects.\n\nJupyter notebooks are used both by experienced programmers and technically curious newcomers. There's no need to download software or set up a development environment. All of your work is done in your browser.\n\nOur deployment is using JupyterHub, which can serve live Jupyter notebooks to multiple users.",
+    "url" : "https://hub.paws.wmcloud.org/",
     "keywords" : "paws, pywikibot, jupyter notebook, python",
     "author" : "Yuvi Panda",
-    "repository" : "https://github.com/yuvipanda/paws.git"
+    "repository" : "https://github.com/toolforge/paws",
+    "for_wikis": ["*"],
+    "icon": "https://commons.wikimedia.org/wiki/File:PAWS_(no_text).svg",
+    "license": "MIT",
+    "sponsor": ["Wikimedia Foundation"],
+    "available_ui_languages": ["en"],
+    "technology_used": ["Jupyter Notebook", "pywikibot", "Python 3", "R", "SPARQL"],
+    "tool_type": "web app",
+    "developer_docs_url": [
+        {
+            "url": "https://wikitech.wikimedia.org/wiki/PAWS/PAWS_maintenance_and_administration",
+            "language": "en"
+        }
+    ],
+    "user_docs_url": [
+        {
+            "language": "en",
+            "url": "https://wikitech.wikimedia.org/wiki/PAWS"
+        }
+    ],
+    "bugtracker_url": "https://phabricator.wikimedia.org/project/board/1648/",
+    "_language": "en",
+    "_schema": "/toolinfo/1.2.0"
 }
