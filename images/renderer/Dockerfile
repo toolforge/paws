@@ -8,7 +8,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install git+https://github.com/jupyter/nbconvert.git ipython werkzeug
+RUN pip3 install git+https://github.com/jupyter/nbconvert.git ipython werkzeug markdown docutils
 
 COPY renderer.py /srv/renderer.py
 COPY basic.tpl /srv/basic.tpl
