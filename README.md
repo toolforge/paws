@@ -16,17 +16,19 @@ to trigger a pull request or using a fork to set up a pull request.
 ### Settings up a development environment
 
 It is possible to run a fully-functioning PAWS system inside [minikube](https://minikube.sigs.k8s.io/docs/)! You don't need
-access to the secrets.yaml file to do it either, since the defaults mostly support it.
+access to the secrets.yaml file to do it either, since the defaults mostly support it. At this time, you need to
+set it up with a cluster version before 1.22, most likely.
 
-You will need to install minikube and [helm](https://helm.sh) on your system. When you are confident those are working,
+You will need to install minikube (tested on minikube 1.23) and [helm](https://helm.sh) and kubectl on your system. When you are confident those are working, start minikube with:
+ - `minikube start --kubernetes-version=v1.20.11`
+ - `minikube addons enable ingress`
+(from the top level of this repo):
 install the dependencies for the PAWS dev environment with these steps:
  - `helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/`
  - `helm repo add bitnami https://charts.bitnami.com/bitnami`
  - `helm dep up paws/`
-
-Then, you need to create a new namespace for paws (`kubectl create namespace paws-dev` for instance) and then install into it
-with helm (from the top level of this repo):
-`helm -n paws-dev install dev paws/`
+ - `kubectl create namespace paws-dev`
+ - `helm -n paws-dev install dev paws/ --timeout=50m`
 
 The rest of the setup instructions will display on screen as long as the install is successful.
 Please refer to the helm documentation from there.
@@ -40,6 +42,16 @@ If minikube is acting weird, it might be worth it to upgrade minikube or even to
  increase the default memory:
 `minikube config set memory 4096`
 
+#### Working with images
+There are 8 images that are part of PAWS, in particular in the images/ directory. If you start a dev environment, it will pull those images from quay.io by default, just like in Wikimedia Cloud Services. If you are making changes to the images and testing those locally, you'll need to build them and tag them for your local environment, possibly setting them in your local values file with the tags you set.
+
+If you are using minikube, you need to make sure you are using minikube's docker, not your system's docker with `eval $(minikube docker-env)`. Now your docker commands will operate on the minikube environment.
+
+For example, let's say you wanted to update the singleuser image (which is the actual notebook server image):
+- `cd images/singleuser`
+- `docker build -t tag-you-are-going-to-use:whatever .`
+
+And then you should have the image with a tag of `tag-you-are-going-to-use:whatever` that you could edit into your values.yaml file for local helm work. If you were aiming to aggressively push a tag for deployment, dodging around the CI system to do so, you'd tag with `quay.io/wikimedia-paws-prod/singleuser:latest`, which will cause a later `docker push quay.io/wikimedia-paws-prod/singleuser:latest` to actually push that tag directly to the repo for deployment in Cloud Services. Don't do that unless you really know what you are doing.
 ## Useful libraries
 ### Accessing Database Replicas With Pandas and Sqlalchemy
 

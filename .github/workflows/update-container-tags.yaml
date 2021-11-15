@@ -1,0 +1,60 @@
+name: update container tags
+
+on:
+  pull_request:
+
+jobs:
+  update-container-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      - name: git fetch
+        run: |
+          git fetch
+
+# Github actions doesn't have much in the way of loops. Using a matrix results
+# in multiple separate jobs being run, which will try to overwrite one another.
+# Any kind of loop shaped thing would be more elegant than this. Until then,
+# when a container is added copy one of these and change then name in all four
+# places
+      - name: update values.yaml for renderer
+        run: |
+          if [[ $(git diff remotes/origin/master -- images/renderer/) ]]; then
+          sed -i 's/tag: .* # renderer tag managed by github actions$/tag: pr-${{ github.event.number }} # renderer tag managed by github actions/' paws/values.yaml
+          fi
+
+      - name: update values.yaml for nbserve
+        run: |
+          if [[ $(git diff remotes/origin/master -- images/nbserve/) ]]; then
+          sed -i 's/tag: .* # nbserve tag managed by github actions$/tag: pr-${{ github.event.number }} # nbserve tag managed by github actions/' paws/values.yaml
+          fi
+
+      - name: update values.yaml for paws-hub
+        run: |
+          if [[ $(git diff remotes/origin/master -- images/paws-hub/) ]]; then
+          sed -i 's/tag: .* # paws-hub tag managed by github actions$/tag: pr-${{ github.event.number }} # paws-hub tag managed by github actions/' paws/values.yaml
+          fi
+
+      - name: update values.yaml for jobber
+        run: |
+          if [[ $(git diff remotes/origin/master -- images/jobber/) ]]; then
+          sed -i 's/tag: .* # jobber tag managed by github actions$/tag: pr-${{ github.event.number }} # jobber tag managed by github actions/' paws/values.yaml
+          fi
+
+      - name: update values.yaml for singleuser
+        run: |
+          if [[ $(git diff remotes/origin/master -- images/singleuser/) ]]; then
+          sed -i 's/tag: .* # singleuser tag managed by github actions$/tag: pr-${{ github.event.number }} # singleuser tag managed by github actions/' paws/values.yaml
+          fi
+
+      - uses: EndBug/add-and-commit@v7
+        with:
+          add: 'paws/values.yaml'
+          author_name: Github Action
+          author_email: auto@github.com
+          branch: ${{ github.head_ref }}
+          message: 'auto update of ${{ inputs.imagename }} tag'
+          pull: --rebase --autostash

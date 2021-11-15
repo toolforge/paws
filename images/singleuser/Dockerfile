@@ -1,7 +1,8 @@
 FROM ubuntu:20.04
 
+ENV PYWIKIBOT_VERSION=6.6.2
 ENV EDITOR=/bin/nano
-ENV PYWIKIBOT2_DIR=/srv/paws
+ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Use bash as default shell, rather than sh
@@ -21,14 +22,14 @@ RUN adduser --disabled-password \
 WORKDIR ${HOME}
 
 # Base building utilities that'll always be required, probably
-RUN apt-get update > /dev/null && \
+RUN apt-get update && \
     apt-get install --yes \
         git \
         locales \
         pkg-config \
         build-essential \
         gcc \
-        apt-transport-https > /dev/null
+        apt-transport-https
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
@@ -45,11 +46,12 @@ RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
 # Use newer version of R
 # Binary packages from packagemanager.rstudio.com work against this.
 # Base R from Focal is only 3.6.
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+COPY E298A3A825C0D65DFD57CBB651716619E084DAB9.asc /tmp/
+RUN apt-key add /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc && rm /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc
 RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" > /etc/apt/sources.list.d/cran.list
 
 # Install languages needed and their core dev packages
-RUN apt-get update --yes > /dev/null && \
+RUN apt-get update --yes && \
     apt-get install --yes \
         python3 \
         python3-dev \
@@ -58,7 +60,7 @@ RUN apt-get update --yes > /dev/null && \
         r-base-dev \
         r-cran-littler \
         openjdk-11-jdk \
-        nodejs > /dev/null
+        nodejs
 
 # Utilities
 RUN apt-get install --yes \
@@ -71,7 +73,7 @@ RUN apt-get install --yes \
         nano \
         vim \
         lsof \
-        mariadb-client > /dev/null
+        mariadb-client
 
 
 # Needed by RStudio
@@ -81,7 +83,7 @@ RUN apt-get update -qq --yes && \
         sudo \
         libapparmor1 \
         lsb-release \
-        libclang-dev  > /dev/null
+        libclang-dev
 # Install RStudio
 # 1.3.959 is latest version that works with jupyter-rsession-proxy
 # See https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93#issuecomment-725874693
@@ -122,7 +124,7 @@ RUN apt-get install --yes \
     libssl-dev \
     # For PDFs and stuff
     pandoc \
-    texlive-xetex > /dev/null
+    texlive-xetex
 
 # Create user owned R libs dir
 # This lets users temporarily install packages
@@ -145,10 +147,11 @@ ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
 
 USER ${NB_USER}
 RUN python3 -m venv /srv/paws
+RUN pip --no-cache-dir install -U pip setuptools wheel
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub==1.1.0 \
+    jupyterhub==1.4.2 \
     notebook==6.3.* \
     jupyterlab==3.* \
     nbgitpuller==0.9.0 \
@@ -179,7 +182,7 @@ COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
-RUN git clone --branch stable --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
+RUN git clone --branch $PYWIKIBOT_VERSION --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
 COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 

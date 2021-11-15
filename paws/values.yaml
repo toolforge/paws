@@ -12,14 +12,14 @@ pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: latest
+      tag: 21.10.01 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
   renderer:
     image:
-      name: docker-registry.tools.wmflabs.org/toolforge-paws-public-renderer
-      tag: latest
+      name: quay.io/wikimedia-paws-prod/renderer
+      tag: 21.10.01 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     replicas: 1
@@ -57,16 +57,38 @@ deployHook:
   service:
     type: ClusterIP
 jupyterhub:
+  prePuller:
+    containerSecurityContext:
+      runAsUser: 52771
+      runAsGroup: 52771
+    hook:
+      containerSecurityContext:
+        runAsUser: 52771
+        runAsGroup: 52771
+    pause:
+      containerSecurityContext:
+        runAsUser: 52771
+        runAsGroup: 52771
   proxy:
+    chp:
+      containerSecurityContext:
+        runAsUser: 52771
+        runAsGroup: 52771
     # jupyterhub.proxy.secretToken is a valid dummy value for development
     secretToken: "23f542cc4b1af000e68088f1acc7ca8275a67cf496bae15ead6a79b8c6702597"
     service: 
       nodePorts: 
         http: 32611
       type: NodePort
-  auth: 
-    admin: 
-      users: 
+  hub:
+    config:
+      # updated auth object for chart version 0.11.0+ this is the local dev values
+      MWOAuthenticator:
+        client_id: fea321f1b6b5aed9fa83d5362839cd3d
+        client_secret: 6b17e5b87ae5ee893f5d4ba8b0e2377c6c0c3fcc
+        index_url: https://meta.wikimedia.org/w/index.php
+      Authenticator:
+        admin_users:
         - Yuvipanda
         - BDavis_(WMF)
         - BStorm_(WMF)
@@ -76,14 +98,12 @@ jupyterhub:
         - Andrewbogott
         - Chicocvenancio
         - Zhuyifei1999
-    type: mediawiki
-  hub:
-    cull:
-      timeout: 86400
+      JupyterHub:
+        authenticator_class: mediawiki
     db:
       # jupyterhub.hub.db values are overridden in Cloud VPS
       url: sqlite://
-      type: sqlite
+      type: sqlite-pvc
       upgrade: true
     extraVolumes:
     - name: homes
@@ -96,11 +116,11 @@ jupyterhub:
     - name: dumps-src1
       hostPath:
         path: /mnt/nfs/dumps-labstore1007.wikimedia.org
-        type: Directory
+        type: DirectoryOrCreate
     - name: dumps-src2
       hostPath:
         path: /mnt/nfs/dumps-labstore1006.wikimedia.org
-        type: Directory
+        type: DirectoryOrCreate
     extraVolumeMounts:
     - name: homes
       mountPath: /data/project
@@ -114,6 +134,12 @@ jupyterhub:
       mountPath: /mnt/nfs/dumps-labstore1006.wikimedia.org
       readOnly: true
     extraConfig: 
+      fixLabels: |
+          def fix_labels(spawner, pod):
+            del pod.metadata.labels['hub.jupyter.org/username']
+            return pod
+
+          c.KubeSpawner.modify_pod_hook = fix_labels
       myConfig: |
           import hmac
           import hashlib
@@ -197,24 +223,23 @@ jupyterhub:
           c.JupyterHub.authenticate_prometheus = False
           c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg'
           c.JupyterHub.template_vars = {
-              'announcement': (
-                '<span class="alert-success">'
-                'The new DB replicas are acessible in PAWS. Please '
-                '<a href="//wikitech.wikimedia.org/wiki/News/Wiki_Replicas_2020_Redesign#How_should_I_connect_to_databases_in_PAWS%3F">'
-                'test the connection</a> on your notebooks and '
-                '<a href="//phabricator.wikimedia.org/T276284#reply">'
-                'report any issues on Phabricator </a></span>')}
+              'announcement': ('<span class="alert-success">'
+                              'Welcome to PAWS. '
+                              'Please <a href="//phabricator.wikimedia.org/tag'
+                              '/paws/"> report any issues on Phabricator </a>'
+                              '</span>')
+          }
     extraEnv: 
       USER: tools.paws
       JUPYTERHUB_CRYPT_KEY: "4849a4d92a49cdf9a80b49486293e29966c4f02daefa0f5597cf14546bab09f8"
       MYSQL_HMAC_KEY: "9a33d49db4bb823e87187a11e4f6296bee41bc35c41dc195634dff440c1870f0"
     cookieSecret: 827902ad187337f83adc565dadfb4c095ce1962442aae043ac78948f9b216a8f
     fsGid: 52771
-    gid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: latest
-    uid: 52771
+      tag: 21.10.01 # paws-hub tag managed by github actions
+    containerSecurityContext:
+      runAsUser: 52771
   ingress: 
     enabled: true
     hosts:
@@ -223,11 +248,15 @@ jupyterhub:
   scheduling:
     userScheduler:
       enabled: false
+    userPlaceholder:
+      containerSecurityContext:
+        runAsUser: 52771
+        runAsGroup: 52771
   singleuser:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: latest
+      tag: 21.11.01 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 1G
@@ -238,10 +267,9 @@ jupyterhub:
     storage: 
       type: none
     uid: 52771
-    gid: 52771
-    # This must be enabled or it cannot work with restrictive PSP
-    cloudMetadata: 
-      enabled: true
+    # This must be false or this whole thing cannot work with restrictive PSP
+    cloudMetadata:
+      blockWithIptables: false
     lifecycleHooks:
       postStart:
         exec:
@@ -251,31 +279,12 @@ mysql:
   domain: "svc.cluster.local"
   username: s52771
   password: "iAmNotSecret0"
-# If not deployed for prod use, we use the Bitnami mediawiki chart for testing
-mediawikiHacks:
+# If not deployed for prod use, we use the some hacks for testing
+localdev:
+  enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: latest
+    tag: 21.10.01 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
-    template: "{{ .Values.mediawikiHacks.image.name}}:{{.Values.mediawikiHacks.image.tag }}"
-mediawiki:
-  enabled: true
-  mediawikiHost: wiki.mediawiki.local
-  mediawikiUser: TheAdmin
-  mediawikiPassword: 59202f7c94f01de9200f7a920193e8
-  mariadb:
-    rootUser:
-      password: 06f75c9e5cf56c9a74f16f3726e29b
-    db:
-      name: enwiki_p
-      user: s52771
-      password: iAmNotSecret0
-  service:
-    type: NodePort
-  ingress:
-    enabled: true
-    hosts:
-      - name: wiki.mediawiki.local
-        tls: false
-        certManager: false
-
+    template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
+ 

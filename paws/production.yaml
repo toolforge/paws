@@ -15,5 +15,5 @@ jupyterhub:
     hosts:
     - hub.paws.wmcloud.org
 # So that we don't use the Bitnami charts in Cloud VPS deployment
-mediawiki:
+localdev:
   enabled: false
