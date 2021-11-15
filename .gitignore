@@ -7,3 +7,4 @@ charts/
 requirements.lock
 Chart.lock
 dev-values.yaml
+*.swp

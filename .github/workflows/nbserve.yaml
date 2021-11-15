@@ -1,0 +1,16 @@
+name: build and push nbserve
+
+on:
+  pull_request:
+    paths:
+      - images/nbserve/**
+
+jobs:
+  build-and-push:
+    name: build and push nbserve
+    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v1
+    with:
+      imagename: nbserve
+    secrets:
+      quay_user: ${{ secrets.QUAY_USER }}
+      quay_password: ${{ secrets.QUAY_PASSWORD }}

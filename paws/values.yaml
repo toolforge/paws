@@ -12,14 +12,14 @@ pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: latest
+      tag: 21.10.01 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
   renderer:
     image:
-      name: docker-registry.tools.wmflabs.org/toolforge-paws-public-renderer
-      tag: latest
+      name: quay.io/wikimedia-paws-prod/renderer
+      tag: 21.10.01 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     replicas: 1
@@ -237,7 +237,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: 21.10.01
+      tag: 21.10.01 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
   ingress: 
@@ -256,7 +256,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: 21.10.01
+      tag: 21.11.01 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 1G
@@ -284,7 +284,7 @@ localdev:
   enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: 21.10.01
+    tag: 21.10.01 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
  
