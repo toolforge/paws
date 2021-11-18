@@ -147,7 +147,7 @@ ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:/srv/julia/bin:$PATH
 # Install Julia directories and depot path
 ENV JULIA_DEPOT_PATH /srv/julia-depot/
 RUN install -d -o ${NB_USER} -g ${NB_USER} /srv/julia
-RUN install -d -o ${NB_USER} -g ${NB_USER} /srv/julia-depot
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${JULIA_DEPOT_PATH}
 
 USER ${NB_USER}
 RUN python3 -m venv /srv/paws
