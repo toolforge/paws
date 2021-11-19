@@ -28,10 +28,10 @@ jobs:
       - name: git status
         run: |
           git status
-      - name: Echo github obj
-        run: echo ${{ toJson(github) }}
-      - name: github.head.repo.full_name
-        run: echo ${{ github.head.repo.full_name }}
+      - name: github.event.pull_request.head.repo.full_name
+        run: echo ${{ github.event.pull_request.head.repo.full_name }}
+      #- name: Echo github obj
+      #  run: echo ${{ toJson(github) }}
 
 #      - name: github.action
 #        run: echo ${{ github.action }}
