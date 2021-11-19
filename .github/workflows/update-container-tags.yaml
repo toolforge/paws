@@ -21,6 +21,8 @@ jobs:
       - name: git status
         run: |
           git status
+      - name: git github
+        run: echo ${{ !github }}
       - name: git repository
         run: echo ${{ github.repository }}
       - name: git repository_owner
