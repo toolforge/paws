@@ -1,6 +1,6 @@
 # PAWS
 
-PAWS: A Web Shell (PAWS) is a Jupyter notebooks deployment that has been customized to make interacting with Wikimedia wikis easier. It allows users to create and share documents that contain live code, visualizations such as graphs, rich text, etc. The user created notebooks are a powerful tool that enables data analysis and scientific research, and also transforms the way in which programmers write code - by enabling an exploratory environment with a quick feedback loop, and a low barrier for entry through it's easy to use graphical interface. 
+PAWS: A Web Shell (PAWS) is a Jupyter notebooks deployment that has been customized to make interacting with Wikimedia wikis easier. It allows users to create and share documents that contain live code, visualizations such as graphs, rich text, etc. The user created notebooks are a powerful tool that enables data analysis and scientific research, and also transforms the way in which programmers write code - by enabling an exploratory environment with a quick feedback loop, and a low barrier for entry through it's easy to use graphical interface.
 
 ## Contributing
 
@@ -33,14 +33,25 @@ install the dependencies for the PAWS dev environment with these steps:
 The rest of the setup instructions will display on screen as long as the install is successful.
 Please refer to the helm documentation from there.
 
+If you are experiencing issues with the installation, you can try changing the driver configuration in minikube: https://minikube.sigs.k8s.io/docs/drivers/
+
+- First delete the current cluster:
+
+    `minikube delete`
+
+- Start a new cluster with the driver you want to use (e.g. docker, virtualbox, hyperkit, etc.):
+
+    `minikube start --driver=docker --kubernetes-version=v1.20.11`
+
+Another possible solution if minikube is acting weird might be to upgrade minikube, or even to
+increase the default memory:
+
+`minikube config set memory 4096`
+
 NOTE: By default the mariadb chart keeps a PersistentVolumeClaim around for its storage even after
 uninstall. If you intend on rebuilding your dev environment later, you will need to use all the same
 values for DB and DB passwords if you don't delete that claim and volume (and the data from your
 last wiki will be in there--which means you keep your oauth grant!). The PVC for mediawiki gets cleaned up on uninstall.
-
-If minikube is acting weird, it might be worth it to upgrade minikube or even to
- increase the default memory:
-`minikube config set memory 4096`
 
 #### Working with images
 There are 8 images that are part of PAWS, in particular in the images/ directory. If you start a dev environment, it will pull those images from quay.io by default, just like in Wikimedia Cloud Services. If you are making changes to the images and testing those locally, you'll need to build them and tag them for your local environment, possibly setting them in your local values file with the tags you set.
@@ -76,7 +87,7 @@ A notebook can be turned into a public notebook by publishing a link to it. This
 
 If you want to run the copy yourself, or do interactive changes, you must download the notebook and reupload on your own account. Downloading the raw format of the previous example can be done by adding format=raw to the previous example …revisions-sql.ipynb?format=raw. This download-reupload-process is somewhat awkward.
 
-Note that a notebook will always be published, as the link can be guessed, so don't add any private information. 
+Note that a notebook will always be published, as the link can be guessed, so don't add any private information.
 
 ### To know more about paws have a look at:
 https://wikitech.wikimedia.org/wiki/PAWS
