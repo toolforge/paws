@@ -22,6 +22,12 @@ jobs:
       - name: git status
         run: |
           git status
+      - name: git checkout
+        run: |
+          git checkout fork-to-test-secret
+      - name: git status
+        run: |
+          git status
 #      - name: github.action
 #        run: echo ${{ github.action }}
 #      - name: github.action_path
