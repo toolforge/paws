@@ -1,7 +1,8 @@
 name: update container tags
 
 on:
-  pull_request_target:
+  pull_request:
+  #pull_request_target:
 
 jobs:
   update-container-tags:
