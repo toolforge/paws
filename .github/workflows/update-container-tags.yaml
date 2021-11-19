@@ -21,6 +21,18 @@ jobs:
       - name: git status
         run: |
           git status
+      - name: git headref
+        run: echo ${{ github.head_ref }}
+      - name: git ref
+        run: echo ${{ github.ref }}
+      - name: git refname
+        run: echo ${{ github.ref_name }}
+      - name: git refprotected
+        run: echo ${{ github.ref_protected }}
+      - name: git reftype
+        run: echo ${{ github.ref_type }}
+      - name: git baseref
+        run: echo ${{ github.base_ref }}
 # Github actions doesn't have much in the way of loops. Using a matrix results
 # in multiple separate jobs being run, which will try to overwrite one another.
 # Any kind of loop shaped thing would be more elegant than this. Until then,
