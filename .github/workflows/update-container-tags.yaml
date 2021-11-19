@@ -28,6 +28,9 @@ jobs:
       - name: git status
         run: |
           git status
+      - name: Echo github obj
+        run: echo ${{ toJson(github) }}
+
 #      - name: github.action
 #        run: echo ${{ github.action }}
 #      - name: github.action_path
@@ -75,24 +78,6 @@ jobs:
 #      - name: github.workspace
 #        run: echo ${{ github.workspace }}
 
-#      - name: git github
-#        run: echo ${{ !github }}
-#      - name: git repository
-#        run: echo ${{ github.repository }}
-#      - name: git repository_owner
-#        run: echo ${{ github.repository_owner }}
-#      - name: git headref
-#        run: echo ${{ github.head_ref }}
-#      - name: git ref
-#        run: echo ${{ github.ref }}
-#      - name: git refname
-#        run: echo ${{ github.ref_name }}
-#      - name: git refprotected
-#        run: echo ${{ github.ref_protected }}
-#      - name: git reftype
-#        run: echo ${{ github.ref_type }}
-#      - name: git baseref
-#        run: echo ${{ github.base_ref }}
 # Github actions doesn't have much in the way of loops. Using a matrix results
 # in multiple separate jobs being run, which will try to overwrite one another.
 # Any kind of loop shaped thing would be more elegant than this. Until then,
