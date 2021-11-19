@@ -21,8 +21,10 @@ jobs:
       - name: git status
         run: |
           git status
-      - name: git github
-        run: echo ${{ github }}
+      - name: git repository
+        run: echo ${{ github.repository }}
+      - name: git repository_owner
+        run: echo ${{ github.repository_owner }}
       - name: git headref
         run: echo ${{ github.head_ref }}
       - name: git ref
