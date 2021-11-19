@@ -30,6 +30,8 @@ jobs:
           git status
       - name: Echo github obj
         run: echo ${{ toJson(github) }}
+      - name: github.head.repo.full_name
+        run: echo ${{ github.head.repo.full_name }}
 
 #      - name: github.action
 #        run: echo ${{ github.action }}
