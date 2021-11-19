@@ -15,6 +15,12 @@ jobs:
         run: |
           git fetch
 
+      - name: git branch
+        run: |
+          git branch -a
+      - name: git status
+        run: |
+          git status
 # Github actions doesn't have much in the way of loops. Using a matrix results
 # in multiple separate jobs being run, which will try to overwrite one another.
 # Any kind of loop shaped thing would be more elegant than this. Until then,
