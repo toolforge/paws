@@ -21,6 +21,8 @@ jobs:
       - name: git status
         run: |
           git status
+      - name: git github
+        run: echo ${{ github }}
       - name: git headref
         run: echo ${{ github.head_ref }}
       - name: git ref
