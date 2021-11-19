@@ -50,6 +50,14 @@ jobs:
           sed -i 's/tag: .* # singleuser tag managed by github actions$/tag: pr-${{ github.event.number }} # singleuser tag managed by github actions/' paws/values.yaml
           fi
 
+      - name: print values.yaml
+        run: |
+          cat paws/values.yaml
+
+      - name: echo secret
+        run: |
+          echo ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
       - uses: EndBug/add-and-commit@v7
         with:
           add: 'paws/values.yaml'
