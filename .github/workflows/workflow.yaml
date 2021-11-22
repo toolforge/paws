@@ -5,7 +5,7 @@ name: testing workflow run
 on:
   workflow_run:
     workflows: ["update container tags", "build and push jobber"]
-    branches: [fork-secret]
+    branches: [master, fork-secret]
 #    types:
 #      - completed
 
