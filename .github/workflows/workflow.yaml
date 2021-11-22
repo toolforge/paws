@@ -4,9 +4,9 @@ name: testing workflow run
 # access to secrets
 on:
   workflow_run:
-    workflows: ["build and push jobber"]
-    types:
-      - completed
+    workflows: ["Python lint"]
+#    types:
+#      - completed
 
 jobs:
   upload:
