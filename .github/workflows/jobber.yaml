@@ -1,7 +1,7 @@
 name: build and push jobber
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - images/jobber/**
 
