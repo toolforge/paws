@@ -5,9 +5,8 @@ name: testing workflow run
 on:
   workflow_run:
     workflows: ["Python lint", "update container tags", "build and push jobber"]
-    branches: [master, fork-secret]
-#    types:
-#      - completed
+    types:
+      - completed
 
 jobs:
   upload:
