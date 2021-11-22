@@ -2,6 +2,9 @@ name: Python lint
 
 on:
   pull_request:
+    branches:
+      - master
+      - fork-secret
 
 jobs:
   flake8_py3:
