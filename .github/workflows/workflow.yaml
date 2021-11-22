@@ -4,7 +4,7 @@ name: testing workflow run
 # access to secrets
 on:
   workflow_run:
-    workflows: ["Python lint"]
+    workflows: ["update container tags"]
 #    types:
 #      - completed
 
