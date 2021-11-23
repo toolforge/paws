@@ -80,6 +80,8 @@ jupyterhub:
       nodePorts: 
         http: 32611
       type: NodePort
+  cull:
+    timeout: 86400
   hub:
     config:
       # updated auth object for chart version 0.11.0+ this is the local dev values
