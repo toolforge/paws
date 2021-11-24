@@ -15,40 +15,13 @@ jobs:
         run: |
           git fetch
 
-# Github actions doesn't have much in the way of loops. Using a matrix results
-# in multiple separate jobs being run, which will try to overwrite one another.
-# Any kind of loop shaped thing would be more elegant than this. Until then,
-# when a container is added copy one of these and change then name in all four
-# places
-      - name: update values.yaml for renderer
+      - name: update values.yaml
         run: |
-          if [[ $(git diff remotes/origin/master -- images/renderer/) ]]; then
-          sed -i 's/tag: .* # renderer tag managed by github actions$/tag: pr-${{ github.event.number }} # renderer tag managed by github actions/' paws/values.yaml
-          fi
-
-      - name: update values.yaml for nbserve
-        run: |
-          if [[ $(git diff remotes/origin/master -- images/nbserve/) ]]; then
-          sed -i 's/tag: .* # nbserve tag managed by github actions$/tag: pr-${{ github.event.number }} # nbserve tag managed by github actions/' paws/values.yaml
-          fi
-
-      - name: update values.yaml for paws-hub
-        run: |
-          if [[ $(git diff remotes/origin/master -- images/paws-hub/) ]]; then
-          sed -i 's/tag: .* # paws-hub tag managed by github actions$/tag: pr-${{ github.event.number }} # paws-hub tag managed by github actions/' paws/values.yaml
-          fi
-
-      - name: update values.yaml for jobber
-        run: |
-          if [[ $(git diff remotes/origin/master -- images/jobber/) ]]; then
-          sed -i 's/tag: .* # jobber tag managed by github actions$/tag: pr-${{ github.event.number }} # jobber tag managed by github actions/' paws/values.yaml
-          fi
-
-      - name: update values.yaml for singleuser
-        run: |
-          if [[ $(git diff remotes/origin/master -- images/singleuser/) ]]; then
-          sed -i 's/tag: .* # singleuser tag managed by github actions$/tag: pr-${{ github.event.number }} # singleuser tag managed by github actions/' paws/values.yaml
-          fi
+          for i in renderer nbserve paws-hub jobber singleuser ; do
+            if [[ $(git diff remotes/origin/master -- images/${i}/) ]]; then
+            sed -i "s/tag: .* # ${i} tag managed by github actions$/tag: pr-${{ github.event.number }} # ${i} tag managed by github actions/" paws/values.yaml
+            fi
+          done
 
       - uses: EndBug/add-and-commit@v7
         with:
