@@ -14,7 +14,9 @@ c.ServerProxy.servers = {
             "umask 077 && exec "
             + openrefine_path
             + " -p {port} -d "
-            + os.path.expanduser("~"),
+            + os.path.expanduser("~")
+            + " -H "
+            + os.environ.get("HUB_DOMAIN", "*"),
         ],
         "port": 3333,
         "timeout": 120,
