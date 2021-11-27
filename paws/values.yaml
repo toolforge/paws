@@ -88,7 +88,7 @@ jupyterhub:
       MWOAuthenticator:
         client_id: fea321f1b6b5aed9fa83d5362839cd3d
         client_secret: 6b17e5b87ae5ee893f5d4ba8b0e2377c6c0c3fcc
-        index_url: https://meta.wikimedia.org/w/index.php
+        mw_index_url: https://meta.wikimedia.org/w/index.php
       Authenticator:
         admin_users:
         - Yuvipanda
