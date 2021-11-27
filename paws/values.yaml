@@ -162,8 +162,9 @@ jupyterhub:
               async def refresh_user(self, user, handler=None):
                   client = AsyncHTTPClient()
                   try:
-                      response = await client.fetch(f"https://meta.wikimedia.org/w/api.php?action=query&format=json&meta=globaluserinfo&guiuser={user.name}")
-                      locked = bool("locked" in json.loads(response.body)['query']['globaluserinfo'].keys())
+                      response = await client.fetch(f"https://meta.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&meta=globaluserinfo&guiuser={user.name}",
+                                                     user_agent="PAWS-authenticator/0.1 (https://phabricator.wikimedia.org/tag/paws/)" )
+                      locked = bool(json.loads(response.body)['query']['globaluserinfo'].get("locked", False))
                       if locked:
                           await user.spawner.stop(now=True)
                           return False
