@@ -151,6 +151,7 @@ jupyterhub:
           from oauthenticator.mediawiki import MWOAuthenticator
           from tornado import gen
 
+          from tornado.escape import url_escape
           from tornado.httpclient import AsyncHTTPClient
           
 
@@ -162,7 +163,7 @@ jupyterhub:
               async def refresh_user(self, user, handler=None):
                   client = AsyncHTTPClient()
                   try:
-                      response = await client.fetch(f"https://meta.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&meta=globaluserinfo&guiuser={user.name}",
+                      response = await client.fetch(f"https://meta.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&meta=globaluserinfo&guiuser={url_escape(user.name)}",
                                                      user_agent="PAWS-authenticator/0.1 (https://phabricator.wikimedia.org/tag/paws/)" )
                       locked = bool(json.loads(response.body)['query']['globaluserinfo'].get("locked", False))
                       if locked:
