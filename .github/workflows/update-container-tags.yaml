@@ -19,10 +19,18 @@ jobs:
         run: |
           git checkout ${{ github.head_ref }}
 
+      # compare  to upstream main branch
+      - name: git add remote
+        run: |
+          git remote add toolforgepaws https://github.com/toolforge/paws.git
+      - name: git remote update
+        run: |
+          git remote update
+
       - name: update values.yaml
         run: |
           for i in renderer nbserve paws-hub jobber singleuser ; do
-            if [[ $(git diff remotes/origin/master -- images/${i}/) ]]; then
+            if [[ $(git diff remotes/toolforgepaws/master -- images/${i}/) ]]; then
             sed -i "s/tag: .* # ${i} tag managed by github actions$/tag: pr-${{ github.event.number }} # ${i} tag managed by github actions/" paws/values.yaml
             fi
           done
