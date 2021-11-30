@@ -1,14 +1,14 @@
 name: build and push jobber
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - images/jobber/**
 
 jobs:
   build-and-push:
     name: build and push jobber
-    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v1
+    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v2
     with:
       imagename: jobber
     secrets:
