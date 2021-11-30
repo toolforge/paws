@@ -1,14 +1,14 @@
 name: build and push paws-hub
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - images/paws-hub/**
 
 jobs:
   build-and-push:
     name: build and push paws-hub
-    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v1
+    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v2
     with:
       imagename: paws-hub
     secrets:
