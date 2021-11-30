@@ -258,7 +258,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-96 # singleuser tag managed by github actions
+      tag: pr-115 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 1G
@@ -286,7 +286,7 @@ localdev:
   enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: 21.10.01 # jobber tag managed by github actions
+    tag: pr-115 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
  
