@@ -1,7 +1,7 @@
 name: build and push singleuser
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - images/singleuser/**
 
@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-push:
     name: build and push singleuser
-    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v1
+    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v2
     with:
       imagename: singleuser
     secrets:
