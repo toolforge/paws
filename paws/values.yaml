@@ -88,7 +88,7 @@ jupyterhub:
       MWOAuthenticator:
         client_id: fea321f1b6b5aed9fa83d5362839cd3d
         client_secret: 6b17e5b87ae5ee893f5d4ba8b0e2377c6c0c3fcc
-        index_url: https://meta.wikimedia.org/w/index.php
+        mw_index_url: https://meta.wikimedia.org/w/index.php
       Authenticator:
         admin_users:
         - Yuvipanda
@@ -147,14 +147,34 @@ jupyterhub:
           import hashlib
           import subprocess
           import os
+          import json
           from oauthenticator.mediawiki import MWOAuthenticator
           from tornado import gen
+
+          from tornado.escape import url_escape
+          from tornado.httpclient import AsyncHTTPClient
           
+
           class Auth(MWOAuthenticator):
               enable_auth_state = True
               def normalize_username(self, username):
                   return username
           
+              async def refresh_user(self, user, handler=None):
+                  client = AsyncHTTPClient()
+                  try:
+                      response = await client.fetch(f"https://meta.wikimedia.org/w/api.php?action=query&format=json&formatversion=2&meta=globaluserinfo&guiuser={url_escape(user.name)}",
+                                                     user_agent="PAWS-authenticator/0.1 (https://phabricator.wikimedia.org/tag/paws/)" )
+                      locked = bool(json.loads(response.body)['query']['globaluserinfo'].get("locked", False))
+                      if locked:
+                          await user.spawner.stop(now=True)
+                          return False
+                      else:
+                          return True
+                  except Exception as e:
+                      self.log.error(f"Error checking for Wikimedia lock on user {user.name}: {e}")
+                      return False  # Notebook cookies keep user logged in
+
               @gen.coroutine
               def pre_spawn_start(self, user, spawner):
                   auth_state = yield user.get_auth_state()
