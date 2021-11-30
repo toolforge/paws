@@ -9,6 +9,7 @@ pip install --no-cache-dir \
     py-heat-magic \
     jupyter-resource-usage \
     git+https://github.com/toolforge/nbpawspublic@main \
+    git+https://github.com/toolforge/labpawspublic@main \
 
 
 jupyter nbextension install --py nbpawspublic --sys-prefix

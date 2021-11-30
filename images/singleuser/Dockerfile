@@ -95,7 +95,7 @@ RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
 # Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L https://github.com/OpenRefine/OpenRefine/releases/download/3.4.1/openrefine-linux-3.4.1.tar.gz | tar xzf - --strip=1
+    curl -L https://github.com/OpenRefine/OpenRefine/releases/download/3.5.0/openrefine-linux-3.5.0.tar.gz | tar xzf - --strip=1
 COPY proxies/openrefine-logo.svg ${OPENREFINE_DIR}/openrefine-logo.svg
 
 # Machine-learning type stuff
@@ -143,7 +143,12 @@ RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
 ENV VENV_DIR /srv/paws
 RUN install -d -o ${NB_USER} -g ${NB_USER} ${VENV_DIR}
 
-ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
+ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:/srv/julia/bin:$PATH
+
+# Install Julia directories and depot path
+ENV JULIA_DEPOT_PATH /srv/julia-depot/
+RUN install -d -o ${NB_USER} -g ${NB_USER} /srv/julia
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${JULIA_DEPOT_PATH}
 
 USER ${NB_USER}
 RUN python3 -m venv /srv/paws
@@ -199,5 +204,9 @@ COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/cus
 
 # Setup custom config as needed
 COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
+
+# install julia and julia kernel
+COPY install-julia /tmp/install-julia
+RUN /tmp/install-julia
 
 EXPOSE 8888
