@@ -12,14 +12,14 @@ pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: pr-76 # nbserve tag managed by github actions
+      tag: 21.10.01 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
   renderer:
     image:
       name: quay.io/wikimedia-paws-prod/renderer
-      tag: pr-76 # renderer tag managed by github actions
+      tag: 21.10.01 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     replicas: 1
@@ -259,7 +259,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-76 # paws-hub tag managed by github actions
+      tag: 21.10.01 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
   ingress: 
@@ -306,7 +306,7 @@ localdev:
   enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: pr-76 # jobber tag managed by github actions
+    tag: 21.10.01 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
  
