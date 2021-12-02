@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV PYWIKIBOT_VERSION=6.6.2
+ENV PYWIKIBOT_VERSION=6.6.3
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -72,6 +72,7 @@ RUN apt-get install --yes \
         links \
         nano \
         vim \
+        lsof \
         mariadb-client
 
 
