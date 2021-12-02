@@ -10,8 +10,14 @@ There is a [workboard](https://phabricator.wikimedia.org/project/view/1648/) and
 To contribute to this project's code, please fork the repo on [GitHub](https://github.com/toolforge/paws/) and submit a pull request.
 
 If you have push access to the project, we ask that new changes be reviewed by one other
-project member by using either a feature branch on the  https://github.com/toolforge/paws repo
+project member by using either a feature branch on the https://github.com/toolforge/paws repo
 to trigger a pull request or using a fork to set up a pull request.
+
+### Pull Requests and CI
+
+When a pull request is opened a few things are run automatically. Any container that was modified in /images will be built and pushed to quay.io. Your branch will be updated with an additional commit, updating the values.yaml file to point to the new image tags. And a linter will be run. These workflows, and their status, will be visible in the github pull request page. At this point you, or anyone else, will be able to pull down the branch in the PR and run it locally in minikube as described below.
+
+If your PR originates from a fork, please be sure "Allow edits and access to secrets by maintainers" is enabled such that the CI can function. Alternatively please manually edit the values.yaml to match the PR number for any containers that your code updates.
 
 ### Settings up a development environment
 
@@ -48,12 +54,9 @@ increase the default memory:
 
 `minikube config set memory 4096`
 
-NOTE: By default the mariadb chart keeps a PersistentVolumeClaim around for its storage even after
-uninstall. If you intend on rebuilding your dev environment later, you will need to use all the same
-values for DB and DB passwords if you don't delete that claim and volume (and the data from your
-last wiki will be in there--which means you keep your oauth grant!). The PVC for mediawiki gets cleaned up on uninstall.
-
 #### Working with images
+Keep in mind that opening a PR will, attempt, to build any image that has changed in the PR branch. This method is fine to build and test the resulting container. Though it is often easier to build, and rebuild, a container locally for testing. The following describes how to build and use a container locally.
+
 There are 8 images that are part of PAWS, in particular in the images/ directory. If you start a dev environment, it will pull those images from quay.io by default, just like in Wikimedia Cloud Services. If you are making changes to the images and testing those locally, you'll need to build them and tag them for your local environment, possibly setting them in your local values file with the tags you set.
 
 If you are using minikube, you need to make sure you are using minikube's docker, not your system's docker with `eval $(minikube docker-env)`. Now your docker commands will operate on the minikube environment.
@@ -62,7 +65,7 @@ For example, let's say you wanted to update the singleuser image (which is the a
 - `cd images/singleuser`
 - `docker build -t tag-you-are-going-to-use:whatever .`
 
-And then you should have the image with a tag of `tag-you-are-going-to-use:whatever` that you could edit into your values.yaml file for local helm work. If you were aiming to aggressively push a tag for deployment, dodging around the CI system to do so, you'd tag with `quay.io/wikimedia-paws-prod/singleuser:latest`, which will cause a later `docker push quay.io/wikimedia-paws-prod/singleuser:latest` to actually push that tag directly to the repo for deployment in Cloud Services. Don't do that unless you really know what you are doing.
+And then you should have the image with a tag of `tag-you-are-going-to-use:whatever` that you could edit into your values.yaml file for local helm work.
 ## Useful libraries
 ### Accessing Database Replicas With Pandas and Sqlalchemy
 
