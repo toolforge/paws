@@ -1,0 +1,5 @@
+git+https://github.com/jupyter/nbconvert.git
+ipython
+werkzeug
+markdown
+docutils
