@@ -37,6 +37,7 @@ beautifulsoup4
 # SQL!
 pymysql
 mycli
+wmpaws
 
 # Interface with other languages
 rpy2
