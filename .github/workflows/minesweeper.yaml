@@ -4,6 +4,9 @@ on:
   pull_request_target:
     paths:
       - images/minesweeper/**
+  push: # temp to run on first PR``
+    paths:
+      - images/minesweeper/**
 
 jobs:
   build-and-push:
