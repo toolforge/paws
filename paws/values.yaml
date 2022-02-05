@@ -303,6 +303,11 @@ mysql:
   domain: "svc.cluster.local"
   username: s52771
   password: "iAmNotSecret0"
+minesweeper:
+  enabled: false  # most local-dev testers won't have the key to configs
+  image:
+    name: quay.io/wikimedia-paws-prod/minesweeper
+    tag: pr-122 # minesweeper tag managed by github actions
 # If not deployed for prod use, we use the some hacks for testing
 localdev:
   enabled: true
