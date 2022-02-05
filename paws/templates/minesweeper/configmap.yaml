@@ -1,4 +1,4 @@
-{{- /* configmap for minesweeper source files */ -}}
+{{- /* configmap for minesweeper source files */}}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -6,15 +6,15 @@ metadata:
   labels:
     app: minesweeper
     component: minesweeper-src
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
 data:
-  {{- (.Files.Glob "files/minesweeper/*").AsConfig | nindent 2 }}
-  {{- (.Files.Glob "files/minesweeper/secrets/*").AsConfig | nindent 2 }}
+{{- (.Files.Glob "files/minesweeper/*").AsConfig | nindent 2 }}
+{{- (.Files.Glob "files/minesweeper/secrets/*").AsConfig | nindent 2 }}
+{{- /* configmap for minesweeper configuration from values */}}
 ---
-{{- /* configmap for minesweeper configuration from values */ -}}
-kind: ConfigMap
 apiVersion: v1
+kind: ConfigMap
 metadata:
   name: minesweeper-config
   labels:
