@@ -48,7 +48,7 @@ spec:
 
       containers:
       - name: minesweeper
-        image: {{ .Values.minesweeper.image }}
+        image: {{ tpl .Values.minesweeper.image.template . | quote}}
         securityContext:
           # we are running with hostPID, but want extremely limited capabilities
           capabilities:
