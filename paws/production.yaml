@@ -17,6 +17,8 @@ jupyterhub:
   singleuser:
     extraEnv:
       HUB_DOMAIN: "hub.paws.wmcloud.org"  # Check jupyterhub.ingress.hosts
+minesweeper:
+  enabled: true
 # So that we don't use the Bitnami charts in Cloud VPS deployment
 localdev:
   enabled: false

@@ -29,7 +29,7 @@ jobs:
 
       - name: update values.yaml
         run: |
-          for i in renderer nbserve paws-hub jobber singleuser ; do
+          for i in renderer nbserve paws-hub jobber singleuser minesweeper ; do
             if [[ $(git diff remotes/toolforgepaws/master -- images/${i}/) ]]; then
             sed -i "s/tag: .* # ${i} tag managed by github actions$/tag: pr-${{ github.event.number }} # ${i} tag managed by github actions/" paws/values.yaml
             fi

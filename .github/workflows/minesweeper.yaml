@@ -1,0 +1,16 @@
+name: build and push minesweeper
+
+on:
+  pull_request_target:
+    paths:
+      - images/minesweeper/**
+
+jobs:
+  build-and-push:
+    name: build and push minesweeper
+    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v2
+    with:
+      imagename: minesweeper
+    secrets:
+      quay_user: ${{ secrets.QUAY_USER }}
+      quay_password: ${{ secrets.QUAY_PASSWORD }}
