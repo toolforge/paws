@@ -57,7 +57,7 @@ RUN apt-get update --yes && \
         python3-dev \
         python3-venv \
         r-recommended \
-        r-base-dev \
+        r-base-dev=4.1.1-1.2004.0 \
         r-cran-littler \
         openjdk-11-jdk \
         nodejs
