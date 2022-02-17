@@ -56,9 +56,29 @@ RUN apt-get update --yes && \
         python3 \
         python3-dev \
         python3-venv \
-        r-recommended \
+#        r-recommended=4.1.1-1.2004.0 \
+#        r-base-dev=4.1.1-1.2004.0 \
+#        r-cran-littler \
+        r-base-core=4.1.1-1.2004.0 \
         r-base-dev=4.1.1-1.2004.0 \
-        r-cran-littler \
+        r-cran-boot=1.3-28-1cran1.2004.0 \
+        r-cran-class=7.3-19-1.2004.0 \
+        r-cran-cluster=2.1.2-1.2004.0 \
+        r-cran-codetools=0.2-18-1cran1.2004.0 \
+        r-cran-foreign=0.8.81-1.2004.0 \
+        r-cran-kernsmooth=2.23-20-1cran1.2004.0 \
+        r-cran-lattice=0.20-44-1cran2~ubuntu20.04.1~ppa1 \
+        r-cran-littler=0.3.13-1.2004.0 \
+        r-cran-mass=7.3-54-1.2004.0 \
+        r-cran-matrix=1.3-4-1.2004.0 \
+        r-cran-mgcv=1.8-36-1cran1.2004.0 \
+        r-cran-nlme=3.1.152-1.2004.0 \
+        r-cran-nnet=7.3-16-1.2004.0 \
+        r-cran-rpart=4.1-15-2focal0 \
+        r-cran-spatial=7.3-11-2focal0 \
+        r-cran-survival=3.2-13-1cran1.2004.0 \
+        r-doc-html=4.1.1-1.2004.0 \
+        r-recommended=4.1.1-1.2004.0 \
         openjdk-11-jdk \
         nodejs
 
@@ -91,6 +111,9 @@ ENV RSTUDIO_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server
 RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
     dpkg -i /tmp/rstudio.deb && \
     rm /tmp/rstudio.deb
+#RUN apt-get install gdebi-core -y
+#RUN wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2021.09.2-382-amd64.deb
+#RUN gdebi rstudio-server-2021.09.2-382-amd64.deb
 
 # Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
