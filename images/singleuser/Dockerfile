@@ -75,6 +75,10 @@ RUN apt-get install --yes \
         lsof \
         mariadb-client
 
+# pyaudio
+RUN apt-get install --yes \
+        portaudio19-dev
+
 
 # Needed by RStudio
 RUN apt-get update -qq --yes && \
