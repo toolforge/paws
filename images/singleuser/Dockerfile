@@ -199,8 +199,10 @@ RUN /usr/local/bin/install-extensions
 
 COPY banner /etc/bash.bashrc
 
-# use custom css to hide clusters tab
-COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
+# append custom css to custom.css
+# SPARQL uses this file too, though seems to add to the top and leave the bottom alone
+COPY custom_css.css /tmp/
+RUN cat /tmp/custom_css.css >> /srv/paws/lib/python3.8/site-packages/notebook/static/custom/custom.css
 
 # Setup custom config as needed
 COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py

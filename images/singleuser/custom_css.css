@@ -1,0 +1,8 @@
+/*
+ * custom user CSS
+ */
+
+/* Hide clusters tab */
+.nav > li > .clusters_tab_link {
+	display: none;
+}
