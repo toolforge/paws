@@ -31,7 +31,6 @@ You will need to install minikube (tested on minikube 1.23) and [helm](https://h
 (from the top level of this repo):
 install the dependencies for the PAWS dev environment with these steps:
  - `helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/`
- - `helm repo add bitnami https://charts.bitnami.com/bitnami`
  - `helm dep up paws/`
  - `kubectl create namespace paws-dev`
  - `helm -n paws-dev install dev paws/ --timeout=50m`
