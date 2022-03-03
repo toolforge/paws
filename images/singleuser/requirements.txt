@@ -37,12 +37,13 @@ beautifulsoup4
 # SQL!
 pymysql
 mycli
+wmpaws
 
 # Interface with other languages
 rpy2
 
 # RStudio
-jupyter-rsession-proxy
+jupyter-rsession-proxy==1.4
 
 # Web dev stuff
 flask

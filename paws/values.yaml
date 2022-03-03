@@ -19,7 +19,7 @@ pawspublic:
   renderer:
     image:
       name: quay.io/wikimedia-paws-prod/renderer
-      tag: 21.10.01 # renderer tag managed by github actions
+      tag: pr-120 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     replicas: 1
@@ -297,15 +297,17 @@ jupyterhub:
       blockWithIptables: false
     extraEnv:
       HUB_DOMAIN: "hub.paws.local"  # Check jupyterhub.ingress.hosts
-    lifecycleHooks:
-      postStart:
-        exec:
-          command: ["sh", "-c", "cd /srv/paws/pwb && git pull origin stable || exit 0"]
 # mysql configures the wiki replica backend variables
 mysql:
   domain: "svc.cluster.local"
   username: s52771
   password: "iAmNotSecret0"
+minesweeper:
+  enabled: false  # most local-dev testers won't have the key to configs
+  image:
+    name: quay.io/wikimedia-paws-prod/minesweeper
+    tag: pr-123 # minesweeper tag managed by github actions
+    template: "{{ .Values.minesweeper.image.name }}:{{ .Values.minesweeper.image.tag }}"
 # If not deployed for prod use, we use the some hacks for testing
 localdev:
   enabled: true
@@ -314,4 +316,3 @@ localdev:
     tag: 21.10.01 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
- 
