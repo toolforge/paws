@@ -275,6 +275,9 @@ jupyterhub:
         runAsUser: 52771
         runAsGroup: 52771
   singleuser:
+    cmd:
+    - jupyterhub-singleuser
+    - --LabApp.collaborative=true
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
