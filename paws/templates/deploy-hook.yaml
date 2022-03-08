@@ -311,7 +311,7 @@ spec:
   selector:
     name: deploy-hook
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: deploy-hook
@@ -325,8 +325,11 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: deploy-hook
-              servicePort: 8888
+              service:
+                name: deploy-hook
+                port: 
+                 number: 8888
+            pathType: Prefix
       host: {{ .Values.deployHook.host }}
   {{ if .Values.deployHook.tls }}
   tls:
