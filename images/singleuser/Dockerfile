@@ -99,7 +99,7 @@ RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
 # Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L https://github.com/OpenRefine/OpenRefine/releases/download/3.5.1/openrefine-linux-3.5.1.tar.gz | tar xzf - --strip=1
+    curl -L https://github.com/OpenRefine/OpenRefine/releases/download/3.5.2/openrefine-linux-3.5.2.tar.gz | tar xzf - --strip=1
 COPY proxies/openrefine-logo.svg ${OPENREFINE_DIR}/openrefine-logo.svg
 
 # Machine-learning type stuff
