@@ -249,7 +249,10 @@ jupyterhub:
                               'Welcome to PAWS. '
                               'Please <a href="//phabricator.wikimedia.org/tag'
                               '/paws/"> report any issues on Phabricator </a>'
-                              '</span>')
+                              '</span>'
+                              '<h1><strong>Notice:</strong></h1>'
+                              '<p>As noted in <a href="https://github.com/jupyter/notebook">jupyter notebook</a>. The notebook interface is being replaced by the <a href="https://github.com/jupyterlab/jupyterlab">JupyterLab</a> interface</p>'
+                              '<p>PAWS will be moving to the JupyterLab interface on 2022-03-21. <a href="https://github.com/jupyterlab/retrolab">Retrolab</a> will also be deployed. There are instructions on switching to it <a href="https://wikitech.wikimedia.org/wiki/PAWS/Additional_features">here</a></p>')
           }
     extraEnv: 
       USER: tools.paws
