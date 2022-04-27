@@ -161,7 +161,7 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 # Install base notebook packages
 RUN pip install --no-cache-dir \
     jupyterhub==2.1.1 \
-    jupyterlab>=3.2.4 \
+    jupyterlab==3.2.4 \
     retrolab \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller==0.9.0 \
