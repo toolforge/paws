@@ -17,7 +17,7 @@ spec:
       - backend:
           service:
             name: paws-public
-            port: 
+            port:
              number: 8000
         pathType: Prefix
         path: /
