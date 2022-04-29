@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-ENV PYWIKIBOT_VERSION=6.6.5
+ENV PYWIKIBOT_VERSION=7.2.0
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -160,9 +160,9 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 
 # Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub==1.4.2 \
-    notebook==6.3.* \
+    jupyterhub==2.1.1 \
     jupyterlab>=3.2.4 \
+    retrolab \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller==0.9.0 \
     voila==0.2.* \
