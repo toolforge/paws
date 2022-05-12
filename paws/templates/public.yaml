@@ -124,5 +124,6 @@ spec:
             name: paws-public
             port:
              number: 8000
-        pathType: ImplementationSpecific
+        pathType: Prefix
+        path: /
 {{ end }}
