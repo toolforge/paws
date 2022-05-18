@@ -107,7 +107,7 @@ spec:
   selector:
     name: renderer
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   labels:
@@ -120,6 +120,10 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: paws-public
-          servicePort: 8000
+          service:
+            name: paws-public
+            port:
+             number: 8000
+        pathType: Prefix
+        path: /
 {{ end }}
