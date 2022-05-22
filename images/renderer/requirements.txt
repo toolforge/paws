@@ -1,4 +1,4 @@
-git+https://github.com/jupyter/nbconvert.git
+git+https://github.com/jupyter/nbconvert.git@6.5
 ipython
 werkzeug
 markdown
