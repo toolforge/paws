@@ -19,7 +19,7 @@ pawspublic:
   renderer:
     image:
       name: quay.io/wikimedia-paws-prod/renderer
-      tag: pr-150 # renderer tag managed by github actions
+      tag: pr-158 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     replicas: 1
@@ -318,6 +318,6 @@ localdev:
   enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: 21.10.01 # jobber tag managed by github actions
+    tag: pr-158 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
