@@ -12,7 +12,7 @@ pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: 21.10.01 # nbserve tag managed by github actions
+      tag: pr-165 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
