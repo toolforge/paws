@@ -5,7 +5,7 @@ PAWS: A Web Shell (PAWS) is a Jupyter notebooks deployment that has been customi
 ## Contributing
 
 Bugs, issues and feature requests are found on [Wikimedia Foundation's Phabricator](https://phabricator.wikimedia.org/).
-There is a [workboard](https://phabricator.wikimedia.org/project/view/1648/) and a project tag of `#paws` to use for related work. You can reference code and commits from this repo at the Phabricator mirror of the code [here](https://phabricator.wikimedia.org/diffusion/PAWS/browse/master/), but please do not clone or try to use that mirror directly.
+There is a [workboard](https://phabricator.wikimedia.org/project/view/1648/) and a project tag of `#paws` to use for related work. You can reference code and commits from this repo at the Phabricator mirror of the code [here](https://phabricator.wikimedia.org/diffusion/PAWS/browse/main/), but please do not clone or try to use that mirror directly.
 
 To contribute to this project's code, please fork the repo on [GitHub](https://github.com/toolforge/paws/) and submit a pull request.
 
@@ -22,11 +22,10 @@ If your PR originates from a fork, please be sure "Allow edits and access to sec
 ### Settings up a development environment
 
 It is possible to run a fully-functioning PAWS system inside [minikube](https://minikube.sigs.k8s.io/docs/)! You don't need
-access to the secrets.yaml file to do it either, since the defaults mostly support it. At this time, you need to
-set it up with a cluster version before 1.22, most likely.
+access to the secrets.yaml file to do it either, since the defaults mostly support it.
 
 You will need to install minikube (tested on minikube 1.23) and [helm](https://helm.sh) and kubectl on your system. When you are confident those are working, start minikube with:
- - `minikube start --kubernetes-version=v1.20.11`
+ - `minikube start --kubernetes-version=v1.21.8`
  - `minikube addons enable ingress`
 (from the top level of this repo):
 install the dependencies for the PAWS dev environment with these steps:
