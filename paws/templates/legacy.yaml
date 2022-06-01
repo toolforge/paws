@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   labels:
@@ -16,11 +16,14 @@ spec:
       paths:
       # The backend portion is just there for the validator. It isn't used.
       - backend:
-          serviceName: paws-public
-          servicePort: 8000
+          service:
+            name: paws-public
+            port:
+             number: 8000
+        pathType: Exact
         path: /paws-public(/|$)(.*)
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   labels:
@@ -37,6 +40,9 @@ spec:
       paths:
       # The backend portion is just there for the validator. It isn't used.
       - backend:
-          serviceName: paws-public
-          servicePort: 8000
+          service:
+            name: paws-public
+            port:
+             number: 8000
+        pathType: Exact
         path: /paws(/|$)(.*)
