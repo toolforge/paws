@@ -175,21 +175,6 @@ subjects:
   name: paws-public
   namespace: prod
 ---
-# The deploy service account for the deploy hook needs a freer hand, I'm afraid
-# We could also experiment with giving this lesser privs than this.
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: deploy-hook-psp-binding
-subjects:
-- kind: ServiceAccount
-  namespace: prod
-  name: deploy
-roleRef:
-  kind: ClusterRole
-  name: privileged-psp
-  apiGroup: rbac.authorization.k8s.io
----
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
