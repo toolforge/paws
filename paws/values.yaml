@@ -35,27 +35,6 @@ paws:
     frontHost: paws.wmcloud.org
     # paws.ingress.frontRedirect should be the destination for URL path of / at paws.ingress.frontHost
     frontRedirect: https://wikitech.wikimedia.org/wiki/PAWS
-deployHook:
-  # deployHook.enabled determines if we are running hte deployhook or not
-  enabled: False
-  host: deploy-hook.paws.wmcloud.org
-  # serviceAccount is the account that has the privileges to deploy PAWS
-  serviceAccount: deploy
-  # deployHook.tls controls using kube-lego or cert-manager for tls
-  tls: false
-  # deployHook.token makes it work. Provide a real on if deploying on Cloud VPS
-  token: b590f591d1101844c5b40d0e62f53f02f5b27da1a2272422cc86729a5dceb074
-  image:
-    name: quay.io/wikimedia-paws-prod/deploy-hook
-    tag: latest
-    # deployHook.image.template safely defines image:tag name in yaml
-    template: "{{ .Values.deployHook.image.name }}:{{ .Values.deployHook.image.tag }}"
-  # service: 
-  #   ports:
-  #     nodePort: 32612
-  #   type: NodePort
-  service:
-    type: ClusterIP
 jupyterhub:
   prePuller:
     containerSecurityContext:

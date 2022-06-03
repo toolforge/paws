@@ -77,7 +77,6 @@ def deploy(prefix, images, release, install):
         "paws-hub": "jupyterhub.hub.image",
         "singleuser": "jupyterhub.singleuser.image",
         "db-proxy": "dbProxy.image",
-        "deploy-hook": "deployHook.image",
     }
 
     args = []
@@ -144,7 +143,7 @@ def main():
 
     args = argparser.parse_args()
 
-    images = ["paws-hub", "singleuser", "db-proxy", "deploy-hook"]
+    images = ["paws-hub", "singleuser", "db-proxy"]
     if args.action == "build":
         build_images(args.image_prefix, images, args.commit_range, args.push)
     else:
