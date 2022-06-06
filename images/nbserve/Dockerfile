@@ -1,4 +1,4 @@
-FROM docker-registry.tools.wmflabs.org/toolforge-python37-sssd-base:latest
+FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
@@ -12,6 +12,11 @@ RUN apt-get update \
     make \
     perl \
     unzip \
+    ca-certificates \
+    git \
+    libxml2-dev \
+    libxslt1-dev \
+    python3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
