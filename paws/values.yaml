@@ -1,11 +1,4 @@
 
-dbProxy: 
-  hmacKey: "9a33d49db4bb823e87187a11e4f6296bee41bc35c41dc195634dff440c1870f0"
-  image: 
-    name: quay.io/wikimedia-paws-prod/db-proxy
-    tag: multiinstance
-    # dbProxy.image.template safely defines image:tag name in yaml
-    template: "{{ .Values.dbProxy.image.name}}:{{.Values.dbProxy.image.tag }}"
 # pawsPublicEnabled enables the anonymous viewing service for notebooks
 pawsPublicEnabled: true
 pawspublic:
