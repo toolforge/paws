@@ -43,7 +43,8 @@ wmpaws
 rpy2
 
 # RStudio
-jupyter-rsession-proxy==1.4
+jupyter-server-proxy
+jupyter-rsession-proxy==2.0.1
 
 # Web dev stuff
 flask
