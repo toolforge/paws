@@ -53,7 +53,7 @@ increase the default memory:
 `minikube config set memory 4096`
 
 #### Working with images
-Keep in mind that opening a PR will, attempt, to build any image that has changed in the PR branch. This method is fine to build and test the resulting container. Though it is often easier to build, and rebuild, a container locally for testing. The following describes how to build and use a container locally.
+Keep in mind that opening a PR will, attempt to, build any image that has changed in the PR branch. This method is fine to build and test the resulting container. Though it is often easier to build, and rebuild, a container locally for testing. The following describes how to build and use a container locally.
 
 There are 8 images that are part of PAWS, in particular in the images/ directory. If you start a dev environment, it will pull those images from quay.io by default, just like in Wikimedia Cloud Services. If you are making changes to the images and testing those locally, you'll need to build them and tag them for your local environment, possibly setting them in your local values file with the tags you set.
 
