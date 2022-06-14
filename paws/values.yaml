@@ -17,7 +17,7 @@ pawspublic:
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     replicas: 1
   ingress:
-    host: public.paws.wmcloud.org
+    host: public.hub.paws.local
     legacyHost: paws-public.wmflabs.org
 paws:
   # frontPageEnabled switches the URL path of / to a redirect to paws.ingress.frontRedirect
