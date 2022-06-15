@@ -44,7 +44,7 @@ rpy2
 
 # RStudio
 jupyter-server-proxy
-git+https://github.com/toolforge/jupyter-rsession-proxy.git@21e2239
+git+https://github.com/toolforge/jupyter-rsession-proxy.git@e451d18
 
 # Web dev stuff
 flask
