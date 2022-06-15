@@ -1,10 +1,12 @@
-FROM docker-registry.tools.wmflabs.org/toolforge-python37-sssd-web
+FROM ubuntu:22.04
 
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     python3-pip \
     python3-setuptools \
-    python3-wheel\
+    python3-wheel \
+    uwsgi \
+    uwsgi-plugin-python3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

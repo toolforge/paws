@@ -11,14 +11,4 @@ metadata:
 spec:
   rules:
   - host: {{ .Values.paws.ingress.frontHost | quote }}
-    http:
-      paths:
-      # The backend portion is just there for the validator. It isn't used.
-      - backend:
-          service:
-            name: paws-public
-            port:
-             number: 8000
-        pathType: Prefix
-        path: /
 {{ end }}
