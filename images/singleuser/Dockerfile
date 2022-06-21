@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 ENV PYWIKIBOT_VERSION=7.3.0
 ENV EDITOR=/bin/nano
@@ -48,7 +48,7 @@ RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
 # Base R from Focal is only 3.6.
 COPY E298A3A825C0D65DFD57CBB651716619E084DAB9.asc /tmp/
 RUN apt-key add /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc && rm /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc
-RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" > /etc/apt/sources.list.d/cran.list
+RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" > /etc/apt/sources.list.d/cran.list
 
 # Install languages needed and their core dev packages
 RUN apt-get update --yes && \
@@ -87,15 +87,24 @@ RUN apt-get update -qq --yes && \
         sudo \
         libapparmor1 \
         lsb-release \
+        gdebi \
+        pip \
         libclang-dev
 # Install RStudio
 # 1.3.959 is latest version that works with jupyter-rsession-proxy
 # See https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93#issuecomment-725874693
-ENV RSTUDIO_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-1.3.959-amd64.deb
-RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
-    dpkg -i /tmp/rstudio.deb && \
-    rm /tmp/rstudio.deb
+#ENV RSTUDIO_URL https://download1.rstudio.org/desktop/jammy/amd64/rstudio-2022.02.3-492-amd64.deb
+#RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
+#    gdebi -n /tmp/rstudio.deb && \
+#    rm /tmp/rstudio.deb
 
+RUN curl http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.17_amd64.deb > /tmp/libssl1.1
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
+RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb && \
+    gdebi -n /tmp/libssl1.1
+
+RUN gdebi -n /tmp/rstudio-server.deb
+    #rm /tmp/rstudio-server.deb
 # Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \

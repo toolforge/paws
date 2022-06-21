@@ -43,7 +43,8 @@ wmpaws
 rpy2
 
 # RStudio
-jupyter-rsession-proxy==1.4
+jupyter-server-proxy
+git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
 
 # Web dev stuff
 flask
