@@ -1,3 +1,5 @@
+---
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -10,18 +12,18 @@ metadata:
   name: paws-public-legacy
 spec:
   rules:
-  - host: {{ .Values.pawspublic.ingress.legacyHost | quote }}
-    http:
+    - host: {{ .Values.pawspublic.ingress.legacyHost | quote }}
+      http:
 
-      paths:
-      # The backend portion is just there for the validator. It isn't used.
-      - backend:
-          service:
-            name: paws-public
-            port:
-             number: 8000
-        pathType: Exact
-        path: /paws-public(/|$)(.*)
+        paths:
+          # The backend portion is just there for the validator. It isn't used.
+          - backend:
+              service:
+                name: paws-public
+                port:
+                  number: 8000
+            pathType: Exact
+            path: /paws-public(/|$)(.*)
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -35,14 +37,14 @@ metadata:
   name: paws-legacy
 spec:
   rules:
-  - host: {{ .Values.paws.ingress.legacyHost | quote }}
-    http:
-      paths:
-      # The backend portion is just there for the validator. It isn't used.
-      - backend:
-          service:
-            name: paws-public
-            port:
-             number: 8000
-        pathType: Exact
-        path: /paws(/|$)(.*)
+    - host: {{ .Values.paws.ingress.legacyHost | quote }}
+      http:
+        paths:
+          # The backend portion is just there for the validator. It isn't used.
+          - backend:
+              service:
+                name: paws-public
+                port:
+                  number: 8000
+            pathType: Exact
+            path: /paws(/|$)(.*)

@@ -1,6 +1,8 @@
+---
+
 name: build and push nbserve
 
-on:
+'on':
   pull_request_target:
     paths:
       - images/nbserve/**

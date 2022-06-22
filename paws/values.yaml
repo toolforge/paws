@@ -1,3 +1,4 @@
+---
 
 # pawsPublicEnabled enables the anonymous viewing service for notebooks
 pawsPublicEnabled: true
@@ -48,8 +49,8 @@ jupyterhub:
         runAsGroup: 52771
     # jupyterhub.proxy.secretToken is a valid dummy value for development
     secretToken: "23f542cc4b1af000e68088f1acc7ca8275a67cf496bae15ead6a79b8c6702597"
-    service: 
-      nodePorts: 
+    service:
+      nodePorts:
         http: 32611
       type: NodePort
   cull:
@@ -63,15 +64,15 @@ jupyterhub:
         mw_index_url: https://meta.wikimedia.org/w/index.php
       Authenticator:
         admin_users:
-        - Yuvipanda
-        - BDavis_(WMF)
-        - BStorm_(WMF)
-        - ABorrero_(WMF)
-        - HPham_(WMF)
-        - NSkaggs_(WMF)
-        - Andrewbogott
-        - Chicocvenancio
-        - Zhuyifei1999
+          - Yuvipanda
+          - BDavis_(WMF)
+          - BStorm_(WMF)
+          - ABorrero_(WMF)
+          - HPham_(WMF)
+          - NSkaggs_(WMF)
+          - Andrewbogott
+          - Chicocvenancio
+          - Zhuyifei1999
       JupyterHub:
         authenticator_class: mediawiki
     db:
@@ -80,34 +81,34 @@ jupyterhub:
       type: sqlite-pvc
       upgrade: true
     extraVolumes:
-    - name: homes
-      hostPath:
-        path: /data/project
-    - name: dumps
-      hostPath:
-        path: /public/dumps
-    # Without this, dumps becomes inaccessible and can hang the host
-    - name: dumps-src1
-      hostPath:
-        path: /mnt/nfs/dumps-labstore1007.wikimedia.org
-        type: DirectoryOrCreate
-    - name: dumps-src2
-      hostPath:
-        path: /mnt/nfs/dumps-labstore1006.wikimedia.org
-        type: DirectoryOrCreate
+      - name: homes
+        hostPath:
+          path: /data/project
+      - name: dumps
+        hostPath:
+          path: /public/dumps
+      # Without this, dumps becomes inaccessible and can hang the host
+      - name: dumps-src1
+        hostPath:
+          path: /mnt/nfs/dumps-labstore1007.wikimedia.org
+          type: DirectoryOrCreate
+      - name: dumps-src2
+        hostPath:
+          path: /mnt/nfs/dumps-labstore1006.wikimedia.org
+          type: DirectoryOrCreate
     extraVolumeMounts:
-    - name: homes
-      mountPath: /data/project
-    - name: dumps
-      mountPath: /public/dumps
-      readOnly: true
-    - name: dumps-src1
-      mountPath: /mnt/nfs/dumps-labstore1007.wikimedia.org
-      readOnly: true
-    - name: dumps-src2
-      mountPath: /mnt/nfs/dumps-labstore1006.wikimedia.org
-      readOnly: true
-    extraConfig: 
+      - name: homes
+        mountPath: /data/project
+      - name: dumps
+        mountPath: /public/dumps
+        readOnly: true
+      - name: dumps-src1
+        mountPath: /mnt/nfs/dumps-labstore1007.wikimedia.org
+        readOnly: true
+      - name: dumps-src2
+        mountPath: /mnt/nfs/dumps-labstore1006.wikimedia.org
+        readOnly: true
+    extraConfig:
       fixLabels: |
           def fix_labels(spawner, pod):
             del pod.metadata.labels['hub.jupyter.org/username']
@@ -125,13 +126,13 @@ jupyterhub:
 
           from tornado.escape import url_escape
           from tornado.httpclient import AsyncHTTPClient
-          
+
 
           class Auth(MWOAuthenticator):
               enable_auth_state = True
               def normalize_username(self, username):
                   return username
-          
+
               async def refresh_user(self, user, handler=None):
                   client = AsyncHTTPClient()
                   try:
@@ -203,7 +204,7 @@ jupyterhub:
 
                       },
                   ]
-          
+
           c.JupyterHub.authenticator_class = Auth
           c.JupyterHub.authenticate_prometheus = False
           c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg'
@@ -215,7 +216,7 @@ jupyterhub:
                               ' report any issues on Phabricator</a>, you can also give feedback <a href="https://phabricator.wikimedia.org/maniphest/task/edit/form/1/?title=%5Bfeature%5D%20%3Cyour%20request%20here%3E&description=%3D%3D%20Why%0D%0A%0D%0AA%20brief%20explanation%20of%20the%20problem%20you%20are%20trying%20to%20solve%0D%0A%0D%0A%3D%3D%20How%3F%0D%0A%0D%0AIf%20you%20have%20an%20idea%2C%20some%20explanation%20on%20how%20to%20solve%20it%20(optional).&projects=PAWS&subscribers=dcaro%2Ckomla&priority=triage">here</a>'
                               '</span>')
           }
-    extraEnv: 
+    extraEnv:
       USER: tools.paws
       JUPYTERHUB_CRYPT_KEY: "4849a4d92a49cdf9a80b49486293e29966c4f02daefa0f5597cf14546bab09f8"
       MYSQL_HMAC_KEY: "9a33d49db4bb823e87187a11e4f6296bee41bc35c41dc195634dff440c1870f0"
@@ -226,7 +227,7 @@ jupyterhub:
       tag: 21.10.01 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
-  ingress: 
+  ingress:
     enabled: true
     hosts:
       - hub.paws.local
@@ -240,8 +241,8 @@ jupyterhub:
         runAsGroup: 52771
   singleuser:
     cmd:
-    - jupyterhub-singleuser
-    - --LabApp.collaborative=true
+      - jupyterhub-singleuser
+      - --LabApp.collaborative=true
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
@@ -253,7 +254,7 @@ jupyterhub:
     cpu:
       guarantee: .5
       limit: 1
-    storage: 
+    storage:
       type: none
     uid: 52771
     # This must be false or this whole thing cannot work with restrictive PSP

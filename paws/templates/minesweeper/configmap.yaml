@@ -1,3 +1,5 @@
+---
+
 {{- /* configmap for minesweeper source files */}}
 kind: ConfigMap
 apiVersion: v1

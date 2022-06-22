@@ -1,8 +1,10 @@
+---
+
 mysql:
   domain: analytics.db.svc.eqiad.wmflabs
   # TODO: remove this when the multiinstance replica proxy is removed
   host: enwiki.analytics.db.svc.eqiad.wmflabs
-dbProxy: 
+dbProxy:
   image:
     tag: latest
 jupyterhub:
@@ -10,10 +12,10 @@ jupyterhub:
     db:
       type: mysql
       upgrade: true
-  ingress: 
+  ingress:
     enabled: true
     hosts:
-    - hub.paws.wmcloud.org
+      - hub.paws.wmcloud.org
   singleuser:
     extraEnv:
       HUB_DOMAIN: "hub.paws.wmcloud.org"  # Check jupyterhub.ingress.hosts
