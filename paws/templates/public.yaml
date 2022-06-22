@@ -1,3 +1,5 @@
+---
+
 {{ if .Values.pawsPublicEnabled }}
 apiVersion: v1
 kind: ServiceAccount
@@ -23,20 +25,20 @@ spec:
     spec:
       serviceAccount: paws-public
       containers:
-      - image: {{ tpl .Values.pawspublic.nbserve.image.template . | quote }}
-        imagePullPolicy: Always
-        name: nbserve
-        ports:
-        - containerPort: 8000
+        - image: {{ tpl .Values.pawspublic.nbserve.image.template . | quote }}
+          imagePullPolicy: Always
           name: nbserve
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /data/project/paws/userhomes
-          name: pawshomes
+          ports:
+            - containerPort: 8000
+              name: nbserve
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/project/paws/userhomes
+              name: pawshomes
       volumes:
-      - hostPath:
-          path: /data/project/paws/userhomes
-        name: pawshomes
+        - hostPath:
+            path: /data/project/paws/userhomes
+          name: pawshomes
 ---
 
 apiVersion: apps/v1
@@ -57,25 +59,25 @@ spec:
     spec:
       serviceAccount: paws-public
       containers:
-      - env:
-        - name: BASE_PATH
-          value: /data/project/paws/userhomes/
-        - name: URL_PREFIX
-          value: /
-        image: {{ tpl .Values.pawspublic.renderer.image.template . | quote }}
-        imagePullPolicy: Always
-        name: renderer
-        ports:
-        - containerPort: 8000
-          name: nbserve
-          protocol: TCP
-        volumeMounts:
-        - mountPath: /data/project/paws/userhomes
-          name: pawshomes
+        - env:
+            - name: BASE_PATH
+              value: /data/project/paws/userhomes/
+            - name: URL_PREFIX
+              value: /
+          image: {{ tpl .Values.pawspublic.renderer.image.template . | quote }}
+          imagePullPolicy: Always
+          name: renderer
+          ports:
+            - containerPort: 8000
+              name: nbserve
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/project/paws/userhomes
+              name: pawshomes
       volumes:
-      - hostPath:
-          path: /data/project/paws/userhomes
-        name: pawshomes
+        - hostPath:
+            path: /data/project/paws/userhomes
+          name: pawshomes
 ---
 apiVersion: v1
 kind: Service
@@ -85,10 +87,10 @@ metadata:
   name: paws-public
 spec:
   ports:
-  - name: http
-    port: 8000
-    protocol: TCP
-    targetPort: 8000
+    - name: http
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
   selector:
     name: nbserve
 ---
@@ -100,10 +102,10 @@ metadata:
   name: renderer
 spec:
   ports:
-  - name: http
-    port: 8000
-    protocol: TCP
-    targetPort: 8000
+    - name: http
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
   selector:
     name: renderer
 ---
@@ -116,14 +118,14 @@ metadata:
   name: paws-public-custom
 spec:
   rules:
-  - host: {{ .Values.pawspublic.ingress.host | quote }}
-    http:
-      paths:
-      - backend:
-          service:
-            name: paws-public
-            port:
-             number: 8000
-        pathType: Prefix
-        path: /
+    - host: {{ .Values.pawspublic.ingress.host | quote }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: paws-public
+                port:
+                  number: 8000
+            pathType: Prefix
+            path: /
 {{ end }}

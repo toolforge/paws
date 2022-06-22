@@ -1,6 +1,8 @@
+---
+
 name: Python lint
 
-on:
+'on':
   pull_request:
 
 jobs:
@@ -14,6 +16,12 @@ jobs:
           python-version: 3.8
       - name: Install tox
         run: pip install tox
+      # yamllint is pretty good, but doesn't handle helm templates too well.
+      # Duplicate files and exclude lines with {{ in them.
+      - name: Duplicate yaml for yamllint
+        run: mkdir /tmp/paws ; cp -r . /tmp/paws
+      - name: Clean for yamllint
+        run: for i in $(find /tmp/paws/ -type f -regex ".*\.ya?ml") ; do sed -i 's/{{/# /' $i ; done
       - name: Run tox
         run: |
           tox
