@@ -3,8 +3,9 @@ Thank you for installing {{ .Chart.Name }}!
 An essential part of setting up your dev environment is adding a hosts file entry.
 Get the IP of minikube with:
 minikube ip
-Add this line to your hosts file:
+Add these lines to your hosts file:
 <ip address> {{ index .Values.jupyterhub.ingress.hosts 0 }}
+<ip address> {{ .Values.pawspublic.ingress.host }}
 
 You can override any values you need in a file called dev-values.yaml.
 
