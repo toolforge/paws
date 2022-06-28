@@ -23,3 +23,6 @@ minesweeper:
   enabled: true
 localdev:
   enabled: false
+pawspublic:
+  ingress:
+    host: public.paws.wmcloud.org
