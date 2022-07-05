@@ -1,6 +1,8 @@
+---
+
 name: Python lint
 
-on:
+'on':
   pull_request:
 
 jobs:

@@ -1,6 +1,8 @@
+---
+
 name: build and push paws-hub
 
-on:
+'on':
   pull_request_target:
     paths:
       - images/paws-hub/**

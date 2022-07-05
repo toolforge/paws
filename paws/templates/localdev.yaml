@@ -71,16 +71,16 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-      - name: fixingperms-host-vols
-        image: {{ tpl .Values.localdev.image.template . | quote }}
-        command: 
-          - chown
-          - -R
-          - 52771:52771
-          - /data/project/paws/userhomes
-        volumeMounts:
-          - mountPath: /data/project/paws/userhomes
-            name: security-disaster-only-for-minikube
+        - name: fixingperms-host-vols
+          image: {{ tpl .Values.localdev.image.template . | quote }}
+          command:
+            - chown
+            - -R
+            - 52771:52771
+            - /data/project/paws/userhomes
+          volumeMounts:
+            - mountPath: /data/project/paws/userhomes
+              name: security-disaster-only-for-minikube
       volumes:
         - name: security-disaster-only-for-minikube
           hostPath:
