@@ -49,3 +49,5 @@ git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
 # Web dev stuff
 flask
 fastapi
+
+nbclassic==0.3.7
