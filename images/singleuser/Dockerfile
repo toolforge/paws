@@ -91,19 +91,14 @@ RUN apt-get update -qq --yes && \
         pip \
         libclang-dev
 # Install RStudio
-# 1.3.959 is latest version that works with jupyter-rsession-proxy
-# See https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93#issuecomment-725874693
-#ENV RSTUDIO_URL https://download1.rstudio.org/desktop/jammy/amd64/rstudio-2022.02.3-492-amd64.deb
-#RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
-#    gdebi -n /tmp/rstudio.deb && \
-#    rm /tmp/rstudio.deb
-
-RUN curl http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.20_amd64.deb > /tmp/libssl1.1
-RUN gdebi -n /tmp/libssl1.1
+# give access to libssl1.1 for rstudio-server
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" > /etc/apt/sources.list.d/focal.list
+RUN apt-get update
 ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
-
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
+# remove focal repo
+#RUN rm /etc/apt/sources.list.d/focal.list && apt-get update
 
 # Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
