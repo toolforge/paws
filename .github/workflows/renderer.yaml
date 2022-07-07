@@ -1,6 +1,8 @@
+---
+
 name: build and push renderer
 
-on:
+'on':
   pull_request_target:
     paths:
       - images/renderer/**

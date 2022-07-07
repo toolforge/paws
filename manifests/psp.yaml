@@ -1,3 +1,5 @@
+---
+
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
@@ -112,14 +114,14 @@ kind: ClusterRole
 metadata:
   name: paws-psp
 rules:
-- apiGroups:
-  - policy
-  resourceNames:
-  - paws-psp
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
+  - apiGroups:
+      - policy
+    resourceNames:
+      - paws-psp
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
 
 ---
 # Cluster role which grants access to the paws pod security policy
@@ -128,14 +130,14 @@ kind: ClusterRole
 metadata:
   name: paws-psp-public
 rules:
-- apiGroups:
-  - policy
-  resourceNames:
-  - paws-psp-public
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
+  - apiGroups:
+      - policy
+    resourceNames:
+      - paws-psp-public
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -148,16 +150,16 @@ roleRef:
   kind: ClusterRole
   name: paws-psp
 subjects:
-# For all most accounts in the prod (paws) namespace
-- kind: ServiceAccount
-  name: hub
-  namespace: prod
-- kind: ServiceAccount
-  name: default
-  namespace: prod
-- kind: ServiceAccount
-  name: hook-image-awaiter
-  namespace: prod
+  # For all most accounts in the prod (paws) namespace
+  - kind: ServiceAccount
+    name: hub
+    namespace: prod
+  - kind: ServiceAccount
+    name: default
+    namespace: prod
+  - kind: ServiceAccount
+    name: hook-image-awaiter
+    namespace: prod
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -170,10 +172,10 @@ roleRef:
   kind: ClusterRole
   name: paws-psp-public
 subjects:
-# For the paws-public service account in the prod (paws) namespace
-- kind: ServiceAccount
-  name: paws-public
-  namespace: prod
+  # For the paws-public service account in the prod (paws) namespace
+  - kind: ServiceAccount
+    name: paws-public
+    namespace: prod
 ---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -237,14 +239,14 @@ kind: ClusterRole
 metadata:
   name: minesweeper-psp
 rules:
-- apiGroups:
-  - policy
-  resourceNames:
-  - minesweeper-psp
-  resources:
-  - podsecuritypolicies
-  verbs:
-  - use
+  - apiGroups:
+      - policy
+    resourceNames:
+      - minesweeper-psp
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -257,7 +259,7 @@ roleRef:
   kind: ClusterRole
   name: minesweeper-psp
 subjects:
-# For all most accounts in the prod (paws) namespace
-- kind: ServiceAccount
-  name: minesweeper
-  namespace: prod
+  # For all most accounts in the prod (paws) namespace
+  - kind: ServiceAccount
+    name: minesweeper
+    namespace: prod

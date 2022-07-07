@@ -98,13 +98,13 @@ RUN apt-get update -qq --yes && \
 #    gdebi -n /tmp/rstudio.deb && \
 #    rm /tmp/rstudio.deb
 
-RUN curl http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.17_amd64.deb > /tmp/libssl1.1
+RUN curl http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.20_amd64.deb > /tmp/libssl1.1
+RUN gdebi -n /tmp/libssl1.1
 ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
-RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb && \
-    gdebi -n /tmp/libssl1.1
+RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 
-RUN gdebi -n /tmp/rstudio-server.deb
-    #rm /tmp/rstudio-server.deb
+RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
+
 # Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
@@ -112,7 +112,8 @@ RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
 COPY proxies/openrefine-logo.svg ${OPENREFINE_DIR}/openrefine-logo.svg
 
 # Machine-learning type stuff
-RUN apt-get install --yes \
+RUN apt-get update && \
+    apt-get install --yes \
     # For scipy & friends
     libblas-dev \
     liblapack-dev \
@@ -174,7 +175,7 @@ RUN pip install --no-cache-dir \
     retrolab \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller==0.9.0 \
-    voila==0.2.* \
+    voila \
     sparqlkernel \
     bash_kernel
 
