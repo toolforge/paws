@@ -128,8 +128,6 @@ RUN apt-get update && \
     # for ipython kernels
     libzmq3-dev \
     libreadline-dev \
-    # For sparql kernel
-    graphviz \
     # For R's mysql
     libmariadb-dev \
     # For R's curl
@@ -176,14 +174,11 @@ RUN pip install --no-cache-dir \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller==0.9.0 \
     voila \
-    sparqlkernel \
     bash_kernel
 
 # Install the bash kernel
 RUN python -m bash_kernel.install --sys-prefix
 
-# Install the SPARQL kernel
-RUN python3 -m jupyter sparqlkernel install --sys-prefix
 
 # Set CRAN mirror to rspm before we install anything
 COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
@@ -223,5 +218,16 @@ COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
 # install julia and julia kernel
 COPY install-julia /tmp/install-julia
 RUN /tmp/install-julia
+
+# SPARQL
+USER root
+RUN apt-get update && \
+    apt-get install --yes \
+    # For sparql kernel
+    graphviz
+
+USER ${NB_USER}
+RUN pip install --no-cache-dir sparqlkernel
+RUN python3 -m jupyter sparqlkernel install --sys-prefix
 
 EXPOSE 8888
