@@ -5,6 +5,7 @@ ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
 
+## Begin minimal setup ##
 # Use bash as default shell, rather than sh
 ENV SHELL /bin/bash
 
@@ -21,6 +22,34 @@ RUN adduser --disabled-password \
     ${NB_USER}
 WORKDIR ${HOME}
 
+RUN apt-get update && \
+    apt-get install --yes \
+        python3-venv \
+        pip \
+        python3
+
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
+# Create venv directory, and let users install into it
+ENV VENV_DIR /srv/paws
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${VENV_DIR}
+
+ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:/srv/julia/bin:$PATH
+
+USER ${NB_USER}
+RUN python3 -m venv /srv/paws
+RUN pip --no-cache-dir install -U pip setuptools wheel
+
+# Install base notebook packages
+RUN pip install --prefix=/srv/paws --no-cache-dir \
+    jupyterhub==2.3.0 \
+    jupyterlab==3.3.4
+
+## End minimal setup ##
+
+USER root
 # Base building utilities that'll always be required, probably
 RUN apt-get update && \
     apt-get install --yes \
@@ -33,10 +62,6 @@ RUN apt-get update && \
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
-
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
 
 # Setup nodesource, because node on Ubuntu is far too old to be useful
 ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
@@ -53,9 +78,7 @@ RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" > /etc
 # Install languages needed and their core dev packages
 RUN apt-get update --yes && \
     apt-get install --yes \
-        python3 \
         python3-dev \
-        python3-venv \
         r-recommended \
         r-base-dev \
         r-cran-littler \
@@ -88,7 +111,6 @@ RUN apt-get update -qq --yes && \
         libapparmor1 \
         lsb-release \
         gdebi \
-        pip \
         libclang-dev
 # Install RStudio
 # 1.3.959 is latest version that works with jupyter-rsession-proxy
@@ -151,11 +173,6 @@ RUN install -d -o ${NB_USER} -g ${NB_USER} ${R_LIBS_USER}
 RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
     echo "R_LIBS_USER=${R_LIBS_USER}" >> /etc/R/Renviron
 
-# Create venv directory, and let users install into it
-ENV VENV_DIR /srv/paws
-RUN install -d -o ${NB_USER} -g ${NB_USER} ${VENV_DIR}
-
-ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:/srv/julia/bin:$PATH
 
 # Install Julia directories and depot path
 ENV JULIA_DEPOT_PATH /srv/julia-depot/
@@ -163,13 +180,7 @@ RUN install -d -o ${NB_USER} -g ${NB_USER} /srv/julia
 RUN install -d -o ${NB_USER} -g ${NB_USER} ${JULIA_DEPOT_PATH}
 
 USER ${NB_USER}
-RUN python3 -m venv /srv/paws
-RUN pip --no-cache-dir install -U pip setuptools wheel
-
-# Install base notebook packages
 RUN pip install --no-cache-dir \
-    jupyterhub==2.3.0 \
-    jupyterlab==3.3.4 \
     retrolab \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller==0.9.0 \
