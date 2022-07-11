@@ -50,6 +50,7 @@ RUN pip install --prefix=/srv/paws --no-cache-dir \
 ## End minimal setup ##
 
 USER root
+
 # Base building utilities that'll always be required, probably
 RUN apt-get update && \
     apt-get install --yes \
@@ -60,28 +61,10 @@ RUN apt-get update && \
         gcc \
         apt-transport-https
 
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen
 
-# Setup nodesource, because node on Ubuntu is far too old to be useful
-ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
-ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
-RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
-
-# Use newer version of R
-# Binary packages from packagemanager.rstudio.com work against this.
-# Base R from Focal is only 3.6.
-COPY E298A3A825C0D65DFD57CBB651716619E084DAB9.asc /tmp/
-RUN apt-key add /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc && rm /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc
-RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" > /etc/apt/sources.list.d/cran.list
-
-# Install languages needed and their core dev packages
 RUN apt-get update --yes && \
     apt-get install --yes \
         python3-dev \
-        r-recommended \
-        r-base-dev \
-        r-cran-littler \
         openjdk-11-jdk \
         nodejs
 
@@ -102,31 +85,79 @@ RUN apt-get install --yes \
 RUN apt-get install --yes \
         portaudio19-dev
 
+RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen
 
-# Needed by RStudio
-RUN apt-get update -qq --yes && \
-    apt-get install --yes --no-install-recommends -qq \
-        psmisc \
-        sudo \
-        libapparmor1 \
-        lsb-release \
+# Setup nodesource, because node on Ubuntu is far too old to be useful
+ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
+ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
+RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
+
+## Install R ## 
+# Use newer version of R
+# Binary packages from packagemanager.rstudio.com work against this.
+# Base R from Focal is only 3.6.
+COPY E298A3A825C0D65DFD57CBB651716619E084DAB9.asc /tmp/
+RUN apt-key add /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc && rm /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc
+RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" > /etc/apt/sources.list.d/cran.list
+
+# Install languages needed and their core dev packages
+RUN apt-get update --yes && \
+    apt-get install --yes \
+        r-recommended \
+        r-base-dev \
+        r-cran-littler \
+        git \
+        curl \
         gdebi \
-        libclang-dev
-# Install RStudio
-# 1.3.959 is latest version that works with jupyter-rsession-proxy
-# See https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93#issuecomment-725874693
-#ENV RSTUDIO_URL https://download1.rstudio.org/desktop/jammy/amd64/rstudio-2022.02.3-492-amd64.deb
-#RUN curl --silent --location --fail ${RSTUDIO_URL} > /tmp/rstudio.deb && \
-#    gdebi -n /tmp/rstudio.deb && \
-#    rm /tmp/rstudio.deb
+        # For R's mysql
+        libmariadb-dev \
+        # For R's curl
+        libcurl4-openssl-dev \
+        # for ipython kernels
+        libzmq3-dev \
+        # For R's devtools
+        libssl-dev
 
+# Install RStudio
 RUN curl http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.20_amd64.deb > /tmp/libssl1.1
 RUN gdebi -n /tmp/libssl1.1
 ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
-
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
 
+# Create user owned R libs dir
+# This lets users temporarily install packages
+ENV R_LIBS_USER /srv/r
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${R_LIBS_USER}
+
+# R_LIBS_USER is set by default in /etc/R/Renviron, which RStudio loads.
+# We uncomment the default, and set what we wanna - so it picks up
+# the packages we install. Without this, RStudio doesn't see the packages
+# that R does.
+# Stolen from https://github.com/jupyterhub/repo2docker/blob/6a07a48b2df48168685bb0f993d2a12bd86e23bf/repo2docker/buildpacks/r.py
+RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
+    echo "R_LIBS_USER=${R_LIBS_USER}" >> /etc/R/Renviron
+
+USER ${NB_USER}
+RUN pip install --no-cache-dir \
+    jupyter-server-proxy \
+    git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
+
+# Set CRAN mirror to rspm before we install anything
+COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
+# RStudio needs its own config
+COPY rsession.conf /etc/rstudio/rsession.conf
+
+# Install the R Kernel
+RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
+    r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
+    rm -rf /tmp/downloaded_packages
+
+## Done installing R
+
+
+USER root
 # Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
@@ -150,28 +181,9 @@ RUN apt-get update && \
     # for ipython kernels
     libzmq3-dev \
     libreadline-dev \
-    # For R's mysql
-    libmariadb-dev \
-    # For R's curl
-    libcurl4-openssl-dev \
-    # For R's devtools
-    libssl-dev \
     # For PDFs and stuff
     pandoc \
     texlive-xetex
-
-# Create user owned R libs dir
-# This lets users temporarily install packages
-ENV R_LIBS_USER /srv/r
-RUN install -d -o ${NB_USER} -g ${NB_USER} ${R_LIBS_USER}
-
-# R_LIBS_USER is set by default in /etc/R/Renviron, which RStudio loads.
-# We uncomment the default, and set what we wanna - so it picks up
-# the packages we install. Without this, RStudio doesn't see the packages
-# that R does.
-# Stolen from https://github.com/jupyterhub/repo2docker/blob/6a07a48b2df48168685bb0f993d2a12bd86e23bf/repo2docker/buildpacks/r.py
-RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
-    echo "R_LIBS_USER=${R_LIBS_USER}" >> /etc/R/Renviron
 
 
 # Install Julia directories and depot path
@@ -191,16 +203,6 @@ RUN pip install --no-cache-dir \
 RUN python -m bash_kernel.install --sys-prefix
 
 
-# Set CRAN mirror to rspm before we install anything
-COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
-# RStudio needs its own config
-COPY rsession.conf /etc/rstudio/rsession.conf
-
-
-# Install the R Kernel
-RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
-    r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
-    rm -rf /tmp/downloaded_packages
 
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
