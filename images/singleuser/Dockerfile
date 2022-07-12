@@ -93,7 +93,7 @@ ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
 ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
 RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
 
-## Install R ## 
+## Install R ##
 # Use newer version of R
 # Binary packages from packagemanager.rstudio.com work against this.
 # Base R from Focal is only 3.6.
@@ -120,11 +120,16 @@ RUN apt-get update --yes && \
         libssl-dev
 
 # Install RStudio
-RUN curl http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1-1ubuntu2.1~18.04.20_amd64.deb > /tmp/libssl1.1
-RUN gdebi -n /tmp/libssl1.1
+# give access to libssl1.1 for rstudio-server
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" > /etc/apt/sources.list.d/focal.list
+RUN apt-get update
+
 ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
+# remove focal repo
+RUN rm /etc/apt/sources.list.d/focal.list && apt-get update
+
 
 # Create user owned R libs dir
 # This lets users temporarily install packages
