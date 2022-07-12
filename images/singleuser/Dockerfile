@@ -51,6 +51,11 @@ RUN pip install --prefix=/srv/paws --no-cache-dir \
 
 USER root
 
+# Setup nodesource, because node on Ubuntu is far too old to be useful
+ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
+ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
+RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
+
 # Base building utilities that'll always be required, probably
 RUN apt-get update && \
     apt-get install --yes \
@@ -87,11 +92,6 @@ RUN apt-get install --yes \
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
-
-# Setup nodesource, because node on Ubuntu is far too old to be useful
-ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
-ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
-RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
 
 ## Install R ##
 # Use newer version of R
