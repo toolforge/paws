@@ -36,7 +36,7 @@ ENV LANGUAGE en_US.UTF-8
 ENV VENV_DIR /srv/paws
 RUN install -d -o ${NB_USER} -g ${NB_USER} ${VENV_DIR}
 
-ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:/srv/julia/bin:$PATH
+ENV PATH=/srv/paws/pwb:/srv/paws/bin:/srv/paws:$PATH
 
 USER ${NB_USER}
 RUN python3 -m venv /srv/paws
@@ -161,13 +161,16 @@ RUN r -e "install.packages('IRkernel', version='1.1.1')" && \
 
 ## Done installing R
 
-
 USER root
-# Setup OpenRefine
+
+## Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
     curl -L https://github.com/OpenRefine/OpenRefine/releases/download/3.5.2/openrefine-linux-3.5.2.tar.gz | tar xzf - --strip=1
 COPY proxies/openrefine-logo.svg ${OPENREFINE_DIR}/openrefine-logo.svg
+
+## Done setting up OpenRefine
+
 
 # Machine-learning type stuff
 RUN apt-get update && \
@@ -191,16 +194,27 @@ RUN apt-get update && \
     texlive-xetex
 
 
+## Install Julia
 # Install Julia directories and depot path
+
+ENV PATH=$PATH:/srv/julia/bin
 ENV JULIA_DEPOT_PATH /srv/julia-depot/
 RUN install -d -o ${NB_USER} -g ${NB_USER} /srv/julia
 RUN install -d -o ${NB_USER} -g ${NB_USER} ${JULIA_DEPOT_PATH}
 
 USER ${NB_USER}
+
+# install julia and julia kernel
+COPY install-julia /tmp/install-julia
+RUN /tmp/install-julia
+
+## Done Installing Julia
+
+
 RUN pip install --no-cache-dir \
     retrolab \
     jupyterlab-link-share>=0.2.4 \
-    nbgitpuller==0.9.0 \
+    nbgitpuller \
     voila \
     bash_kernel
 
@@ -233,11 +247,7 @@ COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/cus
 # Setup custom config as needed
 COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
 
-# install julia and julia kernel
-COPY install-julia /tmp/install-julia
-RUN /tmp/install-julia
-
-# SPARQL
+## Install SPARQL
 USER root
 RUN apt-get update && \
     apt-get install --yes \
@@ -247,5 +257,7 @@ RUN apt-get update && \
 USER ${NB_USER}
 RUN pip install --no-cache-dir sparqlkernel
 RUN python3 -m jupyter sparqlkernel install --sys-prefix
+
+## End SPARQL Install
 
 EXPOSE 8888
