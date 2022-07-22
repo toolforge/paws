@@ -227,6 +227,10 @@ jupyterhub:
       tag: 21.10.01 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
+    resources:
+      requests:
+        memory: "200Mi"
+        cpu: .2
   ingress:
     enabled: true
     hosts:
