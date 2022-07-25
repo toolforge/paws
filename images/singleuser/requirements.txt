@@ -46,4 +46,8 @@ rpy2
 flask
 fastapi
 
+# upgrading to 0.4.0 breaks jupyterlab
+# upgrading to 0.4.3 breaks openrefine
+# tracking in T312251
 nbclassic==0.3.7
+
