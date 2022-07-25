@@ -45,3 +45,5 @@ rpy2
 # Web dev stuff
 flask
 fastapi
+
+nbclassic==0.3.7
