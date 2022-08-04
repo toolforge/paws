@@ -44,6 +44,10 @@ jupyterhub:
         runAsGroup: 52771
   proxy:
     chp:
+      resources:
+        requests:
+          memory: "200Mi"
+          cpu: .2
       containerSecurityContext:
         runAsUser: 52771
         runAsGroup: 52771
