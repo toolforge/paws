@@ -166,7 +166,7 @@ USER root
 ## Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L https://github.com/OpenRefine/OpenRefine/releases/download/3.5.2/openrefine-linux-3.5.2.tar.gz | tar xzf - --strip=1
+    curl -L 'https://oss.sonatype.org/service/local/artifact/maven/content?r=releases&g=org.openrefine&a=openrefine&v=3.6.0&c=linux&p=tar.gz' | tar xzf - --strip=1
 COPY proxies/openrefine-logo.svg ${OPENREFINE_DIR}/openrefine-logo.svg
 
 ## Done setting up OpenRefine
