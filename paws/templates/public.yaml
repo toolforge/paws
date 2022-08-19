@@ -35,6 +35,11 @@ spec:
           volumeMounts:
             - mountPath: /data/project/paws/userhomes
               name: pawshomes
+          resources:
+            requests:
+              memory: "2000Mi"
+              cpu: "50m"
+
       volumes:
         - hostPath:
             path: /data/project/paws/userhomes
