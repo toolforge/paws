@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=7.5.0
+ENV PYWIKIBOT_VERSION=7.6.0
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -52,9 +52,8 @@ RUN pip install --prefix=/srv/paws --no-cache-dir \
 USER root
 
 # Setup nodesource, because node on Ubuntu is far too old to be useful
-ADD node/nodesource.gpg.key /etc/apt/trusted.gpg.d/nodesource.gpg.key
+ADD node/nodesource.gpg /etc/apt/trusted.gpg.d/nodesource.gpg
 ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
-RUN apt-key add /etc/apt/trusted.gpg.d/nodesource.gpg.key
 
 # Base building utilities that'll always be required, probably
 RUN apt-get update && \
@@ -97,9 +96,8 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 # Use newer version of R
 # Binary packages from packagemanager.rstudio.com work against this.
 # Base R from Focal is only 3.6.
-COPY E298A3A825C0D65DFD57CBB651716619E084DAB9.asc /tmp/
-RUN apt-key add /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc && rm /tmp/E298A3A825C0D65DFD57CBB651716619E084DAB9.asc
-RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/" > /etc/apt/sources.list.d/cran.list
+ADD r/cran.gpg /etc/apt/trusted.gpg.d/cran.gpg
+ADD r/cran.list /etc/apt/sources.list.d/cran.list
 
 # Install languages needed and their core dev packages
 RUN apt-get update --yes && \
