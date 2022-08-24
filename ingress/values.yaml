@@ -4,9 +4,9 @@ controller:
   name: controller
   image:
     repository: docker-registry.tools.wmflabs.org/nginx-ingress-controller
-    tag: "v1.0.4"
+    tag: "v1.3.0"
     digest: >-
-      sha256:a7fb797e0b1c919a49cf9b3f9bb90ebca39bc85d0edd11c9a5cf897da5eb5a3f
+      sha256:07eca00ef18e7206de358601ee7075bdc582ba7a4b68a23a530691f420798c5d
     pullPolicy: IfNotPresent
   config:
     # T241310: pass the incoming X-Forwarded-* headers to upstreams
