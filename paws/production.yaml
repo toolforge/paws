@@ -19,6 +19,7 @@ jupyterhub:
   singleuser:
     extraEnv:
       HUB_DOMAIN: "hub.paws.wmcloud.org"  # Check jupyterhub.ingress.hosts
+      REFINE_DOMAIN: "hub.paws.wmcloud.org"
 minesweeper:
   enabled: true
 localdev:
