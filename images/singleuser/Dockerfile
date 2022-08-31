@@ -170,7 +170,7 @@ RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
 USER ${NB_USER}
 ENV REFINE_DIR /home/paws
 RUN pip install --no-cache-dir \
-    git+https://github.com/vivian-rook/nb_serverproxy_openrefine@fe93fd1cec26e4e3b54fe6e66f62b05d953233b9
+    git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
 
 ## Done setting up OpenRefine
 
