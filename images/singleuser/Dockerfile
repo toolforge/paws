@@ -163,12 +163,18 @@ USER root
 
 ## Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
+ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
     curl -L 'https://oss.sonatype.org/service/local/artifact/maven/content?r=releases&g=org.openrefine&a=openrefine&v=3.6.1&c=linux&p=tar.gz' | tar xzf - --strip=1
-COPY proxies/openrefine-logo.svg ${OPENREFINE_DIR}/openrefine-logo.svg
+
+USER ${NB_USER}
+ENV REFINE_DIR /home/paws
+RUN pip install --no-cache-dir \
+    git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
 
 ## Done setting up OpenRefine
 
+USER root
 
 # Machine-learning type stuff
 RUN apt-get update && \
@@ -243,7 +249,7 @@ COPY banner /etc/bash.bashrc
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
 
 # Setup custom config as needed
-COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
+#COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
 
 ## Install SPARQL
 USER root

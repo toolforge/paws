@@ -254,7 +254,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-197 # singleuser tag managed by github actions
+      tag: pr-198 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 1G
@@ -270,6 +270,7 @@ jupyterhub:
       blockWithIptables: false
     extraEnv:
       HUB_DOMAIN: "hub.paws.local"  # Check jupyterhub.ingress.hosts
+      REFINE_DOMAIN: "hub.paws.local"  # Check jupyterhub.ingress.hosts
     lifecycleHooks:
       postStart:
         exec:
