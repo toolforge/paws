@@ -23,7 +23,7 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: /mnt/nfs/dumps-labstore1006.wikimedia.org
+    path: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
 ---
 kind: PersistentVolume
 apiVersion: v1
@@ -35,7 +35,7 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: /mnt/nfs/dumps-labstore1007.wikimedia.org
+    path: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
 ---
 kind: PersistentVolume
 apiVersion: v1
