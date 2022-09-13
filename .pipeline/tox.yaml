@@ -1,0 +1,25 @@
+---
+
+version: v4
+
+base: docker-registry.wikimedia.org/python3-buster:latest
+
+runs:
+  as: paws
+  environment:
+    PIP_DISABLE_PIP_VERSION_CHECK: "on"
+lives:
+  in: /app
+
+variants:
+  tox:
+    runs:
+      # Mark as insecure so that the runtime user can modify content.
+      insecurely: true
+    apt:
+      packages:
+        - tox
+    copies:
+      - local
+    entrypoint:
+      - tox

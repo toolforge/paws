@@ -1,0 +1,19 @@
+---
+
+name: "tox"
+
+'on':
+  pull_request:
+
+jobs:
+  docker-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build tox container
+        run: |
+          curl -s -H 'content-type: application/yaml' --data-binary @".pipeline/tox.yaml" https://blubberoid.wikimedia.org/v1/tox | docker build --tag blubber-tox:01 --file - .
+      - name: run tox container
+        run: |
+          docker run blubber-tox:01
