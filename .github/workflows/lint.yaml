@@ -29,10 +29,10 @@ jobs:
         run: |
           export KUBERNETES_VERSION=1.16.0
           ./kubeval/kubeval -v $KUBERNETES_VERSION --strict manifests/*
-      - uses: azure/setup-helm@v1
-      - name: Helm lint
-        run: |
-          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm dependency update paws/
-          helm lint paws/
+#      - uses: azure/setup-helm@v1
+#      - name: Helm lint
+#        run: |
+#          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+#          helm repo add bitnami https://charts.bitnami.com/bitnami
+#          helm dependency update paws/
+#          helm lint paws/
