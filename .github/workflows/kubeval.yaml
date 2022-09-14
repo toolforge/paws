@@ -1,0 +1,19 @@
+---
+
+name: "kubeval"
+
+'on':
+  pull_request:
+
+jobs:
+  docker-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build kubeval container
+        run: |
+          docker build -f tests/kubeval/Dockerfile -t kubeval:01 .
+      - name: run kubeval container
+        run: |
+          docker run kubeval:01
