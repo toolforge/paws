@@ -14,11 +14,11 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
-      - name: Install tox
-        run: pip install tox
-      - name: Run tox
-        run: |
-          tox
+#      - name: Install tox
+#        run: pip install tox
+#      - name: Run tox
+#        run: |
+#          tox
       - name: Install kubeval
         run: |
           mkdir kubeval
