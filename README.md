@@ -90,5 +90,12 @@ If you want to run the copy yourself, or do interactive changes, you must downlo
 
 Note that a notebook will always be published, as the link can be guessed, so don't add any private information.
 
-### To know more about paws have a look at:
+### Running tests locally
+PAWS tests are managed through docker. You can find all of the tests in the tests directory. If you want to build and run them locally run:
+`docker build -f tests/<testname>/Dockerfile -t test:01 . ; docker run test:01`
+Where <testname> is any of the directories in tests. For example:
+`docker build -f tests/tox/Dockerfile -t test:01 . ; docker run test:01`
+Would run tox.
+
+### To know more about PAWS have a look at:
 https://wikitech.wikimedia.org/wiki/PAWS
