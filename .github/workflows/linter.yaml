@@ -1,0 +1,31 @@
+---
+
+name: "linter"
+
+'on':
+  pull_request:
+
+jobs:
+  tox:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build tox container
+        run: |
+          docker build -f tests/tox/Dockerfile -t tox:01 .
+      - name: run tox container
+        run: |
+          docker run tox:01
+
+  kubeval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build kubeval container
+        run: |
+          docker build -f tests/kubeval/Dockerfile -t kubeval:01 .
+      - name: run kubeval container
+        run: |
+          docker run kubeval:01

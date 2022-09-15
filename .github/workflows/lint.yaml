@@ -19,16 +19,16 @@ jobs:
 #      - name: Run tox
 #        run: |
 #          tox
-      - name: Install kubeval
-        run: |
-          mkdir kubeval
-          cd kubeval
-          curl -Lf https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xzf -
-          chmod +x kubeval
-      - name: Run kubeval
-        run: |
-          export KUBERNETES_VERSION=1.16.0
-          ./kubeval/kubeval -v $KUBERNETES_VERSION --strict manifests/*
+#      - name: Install kubeval
+#        run: |
+#          mkdir kubeval
+#          cd kubeval
+#          curl -Lf https://github.com/instrumenta/kubeval/releases/download/0.15.0/kubeval-linux-amd64.tar.gz | tar xzf -
+#          chmod +x kubeval
+#      - name: Run kubeval
+#        run: |
+#          export KUBERNETES_VERSION=1.16.0
+#          ./kubeval/kubeval -v $KUBERNETES_VERSION --strict manifests/*
       - uses: azure/setup-helm@v1
       - name: Helm lint
         run: |
