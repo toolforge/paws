@@ -99,3 +99,12 @@ Would run tox.
 
 ### To know more about PAWS have a look at:
 https://wikitech.wikimedia.org/wiki/PAWS
+
+### Comment to Phabricator
+
+To have a PR make comments to an associated phabricator ticket have the last line of the commit look like:
+
+Bug: <ticket number>
+
+For example:
+Bug: T318182
