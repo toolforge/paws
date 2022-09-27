@@ -25,13 +25,10 @@ jobs:
       - name: post to phabricator
         run: |
           message="${{ github.actor }} ${{ github.event.action }} ${{ github.event.pull_request._links.html.href }}"
-          git fetch
+          echo "${message}"
           inital_commit=$(git log origin/main..origin/${{ github.head_ref }} --pretty=%H | tail -n1)
-          task=$(git log -n 1 ${inital_commit} | tail -n1 | grep "^    Bug: T[0-9]*$" | awk '{print $2}')
-          # if already squashed and merged use the branch name.
-          if [ -z "${task}" ]; then
-            task=$(git log -n 1 origin/${{ github.head_ref }} | tail -n1 | grep "^    Bug: T[0-9]*$" | awk '{print $2}')
-          fi
+          task=$(curl ${{ github.event.pull_request._links.commits.href }} | jq .[0].commit.message -r | grep "^Bug: T[0-9]*$" | head -1 | awk '{print $2}')
+
           if [ -n "${task}" ]; then
             curl https://phabricator.wikimedia.org/api/maniphest.edit \
                 -d api.token=${{ secrets.TOOLFORGE_PHAB_BOT_KEY }} \
