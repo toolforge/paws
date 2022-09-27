@@ -9,6 +9,7 @@ metadata:
     ingress.paws.wmcloud.org: front
   annotations:
     nginx.ingress.kubernetes.io/permanent-redirect: {{ .Values.paws.ingress.frontRedirect | quote }}
+    kubernetes.io/ingress.class: "nginx"
   name: paws-front-page
 spec:
   rules:

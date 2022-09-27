@@ -42,15 +42,16 @@ spec:
     - 'secret'
     - 'downwardAPI'
     - 'hostPath'
+    - 'nfs'
     - 'persistentVolumeClaim'
   allowedHostPaths:
-    - pathPrefix: '/public/dumps'
+    - pathPrefix: '/mnt/public/dumps'
       readOnly: true
     - pathPrefix: '/mnt/nfs'
       readOnly: true
     - pathPrefix: '/var/lib/sss/pipes'
       readOnly: false
-    - pathPrefix: '/data/project'
+    - pathPrefix: '/mnt/project'
       readOnly: false
 ---
 apiVersion: policy/v1beta1
@@ -95,6 +96,7 @@ spec:
     - 'secret'
     - 'downwardAPI'
     - 'hostPath'
+    - 'nfs'
     - 'persistentVolumeClaim'
   allowedHostPaths:
     - pathPrefix: '/public/dumps'

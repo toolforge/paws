@@ -1,0 +1,23 @@
+jupyterhub:
+  hub:
+    extraVolumes:
+    - name: homes
+      nfs:
+        server: 192.168.122.223
+        path: /mnt/project
+    - name: dumps
+      nfs:
+        server: 192.168.122.223
+        path: /mnt/public/dumps
+    # Without this, dumps becomes inaccessible and can hang the host
+    - name: dumps-src1
+      nfs:
+        server: 192.168.122.223
+        path: /mnt/nfs/dumps-labstore1007.wikimedia.org
+    - name: dumps-src2
+      nfs:
+        server: 192.168.122.223
+        path: /mnt/nfs/dumps-labstore1006.wikimedia.org
+    extraConfig:
+      00-myConfig: |
+          localdev = False

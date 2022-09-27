@@ -9,6 +9,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/permanent-redirect: $scheme://{{ .Values.pawspublic.ingress.host }}/$2$is_args$args
     nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/ingress.class: "nginx"
   name: paws-public-legacy
 spec:
   rules:
@@ -34,6 +35,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/permanent-redirect: $scheme://{{ index .Values.jupyterhub.ingress.hosts 0 }}/$2
     nginx.ingress.kubernetes.io/use-regex: "true"
+    kubernetes.io/ingress.class: "nginx"
   name: paws-legacy
 spec:
   rules:

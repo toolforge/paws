@@ -9,6 +9,32 @@ dbProxy:
     tag: latest
 jupyterhub:
   hub:
+    extraVolumes:
+    - name: homes
+      nfs:
+        server: nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud
+        #server: nfs-tools-project.svc.eqiad.wmnet
+        path: /mnt/project
+        #path: /srv/misc/shared/paws/project
+    - name: dumps
+      nfs:
+        server: nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud
+        #server: labstore1007.wikimedia.org
+        path: /
+    # Without this, dumps becomes inaccessible and can hang the host
+    - name: dumps-src1
+      nfs:
+        server: nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud
+        #server: labstore1007.wikimedia.org
+        path: /
+    - name: dumps-src2
+      nfs:
+        server: nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud
+        #server: labstore1006.wikimedia.org
+        path: /
+    extraConfig:
+      00-myConfig: |
+          localdev = False
     db:
       type: mysql
       upgrade: true
