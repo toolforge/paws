@@ -6,5 +6,5 @@ set -euo pipefail
 export JULIA_PATH=/srv/julia/
 export JUPYTER_DATA_DIR=${VENV_DIR}/share/jupyter/
 
-curl --silent --location --fail https://julialang-s3.julialang.org/bin/linux/x64/1.6/julia-1.6.3-linux-x86_64.tar.gz | tar xvz -C ${JULIA_PATH} --strip-components=1
+curl --silent --location --fail https://julialang-s3.julialang.org/bin/linux/x64/1.8/julia-1.8.1-linux-x86_64.tar.gz | tar xvz -C ${JULIA_PATH} --strip-components=1
 julia -e 'using Pkg; Pkg.add("IJulia"); Pkg.build("IJulia"); using IJulia; installkernel("Julia");'
