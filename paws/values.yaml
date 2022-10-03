@@ -100,14 +100,6 @@ jupyterhub:
         hostPath:
           path: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
           type: DirectoryOrCreate
-      - name: dumps-src3
-        hostPath:
-          path: /mnt/nfs/dumps-labstore1007.wikimedia.org
-          type: DirectoryOrCreate
-      - name: dumps-src4
-        hostPath:
-          path: /mnt/nfs/dumps-labstore1006.wikimedia.org
-          type: DirectoryOrCreate
     extraVolumeMounts:
       - name: homes
         mountPath: /data/project
@@ -119,12 +111,6 @@ jupyterhub:
         readOnly: true
       - name: dumps-src2
         mountPath: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
-        readOnly: true
-      - name: dumps-src3
-        mountPath: /mnt/nfs/dumps-labstore1007.wikimedia.org
-        readOnly: true
-      - name: dumps-src4
-        mountPath: /mnt/nfs/dumps-labstore1006.wikimedia.org
         readOnly: true
     extraConfig:
       fixLabels: |
@@ -197,14 +183,6 @@ jupyterhub:
                       {
                           'name': 'dumps-src2',
                           'hostPath': { 'path': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org' }
-                      },
-                      {
-                          'name': 'dumps-src3',
-                          'hostPath': { 'path': '/mnt/nfs/dumps-labstore1007.wikimedia.org' }
-                      },
-                      {
-                          'name': 'dumps-src4',
-                          'hostPath': { 'path': '/mnt/nfs/dumps-labstore1006.wikimedia.org' }
                       }
                   ]
                   spawner.volume_mounts = [
@@ -225,16 +203,6 @@ jupyterhub:
                       {
                           'name': 'dumps-src2',
                           'mountPath': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org',
-                          'readOnly': True
-                      },
-                      {
-                          'name': 'dumps-src3',
-                          'mountPath': '/mnt/nfs/dumps-labstore1007.wikimedia.org',
-                          'readOnly': True
-                      },
-                      {
-                          'name': 'dumps-src4',
-                          'mountPath': '/mnt/nfs/dumps-labstore1006.wikimedia.org',
                           'readOnly': True
                       },
                   ]
