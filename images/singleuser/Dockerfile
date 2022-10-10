@@ -148,9 +148,9 @@ RUN pip install --no-cache-dir \
     git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
 
 # Set CRAN mirror to rspm before we install anything
-COPY Rprofile.site /usr/lib/R/etc/Rprofile.site
+COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
 # RStudio needs its own config
-COPY rsession.conf /etc/rstudio/rsession.conf
+COPY r/rsession.conf /etc/rstudio/rsession.conf
 
 # Install the R Kernel
 RUN r -e "install.packages('IRkernel', version='1.3')" && \
