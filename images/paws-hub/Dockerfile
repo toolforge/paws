@@ -11,6 +11,7 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 COPY PAWS.svg /srv/jupyterhub
+COPY paws-favicon.ico /usr/local/share/jupyterhub/static/favicon.ico
 
 RUN chown -R ${NB_USER}:${NB_USER} /srv/jupyterhub
 USER ${NB_USER}
