@@ -27,3 +27,5 @@ localdev:
 pawspublic:
   ingress:
     host: public.paws.wmcloud.org
+  renderer:
+    cpu: "500m"
