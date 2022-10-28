@@ -46,8 +46,7 @@ spec:
             path: /mnt/project/paws/userhomes
 {{ else }}
         - nfs:
-            server: nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud
-            #server: nfs-tools-project.svc.eqiad.wmnet
+            server: nfs-tools-project.svc.eqiad.wmnet
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
@@ -95,8 +94,7 @@ spec:
             path: /mnt/project/paws/userhomes
 {{ else }}
         - nfs:
-            server: nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud
-            #server: nfs-tools-project.svc.eqiad.wmnet
+            server: nfs-tools-project.svc.eqiad.wmnet
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes

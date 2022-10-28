@@ -166,14 +166,16 @@ jupyterhub:
                   # Set rather than use .extend!
                   # Since otherwise the volumes list will grow each time
                   # the spawner stops and starts!
+
                   homedir = '/data/project/paws/userhomes/{}'.format(identity['sub'])
+                  homenfs = '/mnt/project/paws/userhomes/{}'.format(identity['sub'])
                   # Create the homedir so docker doesn't do it as root
                   os.makedirs(homedir, mode=0o755, exist_ok=True)
                   if localdev == True:
                       spawner.volumes = [
                           {
                               'name': 'home',
-                              'hostPath': { 'path': homedir }
+                              'hostPath': { 'path': homenfs }
                           },
                           {
                               'name': 'dumps',
@@ -189,27 +191,22 @@ jupyterhub:
                           }
                       ]
                   else:
-                      homenfs = '/mnt/project/paws/userhomes/{}'.format(identity['sub'])
                       spawner.volumes = [
                           {
                               'name': 'home',
-                              'nfs': { 'server': 'nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud', 'path': homenfs }
-                              #'nfs': { 'server': 'nfs-tools-project.svc.eqiad.wmnet', 'path': homenfs }
+                              'nfs': { 'server': 'nfs-tools-project.svc.eqiad.wmnet', 'path': homenfs }
                           },
                           {
                               'name': 'dumps',
-                              'nfs': { 'server': 'nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud', 'path': '/' }
-                              #'nfs': { 'server': 'labstore1007.wikimedia.org', 'path': '/' }
+                              'nfs': { 'server': 'clouddumps1001.wikimedia.org', 'path': '/' }
                           },
                           {
                               'name': 'dumps-src1',
-                              'nfs': { 'server': 'nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud', 'path': '/' }
-                              #'nfs': { 'server': 'clouddumps1002.wikimedia.org', 'path': '/' }
+                              'nfs': { 'server': 'clouddumps1002.wikimedia.org', 'path': '/' }
                           },
                           {
                               'name': 'dumps-src2',
-                              'nfs': { 'server': 'nfs-for-test-paws.admin.codfw1dev.wikimedia.cloud', 'path': '/' }
-                              #'nfs': { 'server': 'clouddumps1002.wikimedia.org', 'path': '/' }
+                              'nfs': { 'server': 'clouddumps1001.wikimedia.org', 'path': '/' }
                           }
                       ]
 
@@ -284,10 +281,10 @@ jupyterhub:
       tag: pr-223 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
-      guarantee: .1G
+      guarantee: 1G
       limit: 3G
     cpu:
-      guarantee: .1
+      guarantee: .5
       limit: 1
     storage:
       type: none
