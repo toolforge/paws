@@ -45,13 +45,9 @@ spec:
     - 'nfs'
     - 'persistentVolumeClaim'
   allowedHostPaths:
-    - pathPrefix: '/mnt/public/dumps'
-      readOnly: true
     - pathPrefix: '/mnt/nfs'
       readOnly: true
     - pathPrefix: '/var/lib/sss/pipes'
-      readOnly: false
-    - pathPrefix: '/mnt/project'
       readOnly: false
 ---
 apiVersion: policy/v1beta1
