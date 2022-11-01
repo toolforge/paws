@@ -260,7 +260,6 @@ jupyterhub:
         cpu: .2
   ingress:
     enabled: true
-    annotations: {kubernetes.io/ingress.class: "nginx"}
     hosts:
       - hub.paws.local
   # We are not on an autoscaling cluster, so we don't want this

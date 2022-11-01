@@ -149,7 +149,6 @@ metadata:
     name: paws-public-custom
     ingress.paws.wmcloud.org: public
   annotations:
-    kubernetes.io/ingress.class: "nginx"
   name: paws-public-custom
 spec:
   rules:
