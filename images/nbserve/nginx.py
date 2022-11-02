@@ -117,6 +117,10 @@ http {
             alias /data/project/paws/userhomes/;
         }
 
+        # this section is what allows:
+        # https://public.hub.paws.local/User:VRook_(WMF)/awesome.ipynb
+        # to present whatever is at:
+        # https://public.hub.paws.local/67158682/awesome.ipynb
         location /User: {
             rewrite_by_lua_block {
                 local m = ngx.re.match(ngx.var.uri, "/User:([^/]+)(.*)");
