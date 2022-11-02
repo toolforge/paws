@@ -155,6 +155,8 @@ jupyterhub:
                       return False  # Notebook cookies keep user logged in
 
               @gen.coroutine
+              # more information about where this comes from found here:
+              # https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.volumes
               def pre_spawn_start(self, user, spawner):
                   auth_state = yield user.get_auth_state()
                   identity = auth_state['MEDIAWIKI_USER_IDENTITY']
