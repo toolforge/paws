@@ -219,7 +219,7 @@ jupyterhub:
                       },
                       {
                           'name': 'dumps',
-                          'mountPath': '/public/dumps',
+                          'mountPath': '/public/dumps/public',
                           'readOnly': True
                       },
                       {
