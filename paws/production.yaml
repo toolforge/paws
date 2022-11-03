@@ -16,16 +16,16 @@ jupyterhub:
           path: /srv/misc/shared/paws/project
       - name: dumps
         nfs:
-          server: labstore1007.wikimedia.org
+          server: clouddumps1002.wikimedia.org
           path: /
       # Without this, dumps becomes inaccessible and can hang the host
       - name: dumps-src1
         nfs:
-          server: labstore1007.wikimedia.org
+          server: clouddumps1002.wikimedia.org
           path: /
       - name: dumps-src2
         nfs:
-          server: labstore1006.wikimedia.org
+          server: clouddumps1001.wikimedia.org
           path: /
     extraConfig:
       00-myConfig: |
