@@ -1,13 +1,12 @@
 ---
 
 # pawsPublicEnabled enables the anonymous viewing service for notebooks
-clusterName: cluster
 pawsPublicEnabled: true
 pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: pr-229 # nbserve tag managed by github actions
+      tag: pr-227 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1

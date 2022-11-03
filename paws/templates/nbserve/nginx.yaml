@@ -1,167 +1,171 @@
+---
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nbserve-nginx
 data:
-    nginx.conf: |
-        # Let nginx automatically determine the number of worker processes
-        # to run. This defaults to number of cores on the host.
-        worker_processes auto;
-        
-        # Do not daemonize - we'll either run this under a supervisor
-        # ourselves, or jupyterhub will manage the process, restarting
-        # it when it dies as necessary
-        daemon off;
-        
-        # Set number of connections accepted per worker
-        events {
-            worker_connections 768;
+  nginx.conf: |
+    # Let nginx automatically determine the number of worker processes
+    # to run. This defaults to number of cores on the host.
+    worker_processes auto;
+
+    # Do not daemonize - we'll either run this under a supervisor
+    # ourselves, or jupyterhub will manage the process, restarting
+    # it when it dies as necessary
+    daemon off;
+
+    # Set number of connections accepted per worker
+    events {
+        worker_connections 768;
+    }
+
+    # This needs to be in 'main' since otherwise nginx
+    # will try to write to /var/log/nginx/error.log and failed
+    # because it does not have permissions
+    error_log stderr info;
+
+    # We do not really need / care about a pidfile
+    pid /dev/null;
+
+    http {
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        # Some complex notebooks take a long time to render
+        proxy_read_timeout 180s;
+        proxy_connect_timeout 180s;
+        uwsgi_read_timeout 180s;
+        types_hash_max_size 2048;
+        # server_tokens off;
+
+        # These are varilous temp file paths, many that we do not use.
+        # They are by default set to /var/lib/nginx/*, which causes
+        # problems when running as non-root, as we are here. So we
+        # shall set them all to /tmp. FIXME: Find proper paths for
+        # these somewhere (perhaps on current-dir?)
+        client_body_temp_path /tmp;
+        proxy_temp_path /tmp;
+        fastcgi_temp_path /tmp;
+        uwsgi_temp_path /tmp;
+        scgi_temp_path /tmp;
+
+        # access_log does not support 'stderr' directive directly
+        access_log /dev/stderr;
+
+        # nginx needs an async way to resolve hostnames to IPs, and
+        # the default `gethostbyname` setup does not allow for this.
+        # While ideally nginx should parse /etc/resolv.conf itself,
+        # it does not do so at this time, and needs us to set the DNS
+        # server explicitly.
+        # openresty allows a "local=on" which pulls from
+        # /etc/resolv.conf
+
+        # NOTE: This causes issues when resolving localhost and
+        # other hostnames traditionally set in /etc/hosts, since
+        # DNS servers respond erratically to queries for them.
+        resolver local=on ipv6=off;
+
+        # This is used to support websocket proxying. We need to set
+        # the 'Upgrade' HTTP header to either 'upgrade' (for websockets)
+        # or 'close' (for everything else).
+        # See https://www.nginx.com/resources/admin-guide/reverse-proxy/
+        # for more details.
+        map $http_upgrade $connection_upgrade {
+            default upgrade;
+            ''      close;
         }
-        
-        # This needs to be in 'main' since otherwise nginx
-        # will try to write to /var/log/nginx/error.log and failed
-        # because it does not have permissions
-        error_log stderr info;
-        
-        # We do not really need / care about a pidfile
-        pid /dev/null;
-        
-        http {
-            sendfile on;
-            tcp_nopush on;
-            tcp_nodelay on;
-            keepalive_timeout 65;
-            # Some complex notebooks take a long time to render
-            proxy_read_timeout 180s;
-            proxy_connect_timeout 180s;
-            uwsgi_read_timeout 180s;
-            types_hash_max_size 2048;
-            # server_tokens off;
-        
-            # These are varilous temp file paths, many that we do not use.
-            # They are by default set to /var/lib/nginx/*, which causes
-            # problems when running as non-root, as we are here. So we
-            # shall set them all to /tmp. FIXME: Find proper paths for
-            # these somewhere (perhaps on current-dir?)
-            client_body_temp_path /tmp;
-            proxy_temp_path /tmp;
-            fastcgi_temp_path /tmp;
-            uwsgi_temp_path /tmp;
-            scgi_temp_path /tmp;
-        
-            # access_log does not support 'stderr' directive directly
-            access_log /dev/stderr;
-        
-            # nginx needs an async way to resolve hostnames to IPs, and
-            # the default `gethostbyname` setup does not allow for this.
-            # While ideally nginx should parse /etc/resolv.conf itself,
-            # it does not do so at this time, and needs us to set the DNS
-            # server explicitly. This can be specified by the user, but
-            # defaults to a value we parse out of /etc/resolv.conf.
-            # NOTE: This causes issues when resolving localhost and
-            # other hostnames traditionally set in /etc/hosts, since
-            # DNS servers respond erratically to queries for them.
-            resolver %s ipv6=off;
-        
-            # This is used to support websocket proxying. We need to set
-            # the 'Upgrade' HTTP header to either 'upgrade' (for websockets)
-            # or 'close' (for everything else).
-            # See https://www.nginx.com/resources/admin-guide/reverse-proxy/
-            # for more details.
-            map $http_upgrade $connection_upgrade {
-                default upgrade;
-                ''      close;
+
+        # Shared memory area for caching username to id mappings
+        lua_shared_dict usernamemapping 16m;
+
+        lua_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
+        lua_ssl_verify_depth 10;
+
+        # Serve things with appropriate mimetypes
+        include /usr/local/openresty/nginx/conf/mime.types;
+
+        # This is the 'regular' server, that sees all public
+        # traffic and proxies them to the appropriate backend server.
+        server {
+            listen 0.0.0.0:8000;
+
+            location ~ \/\. {
+                deny all;
             }
-        
-            # Shared memory area for caching username to id mappings
-            lua_shared_dict usernamemapping 16m;
-        
-            lua_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
-            lua_ssl_verify_depth 10;
-        
-            # Serve things with appropriate mimetypes
-            include /usr/local/openresty/nginx/conf/mime.types;
-        
-            # This is the 'regular' server, that sees all public
-            # traffic and proxies them to the appropriate backend server.
-            server {
-                listen 0.0.0.0:8000;
-        
-                location ~ \/\. {
-                    deny all;
-                }
-        
-                # No port numbes in redirects
-                port_in_redirect off;
-        
-                location ~ ^/user/([^/]+)/notebooks/(.*)$ {
-                    rewrite /user/([^/]+)/notebooks/(.*)$ /User:$1/$2 permanent;
-                }
-        
-                # Only after the User: redirect! Otherwise our backend can't find the file.
-                location ~ ^/\d+/.*\.(rst|md|ipynb)$ {
-                    include /usr/local/openresty/nginx/conf/uwsgi_params;
-                    uwsgi_pass uwsgi://%s:8000;
-                }
-        
-                location / {
-                    index 2987347263023847928376409;
-                    fancyindex on;
-        
-                    alias /data/project/paws/userhomes/;
-                }
-        
-        
-                location /accelredir {
-                    internal;
-        
-                    alias /data/project/paws/userhomes/;
-                }
-        
-                # this section is what allows:
-                # https://public.hub.paws.local/User:VRook_(WMF)/awesome.ipynb
-                # to present whatever is at:
-                # https://public.hub.paws.local/67158682/awesome.ipynb
-                location /User: {
-                    rewrite_by_lua_block {
-                        local m = ngx.re.match(ngx.var.uri, "/User:([^/]+)(.*)");
-                        if m then
-                            local userid = ngx.shared.usernamemapping:get(m[1]);
-                            if userid == nil then
-                                local http = require "resty.http";
-                                local httpc = http.new();
-                                local apiurl = "https://meta.wikimedia.org/w/api.php?" ..
-                                               "action=query&format=json&formatversion=2" ..
-                                               "&prop=&list=users&meta=&usprop=centralids" ..
-                                               "&ususers=" .. ngx.escape_uri(m[1]);
-        
-                                local res, err = httpc:request_uri(apiurl);
-                                local cjson = require "cjson";
-                                local resp_data = cjson.decode(res.body);
-        
-                                ngx.log(ngx.ERR, res.body);
-                                if resp_data["query"]["users"][1]["missing"] then
-                                    ngx.exit(404);
-                                end
-                                userid = resp_data["query"]["users"][1]["centralids"]["CentralAuth"]
-        
-                                ngx.shared.usernamemapping:set(m[1], userid);
+
+            # No port numbes in redirects
+            port_in_redirect off;
+
+            location ~ ^/user/([^/]+)/notebooks/(.*)$ {
+                rewrite /user/([^/]+)/notebooks/(.*)$ /User:$1/$2 permanent;
+            }
+
+            # Only after the User: redirect! Otherwise our backend can't find the file.
+            location ~ ^/\d+/.*\.(rst|md|ipynb)$ {
+                include /usr/local/openresty/nginx/conf/uwsgi_params;
+                uwsgi_pass uwsgi://renderer.{{ .Release.Namespace }}.svc.cluster.local:8000;
+            }
+
+            location / {
+                index 2987347263023847928376409;
+                fancyindex on;
+
+                alias /data/project/paws/userhomes/;
+            }
+
+
+            location /accelredir {
+                internal;
+
+                alias /data/project/paws/userhomes/;
+            }
+
+            # this section is what allows:
+            # https://public.hub.paws.local/User:VRook_(WMF)/awesome.ipynb
+            # to present whatever is at:
+            # https://public.hub.paws.local/67158682/awesome.ipynb
+            location /User: {
+                rewrite_by_lua_block {
+                    local m = ngx.re.match(ngx.var.uri, "/User:([^/]+)(.*)");
+                    if m then
+                        local userid = ngx.shared.usernamemapping:get(m[1]);
+                        if userid == nil then
+                            local http = require "resty.http";
+                            local httpc = http.new();
+                            local apiurl = "https://meta.wikimedia.org/w/api.php?" ..
+                                           "action=query&format=json&formatversion=2" ..
+                                           "&prop=&list=users&meta=&usprop=centralids" ..
+                                           "&ususers=" .. ngx.escape_uri(m[1]);
+
+                            local res, err = httpc:request_uri(apiurl);
+                            local cjson = require "cjson";
+                            local resp_data = cjson.decode(res.body);
+
+                            ngx.log(ngx.ERR, res.body);
+                            if resp_data["query"]["users"][1]["missing"] then
+                                ngx.exit(404);
                             end
-                            ngx.req.set_uri("/" .. userid  .. m[2], true, true);
+                            userid = resp_data["query"]["users"][1]["centralids"]["CentralAuth"]
+
+                            ngx.shared.usernamemapping:set(m[1], userid);
                         end
-                    }
-        
-                    proxy_http_version 1.1;
-        
-                    # This is required for websockets to be proxied correctly
-                    proxy_set_header Upgrade $http_upgrade;
-                    proxy_set_header Connection $connection_upgrade;
-        
-                    # This is required for the target servers to know what
-                    # exactly the original protocol / URI / Host was.
-                    proxy_set_header X-Forwarded-Proto $scheme;
-                    proxy_set_header X-Original-URI $request_uri;
-                    proxy_set_header Host $host:$server_port;
+                        ngx.req.set_uri("/" .. userid  .. m[2], true, true);
+                    end
                 }
+
+                proxy_http_version 1.1;
+
+                # This is required for websockets to be proxied correctly
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection $connection_upgrade;
+
+                # This is required for the target servers to know what
+                # exactly the original protocol / URI / Host was.
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Original-URI $request_uri;
+                proxy_set_header Host $host:$server_port;
             }
         }
+    }
