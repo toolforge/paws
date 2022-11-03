@@ -1,5 +1,6 @@
 ---
 
+clusterName: paws
 mysql:
   domain: analytics.db.svc.eqiad.wmflabs
   # TODO: remove this when the multiinstance replica proxy is removed

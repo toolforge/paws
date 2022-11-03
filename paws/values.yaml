@@ -1,6 +1,7 @@
 ---
 
 # pawsPublicEnabled enables the anonymous viewing service for notebooks
+clusterName: cluster
 pawsPublicEnabled: true
 pawspublic:
   nbserve:
