@@ -249,9 +249,6 @@ COPY banner /etc/bash.bashrc
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
 
-# Setup custom config as needed
-#COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
-
 ## Install SPARQL
 USER root
 RUN apt-get update && \
