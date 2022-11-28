@@ -170,7 +170,7 @@ jupyterhub:
                   # the spawner stops and starts!
 
                   homedir = '/data/project/paws/userhomes/{}'.format(identity['sub'])
-                  homenfs = '/mnt/project/paws/userhomes/{}'.format(identity['sub'])
+                  homenfs = '/srv/misc/shared/paws/project/paws/userhomes/{}'.format(identity['sub'])
                   # Create the homedir so docker doesn't do it as root
                   os.makedirs(homedir, mode=0o755, exist_ok=True)
                   if localdev == True:
