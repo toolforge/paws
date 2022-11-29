@@ -41,8 +41,14 @@ spec:
               cpu: "50m"
 
       volumes:
+{{ if .Values.localdev.enabled }}
         - hostPath:
-            path: /data/project/paws/userhomes
+            path: /mnt/project/paws/userhomes
+{{ else }}
+        - nfs:
+            server: nfs-tools-project.svc.eqiad.wmnet
+            path: /srv/misc/shared/paws/project/paws/userhomes
+{{ end }}
           name: pawshomes
 ---
 
@@ -83,8 +89,14 @@ spec:
               memory: "1000Mi"
               cpu: {{ .Values.pawspublic.renderer.cpu }}
       volumes:
+{{ if .Values.localdev.enabled }}
         - hostPath:
-            path: /data/project/paws/userhomes
+            path: /mnt/project/paws/userhomes
+{{ else }}
+        - nfs:
+            server: nfs-tools-project.svc.eqiad.wmnet
+            path: /srv/misc/shared/paws/project/paws/userhomes
+{{ end }}
           name: pawshomes
 ---
 apiVersion: autoscaling/v1
@@ -136,6 +148,7 @@ metadata:
   labels:
     name: paws-public-custom
     ingress.paws.wmcloud.org: public
+  annotations:
   name: paws-public-custom
 spec:
   rules:

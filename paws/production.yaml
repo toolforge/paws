@@ -9,6 +9,27 @@ dbProxy:
     tag: latest
 jupyterhub:
   hub:
+    extraVolumes:
+      - name: homes
+        nfs:
+          server: nfs-tools-project.svc.eqiad.wmnet
+          path: /srv/misc/shared/paws/project
+      - name: dumps
+        nfs:
+          server: clouddumps1002.wikimedia.org
+          path: /
+      # Without this, dumps becomes inaccessible and can hang the host
+      - name: dumps-src1
+        nfs:
+          server: clouddumps1002.wikimedia.org
+          path: /
+      - name: dumps-src2
+        nfs:
+          server: clouddumps1001.wikimedia.org
+          path: /
+    extraConfig:
+      00-myConfig: |
+          localdev = False
     db:
       type: mysql
       upgrade: true
