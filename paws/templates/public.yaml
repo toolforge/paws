@@ -43,7 +43,7 @@ spec:
       volumes:
 {{ if .Values.localdev.enabled }}
         - hostPath:
-            path: /mnt/project/paws/userhomes
+            path: /srv/misc/shared/paws/project/paws/userhomes
 {{ else }}
         - nfs:
             server: nfs-tools-project.svc.eqiad.wmnet
@@ -91,7 +91,7 @@ spec:
       volumes:
 {{ if .Values.localdev.enabled }}
         - hostPath:
-            path: /mnt/project/paws/userhomes
+            path: /srv/misc/shared/paws/project/paws/userhomes
 {{ else }}
         - nfs:
             server: nfs-tools-project.svc.eqiad.wmnet
