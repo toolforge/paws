@@ -87,7 +87,7 @@ jupyterhub:
     extraVolumes:
       - name: homes
         hostPath:
-          path: /mnt/project
+          path: /srv/misc/shared/paws/project
       - name: dumps
         hostPath:
           path: /mnt/public/dumps
