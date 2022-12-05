@@ -11,7 +11,7 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: /mnt/project/paws/userhomes
+    path: /srv/misc/shared/paws/project/paws/userhomes
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -84,5 +84,5 @@ spec:
       volumes:
         - name: security-disaster-only-for-minikube
           hostPath:
-            path: /mnt/project/paws/userhomes
+            path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
