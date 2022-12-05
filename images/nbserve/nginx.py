@@ -104,7 +104,7 @@ http {
         }
 
         location / {
-            index index.html index.ipynb Index.ipynb;
+            index 2987347263023847928376409;
             fancyindex on;
 
             alias /data/project/paws/userhomes/;
