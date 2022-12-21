@@ -11,6 +11,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
   name: paws-public-legacy
 spec:
+  ingressClassName: nginx
   rules:
     - host: {{ .Values.pawspublic.ingress.legacyHost | quote }}
       http:
@@ -36,6 +37,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
   name: paws-legacy
 spec:
+  ingressClassName: nginx
   rules:
     - host: {{ .Values.paws.ingress.legacyHost | quote }}
       http:
