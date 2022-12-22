@@ -264,6 +264,7 @@ jupyterhub:
     enabled: true
     hosts:
       - hub.paws.local
+    ingressClassName: "nginx"
   # We are not on an autoscaling cluster, so we don't want this
   scheduling:
     userScheduler:
