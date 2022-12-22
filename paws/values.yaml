@@ -254,7 +254,7 @@ jupyterhub:
       fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-219 # paws-hub tag managed by github actions
+      tag: pr-236 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
@@ -265,7 +265,6 @@ jupyterhub:
     enabled: true
     hosts:
       - hub.paws.local
-    ingressClassName: "nginx"
   # We are not on an autoscaling cluster, so we don't want this
   scheduling:
     userScheduler:
