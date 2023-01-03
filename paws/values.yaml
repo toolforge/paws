@@ -250,10 +250,11 @@ jupyterhub:
       JUPYTERHUB_CRYPT_KEY: "4849a4d92a49cdf9a80b49486293e29966c4f02daefa0f5597cf14546bab09f8"
       MYSQL_HMAC_KEY: "9a33d49db4bb823e87187a11e4f6296bee41bc35c41dc195634dff440c1870f0"
     cookieSecret: 827902ad187337f83adc565dadfb4c095ce1962442aae043ac78948f9b216a8f
-    fsGid: 52771
+    podSecurityContext:
+      fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-219 # paws-hub tag managed by github actions
+      tag: pr-236 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
