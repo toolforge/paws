@@ -151,6 +151,7 @@ metadata:
   annotations:
   name: paws-public-custom
 spec:
+  ingressClassName: nginx
   rules:
     - host: {{ .Values.pawspublic.ingress.host | quote }}
       http:
