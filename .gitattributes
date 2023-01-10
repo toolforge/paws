@@ -1,4 +1,5 @@
 # Directory entries are not enough to encrypt fines beneath it
 # https://github.com/AGWA/git-crypt#gitattributes-file
 paws/secrets.yaml filter=git-crypt diff=git-crypt
+paws/codfw1dev-secret.yaml filter=git-crypt diff=git-crypt
 paws/files/minesweeper/secrets/** filter=git-crypt diff=git-crypt

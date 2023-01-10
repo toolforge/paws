@@ -1,0 +1,52 @@
+---
+
+mysql:
+  domain: analytics.db.svc.eqiad.wmflabs
+  # TODO: remove this when the multiinstance replica proxy is removed
+  host: enwiki.analytics.db.svc.eqiad.wmflabs
+dbProxy:
+  image:
+    tag: latest
+jupyterhub:
+  hub:
+    extraVolumes:
+      - name: homes
+        nfs:
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          path: /srv/misc/shared/paws/project
+      - name: dumps
+        nfs:
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          path: /
+      # Without this, dumps becomes inaccessible and can hang the host
+      - name: dumps-src1
+        nfs:
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          path: /
+      - name: dumps-src2
+        nfs:
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          path: /
+    extraConfig:
+      00-myConfig: |
+          localdev = False
+    db:
+      type: mysql
+      upgrade: true
+  ingress:
+    enabled: true
+    hosts:
+      - hub.paws-dev.codfw1dev.wmcloud.org
+  singleuser:
+    extraEnv:
+      HUB_DOMAIN: "hub.paws-dev.codfw1dev.wmcloud.org"  # Check jupyterhub.ingress.hosts
+      REFINE_DOMAIN: "hub.paws-dev.codfw1dev.wmcloud.org"
+minesweeper:
+  enabled: true
+localdev:
+  enabled: false
+pawspublic:
+  ingress:
+    host: public.paws-dev.codfw1dev.wmcloud.org
+  renderer:
+    cpu: "5m"
