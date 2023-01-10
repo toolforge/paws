@@ -30,6 +30,9 @@ jupyterhub:
     extraConfig:
       00-myConfig: |
           localdev = False
+          nfs_home = 'nfs-tools-project.svc.eqiad.wmnet'
+          dumps_src1 = 'clouddumps1001.wikimedia.org'
+          dumps_src2 = 'clouddumps1002.wikimedia.org'
     db:
       type: mysql
       upgrade: true

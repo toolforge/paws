@@ -193,19 +193,19 @@ jupyterhub:
                       spawner.volumes = [
                           {
                               'name': 'home',
-                              'nfs': { 'server': 'nfs-tools-project.svc.eqiad.wmnet', 'path': homenfs }
+                              'nfs': { 'server': nfs_home, 'path': homenfs }
                           },
                           {
                               'name': 'dumps',
-                              'nfs': { 'server': 'clouddumps1001.wikimedia.org', 'path': '/' }
+                              'nfs': { 'server': dumps_src1, 'path': '/' }
                           },
                           {
                               'name': 'dumps-src1',
-                              'nfs': { 'server': 'clouddumps1002.wikimedia.org', 'path': '/' }
+                              'nfs': { 'server': dumps_src2, 'path': '/' }
                           },
                           {
                               'name': 'dumps-src2',
-                              'nfs': { 'server': 'clouddumps1001.wikimedia.org', 'path': '/' }
+                              'nfs': { 'server': dumps_src1, 'path': '/' }
                           }
                       ]
 
