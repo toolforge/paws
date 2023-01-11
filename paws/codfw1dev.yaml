@@ -30,6 +30,9 @@ jupyterhub:
     extraConfig:
       00-myConfig: |
           localdev = False
+          nfs_home = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
+          dumps_src1 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
+          dumps_src2 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
     db:
       type: mysql
       upgrade: true

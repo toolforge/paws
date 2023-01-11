@@ -46,7 +46,9 @@ spec:
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ else }}
         - nfs:
-            server: nfs-tools-project.svc.eqiad.wmnet
+{{- with (index .Values.jupyterhub.hub.extraVolumes 0) }}
+            server: {{ .nfs.server }}
+{{- end }}
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
@@ -94,7 +96,9 @@ spec:
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ else }}
         - nfs:
-            server: nfs-tools-project.svc.eqiad.wmnet
+{{- with (index .Values.jupyterhub.hub.extraVolumes 0) }}
+            server: {{ .nfs.server }}
+{{- end }}
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
