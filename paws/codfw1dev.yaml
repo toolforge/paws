@@ -49,7 +49,12 @@ minesweeper:
 localdev:
   enabled: false
 pawspublic:
+  nbserve:
+    requests:
+      memory: "200Mi"
   ingress:
     host: public.paws-dev.codfw1dev.wmcloud.org
   renderer:
-    cpu: "5m"
+    requests:
+      cpu: "50m"
+      memory: "10Mi"
