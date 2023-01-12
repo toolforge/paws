@@ -10,13 +10,17 @@ pawspublic:
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
+    requests:
+      memory: "20Mi"
   renderer:
     image:
       name: quay.io/wikimedia-paws-prod/renderer
       tag: pr-168 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
-    cpu: "10m" # give a token amount for local dev
+    requests:
+      cpu: "10m" # give a token amount for local dev
+      memory: "10Mi"
   ingress:
     host: public.hub.paws.local
     legacyHost: paws-public.wmflabs.org

@@ -37,7 +37,7 @@ spec:
               name: pawshomes
           resources:
             requests:
-              memory: "2000Mi"
+              memory: {{ .Values.pawspublic.nbserve.requests.memory }}
               cpu: "50m"
 
       volumes:
@@ -88,8 +88,8 @@ spec:
               name: pawshomes
           resources:
             requests:
-              memory: "1000Mi"
-              cpu: {{ .Values.pawspublic.renderer.cpu }}
+              memory: {{ .Values.pawspublic.renderer.requests.memory }}
+              cpu: {{ .Values.pawspublic.renderer.requests.cpu }}
       volumes:
 {{ if .Values.localdev.enabled }}
         - hostPath:
