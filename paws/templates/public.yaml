@@ -90,6 +90,8 @@ spec:
             requests:
               memory: {{ .Values.pawspublic.renderer.requests.memory }}
               cpu: {{ .Values.pawspublic.renderer.requests.cpu }}
+            limits:
+              cpu: 2000m
       volumes:
 {{ if .Values.localdev.enabled }}
         - hostPath:
