@@ -23,12 +23,10 @@ pawspublic:
       memory: "10Mi"
   ingress:
     host: public.hub.paws.local
-    legacyHost: paws-public.wmflabs.org
 paws:
   # frontPageEnabled switches the URL path of / to a redirect to paws.ingress.frontRedirect
   frontPageEnabled: true
   ingress:
-    legacyHost: paws.wmflabs.org
     # paws.ingress.frontHost should be the domain the URL path of / uses to redirect to docs
     frontHost: paws.wmcloud.org
     # paws.ingress.frontRedirect should be the destination for URL path of / at paws.ingress.frontHost
