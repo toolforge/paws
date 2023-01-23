@@ -288,7 +288,7 @@ jupyterhub:
       guarantee: 1G
       limit: 3G
     cpu:
-      guarantee: .5
+      guarantee: .15
       limit: 1
     storage:
       type: none
