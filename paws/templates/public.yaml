@@ -37,7 +37,7 @@ spec:
               name: pawshomes
           resources:
             requests:
-              memory: "2000Mi"
+              memory: {{ .Values.pawspublic.nbserve.requests.memory }}
               cpu: "50m"
 
       volumes:
@@ -46,7 +46,9 @@ spec:
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ else }}
         - nfs:
-            server: nfs-tools-project.svc.eqiad.wmnet
+{{- with (index .Values.jupyterhub.hub.extraVolumes 0) }}
+            server: {{ .nfs.server }}
+{{- end }}
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
@@ -86,15 +88,19 @@ spec:
               name: pawshomes
           resources:
             requests:
-              memory: "1000Mi"
-              cpu: {{ .Values.pawspublic.renderer.cpu }}
+              memory: {{ .Values.pawspublic.renderer.requests.memory }}
+              cpu: {{ .Values.pawspublic.renderer.requests.cpu }}
+            limits:
+              cpu: 2000m
       volumes:
 {{ if .Values.localdev.enabled }}
         - hostPath:
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ else }}
         - nfs:
-            server: nfs-tools-project.svc.eqiad.wmnet
+{{- with (index .Values.jupyterhub.hub.extraVolumes 0) }}
+            server: {{ .nfs.server }}
+{{- end }}
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
@@ -151,6 +157,7 @@ metadata:
   annotations:
   name: paws-public-custom
 spec:
+  ingressClassName: nginx
   rules:
     - host: {{ .Values.pawspublic.ingress.host | quote }}
       http:
