@@ -234,12 +234,13 @@ COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
-RUN git clone --branch $PYWIKIBOT_VERSION --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
+RUN pip install pywikibot==$PYWIKIBOT_VERSION
+#RUN git clone --branch $PYWIKIBOT_VERSION --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
 COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 
-COPY install-pwb /usr/local/bin/
-RUN /usr/local/bin/install-pwb
+#COPY install-pwb /usr/local/bin/
+#RUN /usr/local/bin/install-pwb
 
 COPY install-extensions /usr/local/bin/
 RUN /usr/local/bin/install-extensions
