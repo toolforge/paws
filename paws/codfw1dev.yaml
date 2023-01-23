@@ -9,38 +9,38 @@ jupyterhub:
     extraVolumes:
       - name: homes
         nfs:
-          server: nfs-tools-project.svc.eqiad.wmnet
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
           path: /srv/misc/shared/paws/project
       - name: dumps
         nfs:
-          server: clouddumps1002.wikimedia.org
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
           path: /
       # Without this, dumps becomes inaccessible and can hang the host
       - name: dumps-src1
         nfs:
-          server: clouddumps1002.wikimedia.org
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
           path: /
       - name: dumps-src2
         nfs:
-          server: clouddumps1001.wikimedia.org
+          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
           path: /
     extraConfig:
       00-myConfig: |
           localdev = False
-          nfs_home = 'nfs-tools-project.svc.eqiad.wmnet'
-          dumps_src1 = 'clouddumps1001.wikimedia.org'
-          dumps_src2 = 'clouddumps1002.wikimedia.org'
+          nfs_home = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
+          dumps_src1 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
+          dumps_src2 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
     db:
       type: mysql
       upgrade: true
   ingress:
     enabled: true
     hosts:
-      - hub.paws.wmcloud.org
+      - hub.paws-dev.codfw1dev.wmcloud.org
   singleuser:
     extraEnv:
-      HUB_DOMAIN: "hub.paws.wmcloud.org"  # Check jupyterhub.ingress.hosts
-      REFINE_DOMAIN: "hub.paws.wmcloud.org"
+      HUB_DOMAIN: "hub.paws-dev.codfw1dev.wmcloud.org"  # Check jupyterhub.ingress.hosts
+      REFINE_DOMAIN: "hub.paws-dev.codfw1dev.wmcloud.org"
 minesweeper:
   enabled: true
 localdev:
@@ -48,10 +48,10 @@ localdev:
 pawspublic:
   nbserve:
     requests:
-      memory: "2000Mi"
+      memory: "200Mi"
   ingress:
-    host: public.paws.wmcloud.org
+    host: public.paws-dev.codfw1dev.wmcloud.org
   renderer:
     requests:
-      cpu: "500m"
-      memory: "1000Mi"
+      cpu: "50m"
+      memory: "10Mi"
