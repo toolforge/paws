@@ -311,7 +311,7 @@ minesweeper:
   enabled: false  # most local-dev testers won't have the key to configs
   image:
     name: quay.io/wikimedia-paws-prod/minesweeper
-    tag: pr-207 # minesweeper tag managed by github actions
+    tag: pr-234 # minesweeper tag managed by github actions
     template: "{{ .Values.minesweeper.image.name }}:{{ .Values.minesweeper.image.tag }}"
 # If not deployed for prod use, we use the some hacks for testing
 localdev:
