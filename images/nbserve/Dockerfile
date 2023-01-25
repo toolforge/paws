@@ -80,11 +80,9 @@ RUN luarocks install lua-cjson
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY nginx.py /srv/nginx.py
-
 EXPOSE 8000
 
-CMD ["/usr/bin/python3", "/srv/nginx.py"]
+CMD ["/usr/local/openresty/bin/openresty", "-c", "/mnt/nginx.conf"]
 
 # Use SIGQUIT instead of default SIGTERM to cleanly drain requests
 # See https://github.com/openresty/docker-openresty/blob/master/README.md#tips--pitfalls

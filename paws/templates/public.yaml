@@ -35,6 +35,8 @@ spec:
           volumeMounts:
             - mountPath: /data/project/paws/userhomes
               name: pawshomes
+            - name: nginx-conf
+              mountPath: /mnt
           resources:
             requests:
               memory: {{ .Values.pawspublic.nbserve.requests.memory }}
@@ -52,6 +54,10 @@ spec:
             path: /srv/misc/shared/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
+        - name: nginx-conf
+          configMap:
+            name: nbserve-nginx
+
 ---
 
 apiVersion: apps/v1
