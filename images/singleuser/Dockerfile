@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=7.7.1
+ENV PYWIKIBOT_VERSION=7.7.2
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -248,9 +248,6 @@ COPY banner /etc/bash.bashrc
 
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
-
-# Setup custom config as needed
-#COPY jupyter_notebook_config.py /srv/paws/etc/jupyter/jupyter_notebook_config.py
 
 ## Install SPARQL
 USER root
