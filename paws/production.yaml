@@ -18,11 +18,11 @@ jupyterhub:
       # Without this, dumps becomes inaccessible and can hang the host
       - name: dumps-src1
         nfs:
-          server: clouddumps1002.wikimedia.org
+          server: clouddumps1001.wikimedia.org
           path: /
       - name: dumps-src2
         nfs:
-          server: clouddumps1001.wikimedia.org
+          server: clouddumps1002.wikimedia.org
           path: /
     extraConfig:
       00-myConfig: |
