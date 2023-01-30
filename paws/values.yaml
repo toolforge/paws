@@ -95,11 +95,11 @@ jupyterhub:
       # Without this, dumps becomes inaccessible and can hang the host
       - name: dumps-src1
         hostPath:
-          path: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
+          path: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
           type: DirectoryOrCreate
       - name: dumps-src2
         hostPath:
-          path: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
+          path: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
           type: DirectoryOrCreate
     extraVolumeMounts:
       - name: homes
@@ -108,10 +108,10 @@ jupyterhub:
         mountPath: /public/dumps
         readOnly: true
       - name: dumps-src1
-        mountPath: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
+        mountPath: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
         readOnly: true
       - name: dumps-src2
-        mountPath: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
+        mountPath: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
         readOnly: true
     extraConfig:
       fixLabels: |
@@ -186,11 +186,11 @@ jupyterhub:
                           },
                           {
                               'name': 'dumps-src1',
-                              'hostPath': { 'path': '/mnt/nfs/dumps-clouddumps1002.wikimedia.org' }
+                              'hostPath': { 'path': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org' }
                           },
                           {
                               'name': 'dumps-src2',
-                              'hostPath': { 'path': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org' }
+                              'hostPath': { 'path': '/mnt/nfs/dumps-clouddumps1002.wikimedia.org' }
                           }
                       ]
                   else:
@@ -205,11 +205,11 @@ jupyterhub:
                           },
                           {
                               'name': 'dumps-src1',
-                              'nfs': { 'server': dumps_src2, 'path': '/' }
+                              'nfs': { 'server': dumps_src1, 'path': '/' }
                           },
                           {
                               'name': 'dumps-src2',
-                              'nfs': { 'server': dumps_src1, 'path': '/' }
+                              'nfs': { 'server': dumps_src2, 'path': '/' }
                           }
                       ]
 
@@ -225,12 +225,12 @@ jupyterhub:
                       },
                       {
                           'name': 'dumps-src1',
-                          'mountPath': '/mnt/nfs/dumps-clouddumps1002.wikimedia.org',
+                          'mountPath': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org',
                           'readOnly': True
                       },
                       {
                           'name': 'dumps-src2',
-                          'mountPath': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org',
+                          'mountPath': '/mnt/nfs/dumps-clouddumps1002.wikimedia.org',
                           'readOnly': True
                       },
                   ]
