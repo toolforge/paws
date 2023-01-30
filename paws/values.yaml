@@ -205,11 +205,11 @@ jupyterhub:
                           },
                           {
                               'name': 'dumps-src1',
-                              'nfs': { 'server': dumps_src2, 'path': '/' }
+                              'nfs': { 'server': dumps_src1, 'path': '/' }
                           },
                           {
                               'name': 'dumps-src2',
-                              'nfs': { 'server': dumps_src1, 'path': '/' }
+                              'nfs': { 'server': dumps_src2, 'path': '/' }
                           }
                       ]
 
