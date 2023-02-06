@@ -36,11 +36,11 @@ jupyterhub:
   ingress:
     enabled: true
     hosts:
-      - hub.paws.wmcloud.org
+      - hub-paws.wmcloud.org
   singleuser:
     extraEnv:
-      HUB_DOMAIN: "hub.paws.wmcloud.org"  # Check jupyterhub.ingress.hosts
-      REFINE_DOMAIN: "hub.paws.wmcloud.org"
+      HUB_DOMAIN: "hub-paws.wmcloud.org"  # Check jupyterhub.ingress.hosts
+      REFINE_DOMAIN: "hub-paws.wmcloud.org"
 minesweeper:
   enabled: true
 localdev:
@@ -50,7 +50,7 @@ pawspublic:
     requests:
       memory: "2000Mi"
   ingress:
-    host: public.paws.wmcloud.org
+    host: public-paws.wmcloud.org
   renderer:
     requests:
       cpu: "500m"
