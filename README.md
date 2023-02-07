@@ -25,7 +25,7 @@ It is possible to run a fully-functioning PAWS system inside [minikube](https://
 access to the secrets.yaml file to do it either, since the defaults mostly support it.
 
 You will need to install minikube (tested on minikube 1.23) and [helm](https://helm.sh) and kubectl on your system. When you are confident those are working, start minikube with:
- - `minikube start --kubernetes-version=v1.21.8`
+ - `minikube start --kubernetes-version=v1.22.11`
  - `minikube addons enable ingress`
 (from the top level of this repo):
 install the dependencies for the PAWS dev environment with these steps:
