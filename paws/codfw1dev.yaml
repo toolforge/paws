@@ -36,11 +36,13 @@ jupyterhub:
   ingress:
     enabled: true
     hosts:
-      - hub.paws-dev.codfw1dev.wmcloud.org
+      - hub-paws-dev.codfw1dev.wmcloud.org
+    annotations:
+      nginx.ingress.kubernetes.io/configuration-snippet: |
+        more_set_input_headers "REFERER: http://hub-paws-dev.codfw1dev.wmcloud.org/hub/";
   singleuser:
     extraEnv:
-      HUB_DOMAIN: "hub.paws-dev.codfw1dev.wmcloud.org"  # Check jupyterhub.ingress.hosts
-      REFINE_DOMAIN: "hub.paws-dev.codfw1dev.wmcloud.org"
+      HUB_DOMAIN: "hub-paws-dev.codfw1dev.wmcloud.org"  # Check jupyterhub.ingress.hosts
 minesweeper:
   enabled: true
 localdev:
@@ -50,7 +52,7 @@ pawspublic:
     requests:
       memory: "200Mi"
   ingress:
-    host: public.paws-dev.codfw1dev.wmcloud.org
+    host: public-paws-dev.codfw1dev.wmcloud.org
   renderer:
     requests:
       cpu: "50m"
