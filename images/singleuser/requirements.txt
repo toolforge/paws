@@ -39,9 +39,6 @@ pymysql
 mycli
 wmpaws
 
-# Interface with other languages
-rpy2
-
 # Web dev stuff
 flask
 fastapi
