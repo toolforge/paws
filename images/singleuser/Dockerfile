@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=7.7.2
+ENV PYWIKIBOT_VERSION=8.0.0
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -146,6 +146,7 @@ RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
 USER ${NB_USER}
 RUN pip install --no-cache-dir \
     jupyter-server-proxy \
+    rpy2 \
     git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
 
 # Set CRAN mirror to rspm before we install anything
@@ -234,12 +235,10 @@ COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
-RUN git clone --branch $PYWIKIBOT_VERSION --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
+RUN pip install pywikibot==$PYWIKIBOT_VERSION
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
 COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 
-COPY install-pwb /usr/local/bin/
-RUN /usr/local/bin/install-pwb
 
 COPY install-extensions /usr/local/bin/
 RUN /usr/local/bin/install-extensions
