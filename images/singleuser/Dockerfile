@@ -235,7 +235,17 @@ COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
-RUN pip install pywikibot==$PYWIKIBOT_VERSION
+RUN git clone \
+    --branch $PYWIKIBOT_VERSION \
+    --depth 1 \
+    --recurse-submodules \
+    --shallow-submodules \
+    https://gerrit.wikimedia.org/r/pywikibot/core.git \
+    /srv/paws/pwb
+# hack for 8.0.0
+RUN sed -i 's/#!\/usr\/bin\/python3/#!\/usr\/bin\/env python3/' /srv/paws/pwb/pwb.py
+RUN pip install --no-cache-dir \
+    /srv/paws/pwb[eventstreams,graphviz,google,isbn,memento,mysql,mwoauth,html]
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
 COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 
