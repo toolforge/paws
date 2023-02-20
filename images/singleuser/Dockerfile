@@ -167,7 +167,7 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://oss.sonatype.org/service/local/artifact/maven/content?r=releases&g=org.openrefine&a=openrefine&v=3.6.2&c=linux&p=tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.0/openrefine-linux-3.7.0.tar.gz' | tar xzf - --strip=1
 
 USER ${NB_USER}
 ENV REFINE_DIR /home/paws
