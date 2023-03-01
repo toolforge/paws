@@ -169,12 +169,16 @@ ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
     curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.0/openrefine-linux-3.7.0.tar.gz' | tar xzf - --strip=1
 
+USER root
+RUN apt-get install --yes unzip
+
 USER ${NB_USER}
 ENV REFINE_DIR /home/paws
 RUN pip install --no-cache-dir \
     git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
 
-RUN curl https://github.com/OpenRefine/CommonsExtension/releases/download/0.1.0/openrefine-commons-extension-0.1.0.zip > /tmp/openrefine-commonsextension.zip
+USER root
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/0.1.0/openrefine-commons-extension-0.1.0.zip -O /tmp/openrefine-commonsextension.zip
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
