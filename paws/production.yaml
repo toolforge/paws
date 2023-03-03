@@ -10,7 +10,7 @@ jupyterhub:
       - name: homes
         nfs:
           server: paws-nfs.svc.paws.eqiad1.wikimedia.cloud
-          path: /srv/misc/shared/paws/project
+          path: /srv/paws/project
       - name: dumps
         nfs:
           server: clouddumps1002.wikimedia.org

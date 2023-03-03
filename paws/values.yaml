@@ -88,7 +88,7 @@ jupyterhub:
     extraVolumes:
       - name: homes
         hostPath:
-          path: /srv/misc/shared/paws/project
+          path: /srv/paws/project
       - name: dumps
         hostPath:
           path: /mnt/public/dumps
@@ -171,7 +171,7 @@ jupyterhub:
                   # the spawner stops and starts!
 
                   homedir = '/data/project/paws/userhomes/{}'.format(identity['sub'])
-                  homenfs = '/srv/misc/shared/paws/project/paws/userhomes/{}'.format(identity['sub'])
+                  homenfs = '/srv/paws/project/paws/userhomes/{}'.format(identity['sub'])
                   # Create the homedir so docker doesn't do it as root
                   os.makedirs(homedir, mode=0o755, exist_ok=True)
                   if localdev == True:
