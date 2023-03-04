@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=8.0.0
+ENV PYWIKIBOT_VERSION=8.0.1
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -242,8 +242,6 @@ RUN git clone \
     --shallow-submodules \
     https://gerrit.wikimedia.org/r/pywikibot/core.git \
     /srv/paws/pwb
-# hack for 8.0.0
-RUN sed -i 's/#!\/usr\/bin\/python3/#!\/usr\/bin\/env python3/' /srv/paws/pwb/pwb.py
 RUN pip install --no-cache-dir \
     /srv/paws/pwb[eventstreams,graphviz,google,isbn,memento,mysql,mwoauth,html]
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
