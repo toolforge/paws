@@ -116,7 +116,9 @@ RUN apt-get update --yes && \
         # for ipython kernels
         libzmq3-dev \
         # For R's devtools
-        libssl-dev
+        libssl-dev \
+        # for stringi T331363
+        libicu-dev
 
 # Install RStudio
 # give access to libssl1.1 for rstudio-server
