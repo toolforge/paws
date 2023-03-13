@@ -298,7 +298,7 @@ jupyterhub:
       blockWithIptables: false
     extraEnv:
       HUB_DOMAIN: "hub.paws.local"  # Check jupyterhub.ingress.hosts
-      REFINE_DOMAIN: "hub.paws.local"  # Check jupyterhub.ingress.hosts
+      REFINE_DOMAIN: "*"  # Check jupyterhub.ingress.hosts
     networkPolicy:
       egressAllowRules:
         privateIPs: true  # needed for access to replicas
