@@ -45,13 +45,13 @@ spec:
       volumes:
 {{ if .Values.localdev.enabled }}
         - hostPath:
-            path: /srv/misc/shared/paws/project/paws/userhomes
+            path: /srv/paws/project/paws/userhomes
 {{ else }}
         - nfs:
 {{- with (index .Values.jupyterhub.hub.extraVolumes 0) }}
             server: {{ .nfs.server }}
 {{- end }}
-            path: /srv/misc/shared/paws/project/paws/userhomes
+            path: /srv/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
         - name: nginx-conf
@@ -101,13 +101,13 @@ spec:
       volumes:
 {{ if .Values.localdev.enabled }}
         - hostPath:
-            path: /srv/misc/shared/paws/project/paws/userhomes
+            path: /srv/paws/project/paws/userhomes
 {{ else }}
         - nfs:
 {{- with (index .Values.jupyterhub.hub.extraVolumes 0) }}
             server: {{ .nfs.server }}
 {{- end }}
-            path: /srv/misc/shared/paws/project/paws/userhomes
+            path: /srv/paws/project/paws/userhomes
 {{ end }}
           name: pawshomes
 ---

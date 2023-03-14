@@ -9,8 +9,8 @@ jupyterhub:
     extraVolumes:
       - name: homes
         nfs:
-          server: nfs-tools-project.svc.eqiad.wmnet
-          path: /srv/misc/shared/paws/project
+          server: paws-nfs.svc.paws.eqiad1.wikimedia.cloud
+          path: /srv/paws/project
       - name: dumps
         nfs:
           server: clouddumps1002.wikimedia.org
@@ -27,7 +27,7 @@ jupyterhub:
     extraConfig:
       00-myConfig: |
           localdev = False
-          nfs_home = 'nfs-tools-project.svc.eqiad.wmnet'
+          nfs_home = 'paws-nfs.svc.paws.eqiad1.wikimedia.cloud'
           dumps_src1 = 'clouddumps1001.wikimedia.org'
           dumps_src2 = 'clouddumps1002.wikimedia.org'
     db:
