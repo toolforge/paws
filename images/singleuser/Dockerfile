@@ -178,7 +178,7 @@ RUN pip install --no-cache-dir \
     git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
 
 USER root
-RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/0.1.0/openrefine-commons-extension-0.1.0.zip -O /tmp/openrefine-commonsextension.zip
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
