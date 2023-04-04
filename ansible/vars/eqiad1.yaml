@@ -1,0 +1,5 @@
+---
+
+secret-file: 'secrets'
+namespace: 'prod'
+env-file: 'production'
