@@ -8,8 +8,8 @@ pip install --no-cache-dir \
     RISE \
     py-heat-magic \
     jupyter-resource-usage \
-    git+https://github.com/toolforge/nbpawspublic@main \
-    git+https://github.com/toolforge/labpawspublic@main \
+    git+https://github.com/toolforge/nbpawspublic@0a75dabbcacb2e673b21af04fabc809cc186aa46 \
+    git+https://github.com/toolforge/labpawspublic@08b8b4f89143055df024ebbbfb159b07f0f2a5b0 \
 #    git+https://github.com/toolforge/paws-favicon@v1.0 \
 
 # this fails with Jupyter command `jupyter-nbextension` not found.

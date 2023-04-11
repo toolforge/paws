@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=8.0.0
+ENV PYWIKIBOT_VERSION=8.0.3
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -169,7 +169,7 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.1/openrefine-linux-3.7.1.tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.2/openrefine-linux-3.7.2.tar.gz' | tar xzf - --strip=1
 
 USER root
 RUN apt-get install --yes unzip
@@ -180,7 +180,7 @@ RUN pip install --no-cache-dir \
     git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
 
 USER root
-RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/0.1.0/openrefine-commons-extension-0.1.0.zip -O /tmp/openrefine-commonsextension.zip
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
@@ -251,8 +251,6 @@ RUN git clone \
     --shallow-submodules \
     https://gerrit.wikimedia.org/r/pywikibot/core.git \
     /srv/paws/pwb
-# hack for 8.0.0
-RUN sed -i 's/#!\/usr\/bin\/python3/#!\/usr\/bin\/env python3/' /srv/paws/pwb/pwb.py
 RUN pip install --no-cache-dir \
     /srv/paws/pwb[eventstreams,graphviz,google,isbn,memento,mysql,mwoauth,html]
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
