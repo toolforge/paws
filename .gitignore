@@ -8,3 +8,5 @@ requirements.lock
 Chart.lock
 dev-values.yaml
 *.swp
+terraform.tfstate*
+.terraform*

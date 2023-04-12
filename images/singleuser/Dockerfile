@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=7.7.2
+ENV PYWIKIBOT_VERSION=8.0.3
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -167,12 +167,19 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://oss.sonatype.org/service/local/artifact/maven/content?r=releases&g=org.openrefine&a=openrefine&v=3.6.2&c=linux&p=tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.2/openrefine-linux-3.7.2.tar.gz' | tar xzf - --strip=1
+
+USER root
+RUN apt-get install --yes unzip
 
 USER ${NB_USER}
 ENV REFINE_DIR /home/paws
 RUN pip install --no-cache-dir \
     git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
+
+USER root
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
+RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
 
@@ -235,12 +242,18 @@ COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 RUN pip --no-cache-dir install -r /tmp/requirements.txt
 
 # Install pywikibot
-RUN git clone --branch $PYWIKIBOT_VERSION --recursive https://gerrit.wikimedia.org/r/pywikibot/core.git /srv/paws/pwb
+RUN git clone \
+    --branch $PYWIKIBOT_VERSION \
+    --depth 1 \
+    --recurse-submodules \
+    --shallow-submodules \
+    https://gerrit.wikimedia.org/r/pywikibot/core.git \
+    /srv/paws/pwb
+RUN pip install --no-cache-dir \
+    /srv/paws/pwb[eventstreams,graphviz,google,isbn,memento,mysql,mwoauth,html]
 COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
 COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
 
-COPY install-pwb /usr/local/bin/
-RUN /usr/local/bin/install-pwb
 
 COPY install-extensions /usr/local/bin/
 RUN /usr/local/bin/install-extensions
