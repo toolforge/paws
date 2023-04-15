@@ -82,6 +82,8 @@ RUN apt-get clean \
 
 EXPOSE 8000
 
+ADD robots.txt /var/www/robots.txt
+
 CMD ["/usr/local/openresty/bin/openresty", "-c", "/mnt/nginx.conf"]
 
 # Use SIGQUIT instead of default SIGTERM to cleanly drain requests
