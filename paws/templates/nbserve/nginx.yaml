@@ -95,6 +95,10 @@ data:
                 deny all;
             }
 
+            location = /robots.txt {
+                alias /var/www/robots.txt;
+            }
+
             # No port numbes in redirects
             port_in_redirect off;
 
