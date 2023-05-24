@@ -65,6 +65,11 @@ jupyterhub:
     timeout: 86400
   hub:
     config:
+      # updated auth object for chart version 0.11.0+ this is the local dev values
+      #MWOAuthenticator:
+      #  client_id: fea321f1b6b5aed9fa83d5362839cd3d
+      #  client_secret: 6b17e5b87ae5ee893f5d4ba8b0e2377c6c0c3fcc
+      #  mw_index_url: https://meta.wikimedia.org/w/index.php
       Authenticator:
         admin_users:
           - BDavis_(WMF)
@@ -74,7 +79,7 @@ jupyterhub:
           - Chicocvenancio
           - VRook_(WMF)
       JupyterHub:
-        authenticator_class: auth0
+        authenticator_class: mediawiki
     db:
       # jupyterhub.hub.db values are overridden in Cloud VPS
       url: sqlite://
@@ -129,14 +134,13 @@ jupyterhub:
           from tornado.escape import url_escape
           from tornado.httpclient import AsyncHTTPClient
 
-          c.Auth0OAuthenticator.authorize_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/authorize'
-          c.Auth0OAuthenticator.token_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/access_token'
-          c.Auth0OAuthenticator.client_id = 'b4736b99b3b0c7c0831572529d7ea6f8'
-          c.Auth0OAuthenticator.client_secret = '1c2e86fa21bc205d936fc8188c271d1dd3eb2a39'
-          c.Auth0OAuthenticator.oauth_callback_url = 'http://hub.paws.local/hub/oauth_callback'
-          c.Auth0OAuthenticator.scope = ['highvolume','editpage','createeditmovepage','patrol','uploadfile','uploadeditmovefile','rollback','viewmywatchlist','editmywatchlist']
-
           class Auth(MWOAuthenticator):
+              c.MWOAuthenticator.token_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/access_token'
+              c.MWOAuthenticator.authorize_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/authorize'
+              c.MWOAuthenticator.client_id = 'b4736b99b3b0c7c0831572529d7ea6f8'
+              c.MWOAuthenticator.client_secret = '1c2e86fa21bc205d936fc8188c271d1dd3eb2a39'
+              c.MWOAuthenticator.mw_index_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/authorize'
+
               enable_auth_state = True
               def normalize_username(self, username):
                   return username
@@ -236,6 +240,7 @@ jupyterhub:
                       },
                   ]
 
+          c.JupyterHub.authenticator_class = Auth
           c.JupyterHub.authenticate_prometheus = False
           c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg'
           c.JupyterHub.template_vars = {
