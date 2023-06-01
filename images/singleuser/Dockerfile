@@ -93,95 +93,95 @@ RUN apt-get install --yes \
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     locale-gen
 
-### Install R ##
-## Use newer version of R
-## Binary packages from packagemanager.rstudio.com work against this.
-## Base R from Focal is only 3.6.
-#ADD r/cran.gpg /etc/apt/trusted.gpg.d/cran.gpg
-#ADD r/cran.list /etc/apt/sources.list.d/cran.list
-#
-## Install languages needed and their core dev packages
-#RUN apt-get update --yes && \
-#    apt-get install --yes \
-#        r-recommended \
-#        r-base-dev \
-#        r-cran-littler \
-#        git \
-#        curl \
-#        gdebi \
-#        # For R's mysql
-#        libmariadb-dev \
-#        # For R's curl
-#        libcurl4-openssl-dev \
-#        # for ipython kernels
-#        libzmq3-dev \
-#        # For R's devtools
-#        libssl-dev
-#
-## Install RStudio
-## give access to libssl1.1 for rstudio-server
-#RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" > /etc/apt/sources.list.d/focal.list
-#RUN apt-get update
-#
-#ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
-#RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
-#RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
-## remove focal repo
-#RUN rm /etc/apt/sources.list.d/focal.list && apt-get update
-#
-#
-## Create user owned R libs dir
-## This lets users temporarily install packages
-#ENV R_LIBS_USER /srv/r
-#RUN install -d -o ${NB_USER} -g ${NB_USER} ${R_LIBS_USER}
-#
-## R_LIBS_USER is set by default in /etc/R/Renviron, which RStudio loads.
-## We uncomment the default, and set what we wanna - so it picks up
-## the packages we install. Without this, RStudio doesn't see the packages
-## that R does.
-## Stolen from https://github.com/jupyterhub/repo2docker/blob/6a07a48b2df48168685bb0f993d2a12bd86e23bf/repo2docker/buildpacks/r.py
-#RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
-#    echo "R_LIBS_USER=${R_LIBS_USER}" >> /etc/R/Renviron
-#
-#USER ${NB_USER}
-#RUN pip install --no-cache-dir \
-#    jupyter-server-proxy \
-#    rpy2 \
-#    git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
-#
-## Set CRAN mirror to rspm before we install anything
-#COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
-## RStudio needs its own config
-#COPY r/rsession.conf /etc/rstudio/rsession.conf
-#
-## Install the R Kernel
-#RUN r -e "install.packages('IRkernel', version='1.3')" && \
-#    r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
-#    rm -rf /tmp/downloaded_packages
-#
-### Done installing R
-#
-#USER root
-#
-### Setup OpenRefine
-#ENV OPENREFINE_DIR /srv/openrefine
-#ENV PATH=$PATH:$OPENREFINE_DIR
-#RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-#    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.2/openrefine-linux-3.7.2.tar.gz' | tar xzf - --strip=1
-#
-#USER root
-#RUN apt-get install --yes unzip
-#
-#USER ${NB_USER}
-#ENV REFINE_DIR /home/paws
-#RUN pip install --no-cache-dir \
-#    git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
-#
-#USER root
-#RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
-#RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
-#
-### Done setting up OpenRefine
+## Install R ##
+# Use newer version of R
+# Binary packages from packagemanager.rstudio.com work against this.
+# Base R from Focal is only 3.6.
+ADD r/cran.gpg /etc/apt/trusted.gpg.d/cran.gpg
+ADD r/cran.list /etc/apt/sources.list.d/cran.list
+
+# Install languages needed and their core dev packages
+RUN apt-get update --yes && \
+    apt-get install --yes \
+        r-recommended \
+        r-base-dev \
+        r-cran-littler \
+        git \
+        curl \
+        gdebi \
+        # For R's mysql
+        libmariadb-dev \
+        # For R's curl
+        libcurl4-openssl-dev \
+        # for ipython kernels
+        libzmq3-dev \
+        # For R's devtools
+        libssl-dev
+
+# Install RStudio
+# give access to libssl1.1 for rstudio-server
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" > /etc/apt/sources.list.d/focal.list
+RUN apt-get update
+
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
+RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
+RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
+# remove focal repo
+RUN rm /etc/apt/sources.list.d/focal.list && apt-get update
+
+
+# Create user owned R libs dir
+# This lets users temporarily install packages
+ENV R_LIBS_USER /srv/r
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${R_LIBS_USER}
+
+# R_LIBS_USER is set by default in /etc/R/Renviron, which RStudio loads.
+# We uncomment the default, and set what we wanna - so it picks up
+# the packages we install. Without this, RStudio doesn't see the packages
+# that R does.
+# Stolen from https://github.com/jupyterhub/repo2docker/blob/6a07a48b2df48168685bb0f993d2a12bd86e23bf/repo2docker/buildpacks/r.py
+RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
+    echo "R_LIBS_USER=${R_LIBS_USER}" >> /etc/R/Renviron
+
+USER ${NB_USER}
+RUN pip install --no-cache-dir \
+    jupyter-server-proxy \
+    rpy2 \
+    git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
+
+# Set CRAN mirror to rspm before we install anything
+COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
+# RStudio needs its own config
+COPY r/rsession.conf /etc/rstudio/rsession.conf
+
+# Install the R Kernel
+RUN r -e "install.packages('IRkernel', version='1.3')" && \
+    r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
+    rm -rf /tmp/downloaded_packages
+
+## Done installing R
+
+USER root
+
+## Setup OpenRefine
+ENV OPENREFINE_DIR /srv/openrefine
+ENV PATH=$PATH:$OPENREFINE_DIR
+RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.2/openrefine-linux-3.7.2.tar.gz' | tar xzf - --strip=1
+
+USER root
+RUN apt-get install --yes unzip
+
+USER ${NB_USER}
+ENV REFINE_DIR /home/paws
+RUN pip install --no-cache-dir \
+    git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
+
+USER root
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
+RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
+
+## Done setting up OpenRefine
 #
 #USER root
 #
