@@ -225,7 +225,7 @@ RUN /tmp/install-julia
 
 
 RUN pip install --no-cache-dir \
-    retrolab \
+#    retrolab \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller \
     voila \
