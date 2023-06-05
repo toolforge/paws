@@ -221,21 +221,21 @@ USER ${NB_USER}
 COPY install-julia /tmp/install-julia
 RUN /tmp/install-julia
 
-## Done Installing Julia
-#
-#
-#RUN pip install --no-cache-dir \
-#    retrolab \
-#    jupyterlab-link-share>=0.2.4 \
-#    nbgitpuller \
-#    voila \
-#    bash_kernel
-#
-## Install the bash kernel
-#RUN python -m bash_kernel.install --sys-prefix
-#
-#
-#
+# Done Installing Julia
+
+
+RUN pip install --no-cache-dir \
+    retrolab \
+    jupyterlab-link-share>=0.2.4 \
+    nbgitpuller \
+    voila \
+    bash_kernel
+
+# Install the bash kernel
+RUN python -m bash_kernel.install --sys-prefix
+
+
+
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
 
