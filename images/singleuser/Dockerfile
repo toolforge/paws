@@ -224,56 +224,56 @@ RUN /tmp/install-julia
 ## Done Installing Julia
 
 
-RUN pip install --no-cache-dir \
-    retrolab \
-    jupyterlab-link-share>=0.2.4 \
-    nbgitpuller \
-    voila \
-    bash_kernel
-
-# Install the bash kernel
-RUN python -m bash_kernel.install --sys-prefix
-
-
-
-## Install mass amount of python libraries!
-#COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
-#
-#RUN pip --no-cache-dir install -r /tmp/requirements.txt
-#
-## Install pywikibot
-#RUN git clone \
-#    --branch $PYWIKIBOT_VERSION \
-#    --depth 1 \
-#    --recurse-submodules \
-#    --shallow-submodules \
-#    https://gerrit.wikimedia.org/r/pywikibot/core.git \
-#    /srv/paws/pwb
 #RUN pip install --no-cache-dir \
-#    /srv/paws/pwb[eventstreams,graphviz,google,isbn,memento,mysql,mwoauth,html]
-#COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
-#COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
+#    retrolab \
+#    jupyterlab-link-share>=0.2.4 \
+#    nbgitpuller \
+#    voila \
+#    bash_kernel
 #
-#
-#COPY install-extensions /usr/local/bin/
-#RUN /usr/local/bin/install-extensions
-#
-#COPY banner /etc/bash.bashrc
-#
-## use custom css to hide clusters tab
-#COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
-#
-### Install SPARQL
-#USER root
-#RUN apt-get update && \
-#    apt-get install --yes \
-#    # For sparql kernel
-#    graphviz
-#
-#USER ${NB_USER}
-#RUN pip install --no-cache-dir sparqlkernel
-#RUN python3 -m jupyter sparqlkernel install --sys-prefix
-#
-### End SPARQL Install
-#
-#EXPOSE 8888
+## Install the bash kernel
+#RUN python -m bash_kernel.install --sys-prefix
+
+
+
+# Install mass amount of python libraries!
+COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
+
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
+
+# Install pywikibot
+RUN git clone \
+    --branch $PYWIKIBOT_VERSION \
+    --depth 1 \
+    --recurse-submodules \
+    --shallow-submodules \
+    https://gerrit.wikimedia.org/r/pywikibot/core.git \
+    /srv/paws/pwb
+RUN pip install --no-cache-dir \
+    /srv/paws/pwb[eventstreams,graphviz,google,isbn,memento,mysql,mwoauth,html]
+COPY --chown=tools.paws:tools.paws user-config.py /srv/paws/
+COPY --chown=tools.paws:tools.paws user-fixes.py /srv/paws/
+
+
+COPY install-extensions /usr/local/bin/
+RUN /usr/local/bin/install-extensions
+
+COPY banner /etc/bash.bashrc
+
+# use custom css to hide clusters tab
+COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
+
+## Install SPARQL
+USER root
+RUN apt-get update && \
+    apt-get install --yes \
+    # For sparql kernel
+    graphviz
+
+USER ${NB_USER}
+RUN pip install --no-cache-dir sparqlkernel
+RUN python3 -m jupyter sparqlkernel install --sys-prefix
+
+## End SPARQL Install
+
+EXPOSE 8888
