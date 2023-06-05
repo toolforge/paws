@@ -182,46 +182,46 @@ RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
-#
-#USER root
-#
-## Machine-learning type stuff
-#RUN apt-get update && \
-#    apt-get install --yes \
-#    # For scipy & friends
-#    libblas-dev \
-#    liblapack-dev \
-#    libquadmath0 \
-#    gfortran \
-#    # for lxml
-#    libxml2-dev \
-#    libxslt1-dev \
-#    # for matplotlib
-#    libfreetype6-dev \
-#    libpng-dev \
-#    # for ipython kernels
-#    libzmq3-dev \
-#    libreadline-dev \
-#    # For PDFs and stuff
-#    pandoc \
-#    texlive-xetex
-#
-#
-### Install Julia
-## Install Julia directories and depot path
-#
-#ENV PATH=$PATH:/srv/julia/bin
-#ENV JULIA_DEPOT_PATH /srv/julia-depot/
-#RUN install -d -o ${NB_USER} -g ${NB_USER} /srv/julia
-#RUN install -d -o ${NB_USER} -g ${NB_USER} ${JULIA_DEPOT_PATH}
-#
-#USER ${NB_USER}
-#
-## install julia and julia kernel
-#COPY install-julia /tmp/install-julia
-#RUN /tmp/install-julia
-#
-### Done Installing Julia
+
+USER root
+
+# Machine-learning type stuff
+RUN apt-get update && \
+    apt-get install --yes \
+    # For scipy & friends
+    libblas-dev \
+    liblapack-dev \
+    libquadmath0 \
+    gfortran \
+    # for lxml
+    libxml2-dev \
+    libxslt1-dev \
+    # for matplotlib
+    libfreetype6-dev \
+    libpng-dev \
+    # for ipython kernels
+    libzmq3-dev \
+    libreadline-dev \
+    # For PDFs and stuff
+    pandoc \
+    texlive-xetex
+
+
+## Install Julia
+# Install Julia directories and depot path
+
+ENV PATH=$PATH:/srv/julia/bin
+ENV JULIA_DEPOT_PATH /srv/julia-depot/
+RUN install -d -o ${NB_USER} -g ${NB_USER} /srv/julia
+RUN install -d -o ${NB_USER} -g ${NB_USER} ${JULIA_DEPOT_PATH}
+
+USER ${NB_USER}
+
+# install julia and julia kernel
+COPY install-julia /tmp/install-julia
+RUN /tmp/install-julia
+
+## Done Installing Julia
 #
 #
 #RUN pip install --no-cache-dir \
