@@ -236,10 +236,10 @@ RUN /tmp/install-julia
 #
 #
 #
-## Install mass amount of python libraries!
-#COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
-#
-#RUN pip --no-cache-dir install -r /tmp/requirements.txt
+# Install mass amount of python libraries!
+COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
+
+RUN pip --no-cache-dir install -r /tmp/requirements.txt
 #
 ## Install pywikibot
 #RUN git clone \
