@@ -224,15 +224,15 @@ RUN /tmp/install-julia
 ## Done Installing Julia
 
 
-#RUN pip install --no-cache-dir \
-#    retrolab \
-#    jupyterlab-link-share>=0.2.4 \
-#    nbgitpuller \
-#    voila \
-#    bash_kernel
+RUN pip install --no-cache-dir \
+    retrolab \
+    jupyterlab-link-share>=0.2.4 \
+    nbgitpuller \
+    voila \
+    bash_kernel
 
 # Install the bash kernel
-#RUN python -m bash_kernel.install --sys-prefix
+RUN python -m bash_kernel.install --sys-prefix
 
 
 
