@@ -45,6 +45,8 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 # Install base notebook packages
 RUN pip install --prefix=/srv/paws --no-cache-dir \
     jupyterhub==4.0.0 \
+    notebook==6.4.12 \
+    jupyter_collaboration \
     jupyterlab==4.0.1
 
 ## End minimal setup ##
@@ -64,6 +66,7 @@ RUN apt-get update && \
         build-essential \
         gcc \
         apt-transport-https
+
 
 
 RUN apt-get update --yes && \
