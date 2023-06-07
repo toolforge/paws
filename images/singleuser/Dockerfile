@@ -46,7 +46,7 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 RUN pip install --prefix=/srv/paws --no-cache-dir \
     jupyterhub==4.0.0 \
     notebook==6.4.12 \
-    jupyterlab==3.4.8
+    jupyterlab==3.6.3
 
 ## End minimal setup ##
 
@@ -155,7 +155,7 @@ COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
 COPY r/rsession.conf /etc/rstudio/rsession.conf
 
 # Install the R Kernel
-RUN r -e "install.packages('IRkernel', version='1.3')" && \
+RUN r -e "install.packages('IRkernel', version='1.3.2')" && \
     r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
     rm -rf /tmp/downloaded_packages
 
@@ -225,10 +225,9 @@ RUN /tmp/install-julia
 
 
 RUN pip install --no-cache-dir \
-    retrolab \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller \
-    voila \
+#    voila # 0.4.0 downgrades jupyter-server to 1.24.0 appears to work on 2.0 from 0.5.0, though not yet released.
     bash_kernel
 
 # Install the bash kernel
