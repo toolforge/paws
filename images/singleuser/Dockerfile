@@ -45,8 +45,7 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 # Install base notebook packages
 RUN pip install --prefix=/srv/paws --no-cache-dir \
     jupyterhub==4.0.0 \
-    notebook==6.4.12 \
-    jupyterlab==3.6.3
+    jupyterlab==4.0.1
 
 ## End minimal setup ##
 
@@ -262,17 +261,17 @@ COPY banner /etc/bash.bashrc
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
 
-## Install SPARQL
-USER root
-RUN apt-get update && \
-    apt-get install --yes \
-    # For sparql kernel
-    graphviz
-
-USER ${NB_USER}
-RUN pip install --no-cache-dir sparqlkernel
-RUN python3 -m jupyter sparqlkernel install --sys-prefix
-
-## End SPARQL Install
+### Install SPARQL
+#USER root
+#RUN apt-get update && \
+#    apt-get install --yes \
+#    # For sparql kernel
+#    graphviz
+#
+#USER ${NB_USER}
+#RUN pip install --no-cache-dir sparqlkernel
+#RUN python3 -m jupyter sparqlkernel install --sys-prefix
+#
+### End SPARQL Install
 
 EXPOSE 8888
