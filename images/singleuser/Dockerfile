@@ -68,7 +68,6 @@ RUN apt-get update && \
         apt-transport-https
 
 
-
 RUN apt-get update --yes && \
     apt-get install --yes \
         python3-dev \
@@ -264,17 +263,17 @@ COPY banner /etc/bash.bashrc
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
 
-### Install SPARQL
-#USER root
-#RUN apt-get update && \
-#    apt-get install --yes \
-#    # For sparql kernel
-#    graphviz
-#
-#USER ${NB_USER}
-#RUN pip install --no-cache-dir sparqlkernel
-#RUN python3 -m jupyter sparqlkernel install --sys-prefix
-#
-### End SPARQL Install
+## Install SPARQL
+USER root
+RUN apt-get update && \
+    apt-get install --yes \
+    # For sparql kernel
+    graphviz
+
+USER ${NB_USER}
+RUN pip install --no-cache-dir sparqlkernel
+RUN python3 -m jupyter sparqlkernel install --sys-prefix
+
+## End SPARQL Install
 
 EXPOSE 8888
