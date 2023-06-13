@@ -1,5 +1,7 @@
 #!/bin/bash
-set -euo pipefail
+#set -euo pipefail
+# we're getting closer to the end of life for setup.py pipefail now fails on it.
+# To keep labpawspublic working we should update to use wheel
 
 pip install --no-cache-dir \
     pythreejs \
@@ -19,6 +21,6 @@ pip install --no-cache-dir \
 
 # Rebuild JupyterLab for plotly-dash extension
 # Should be fixed by https://github.com/plotly/jupyter-dash/issues/49
-jupyter lab build
+#jupyter lab build
 
 pip install --no-cache-dir git+https://github.com/toolforge/ipynb-paws@147bbeb4dda35e
