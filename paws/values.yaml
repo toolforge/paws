@@ -282,7 +282,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-290 # singleuser tag managed by github actions
+      tag: pr-293 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 1G
