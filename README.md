@@ -101,10 +101,16 @@ Would run tox.
 https://wikitech.wikimedia.org/wiki/PAWS
 
 ### Comment to Phabricator
-
 To have a PR make comments to an associated phabricator ticket have the last line of the commit look like:
 
 Bug: <ticket number>
 
 For example:
 Bug: T318182
+
+### Deployment ###
+Using Terraform for infra
+```
+cd terraform
+terraform apply -var datacenter=<eqiad1|codfw1dev>
+```
