@@ -1,12 +1,12 @@
-resource "openstack_containerinfra_cluster_v1" "k8s_123" {
-  name                = "paws${var.name[var.datacenter]}-123"
-  cluster_template_id = resource.openstack_containerinfra_clustertemplate_v1.template_123.id
+resource "openstack_containerinfra_cluster_v1" "k8s_123_5" {
+  name                = "paws${var.name[var.datacenter]}-123-5"
+  cluster_template_id = resource.openstack_containerinfra_clustertemplate_v1.template_123_5.id
   master_count        = 1
   node_count          = 1
 }
 
-resource "openstack_containerinfra_clustertemplate_v1" "template_123" {
-  name                  = "paws${var.name[var.datacenter]}-123"
+resource "openstack_containerinfra_clustertemplate_v1" "template_123_5" {
+  name                  = "paws${var.name[var.datacenter]}-123-5"
   coe                   = "kubernetes"
   dns_nameserver        = "8.8.8.8"
   docker_storage_driver = "overlay2"
@@ -27,9 +27,9 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_123" {
   }
 }
 
-resource "openstack_db_instance_v1" "db_123" {
+resource "openstack_db_instance_v1" "db_123_5" {
   region    = "${var.region[var.datacenter]}"
-  name      = "paws${var.name[var.datacenter]}-123"
+  name      = "paws${var.name[var.datacenter]}-123-5"
   flavor_id = "${var.db_flavor_uuid[var.datacenter]}"
   size      = "${var.db_size[var.datacenter]}"
 
@@ -41,11 +41,11 @@ resource "openstack_db_instance_v1" "db_123" {
     name      = "paws${var.name[var.datacenter]}"
     host      = "%"
     password  = "${var.db_password[var.datacenter]}"
-    databases = ["paws-123"]
+    databases = ["paws"]
   }
 
   database {
-    name     = "paws-123"
+    name     = "paws"
   }
 
   datastore {

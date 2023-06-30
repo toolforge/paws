@@ -63,14 +63,14 @@ variable "external_network_id" {
     "eqiad1"    = "wan-transport-eqiad"
   }
 }
-variable "fixed_subnet" {
+variable "fixed_network" {
   type = map
   default = {
     "codfw1dev" = "cloud-instances2-b-codfw"
     "eqiad1"    = "lan-flat-cloudinstances2b"
   }
 }
-variable "fixed_network" {
+variable "fixed_subnet" {
   type = map
   default = {
     "codfw1dev" = "lan-flat-cloudinstances2b"
@@ -82,6 +82,13 @@ variable "image_name" {
   default = {
     "codfw1dev" = "Fedora-CoreOS-34"
     "eqiad1"    = "magnum-fedora-coreos-34"
+  }
+}
+variable "workers" {
+  type = map
+  default = {
+    "codfw1dev" = "2"
+    "eqiad1"    = "3"
   }
 }
 
