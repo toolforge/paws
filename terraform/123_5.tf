@@ -2,7 +2,7 @@ resource "openstack_containerinfra_cluster_v1" "k8s_123_5" {
   name                = "paws${var.name[var.datacenter]}-123-5"
   cluster_template_id = resource.openstack_containerinfra_clustertemplate_v1.template_123_5.id
   master_count        = 1
-  node_count          = 1
+  node_count          = "${var.workers[var.datacenter]}"
 }
 
 resource "openstack_containerinfra_clustertemplate_v1" "template_123_5" {
