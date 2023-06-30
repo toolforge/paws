@@ -1,6 +1,14 @@
 variable "datacenter" {
   type = string
-  default = "eqiad1"
+}
+
+# name codfw1dev artifacts with '-dev' names
+variable "name" {
+  type = map
+  default = {
+    "codfw1dev" = "-dev"
+    "eqiad1"    = ""
+  }
 }
 
 # connection vars
