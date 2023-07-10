@@ -1,6 +1,5 @@
 ---
 
-dbpassword: "localpassword"
 # pawsPublicEnabled enables the anonymous viewing service for notebooks
 pawsPublicEnabled: true
 pawspublic:
@@ -83,7 +82,8 @@ jupyterhub:
         authenticator_class: mediawiki
     db:
       # jupyterhub.hub.db values are overridden in Cloud VPS
-      url: "mysql+pymysql://root:localpassword@mysql:3306/paws?charset=utf8mb4"
+      url: "mysql+pymysql://mysql:3306/paws?charset=utf8mb4"
+      password: "localpassword"
       type: mysql
       upgrade: false
     extraVolumes:
