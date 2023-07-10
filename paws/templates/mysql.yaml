@@ -19,7 +19,7 @@ spec:
         image: mysql:5.7.29
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: {{ .Values.jupyterhub.hub.db.password }}
+          value: '{{- regexReplaceAll ".*:.*:(.*)@.*"  .Values.jupyterhub.hub.db.url "${1}" }}'
         - name: MYSQL_DATABASE
           value: "paws"
         ports:
