@@ -1,3 +1,5 @@
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,15 +17,15 @@ spec:
         app: mysql
     spec:
       containers:
-      - name: mysql
-        image: mysql:5.7.29
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: '{{- regexReplaceAll ".*:.*:(.*)@.*"  .Values.jupyterhub.hub.db.url "${1}" }}'
-        - name: MYSQL_DATABASE
-          value: "paws"
-        ports:
-        - containerPort: 3306
+        - name: mysql
+          image: mysql:5.7.29
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: '{{- regexReplaceAll ".*:.*:(.*)@.*"  .Values.jupyterhub.hub.db.url "${1}" }}'
+            - name: MYSQL_DATABASE
+              value: "paws"
+          ports:
+            - containerPort: 3306
 
 ---
 
