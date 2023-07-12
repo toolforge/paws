@@ -26,30 +26,3 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_123_5" {
     cloud_provider_enabled = "true"
   }
 }
-
-resource "openstack_db_instance_v1" "db_123_5" {
-  region    = "${var.region[var.datacenter]}"
-  name      = "paws${var.name[var.datacenter]}-123-5"
-  flavor_id = "${var.db_flavor_uuid[var.datacenter]}"
-  size      = "${var.db_size[var.datacenter]}"
-
-  network {
-    uuid = "${var.network_uuid[var.datacenter]}"
-  }
-
-  user {
-    name      = "paws${var.name[var.datacenter]}"
-    host      = "%"
-    password  = "${var.db_password[var.datacenter]}"
-    databases = ["paws"]
-  }
-
-  database {
-    name     = "paws"
-  }
-
-  datastore {
-    version = "5.7.29"
-    type    = "mysql"
-  }
-}
