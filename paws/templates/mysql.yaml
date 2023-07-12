@@ -26,8 +26,66 @@ spec:
               value: "paws"
           ports:
             - containerPort: 3306
+          volumeMounts:
+            - name: mysql-pvc
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-pvc
+          persistentVolumeClaim:
+            claimName: mysql-pvc
 
 ---
+
+{{ if .Values.localdev.enabled }}
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: csi-hostpath-sc
+
+---
+{{ else }}
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  csi:
+    driver: cinder.csi.openstack.org
+    fsType: ext4
+    volumeHandle: mysql-volumeHandle
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+{{ end }}
 
 apiVersion: v1
 kind: Service
