@@ -66,14 +66,14 @@ variable "external_network_id" {
 variable "fixed_network" {
   type = map
   default = {
-    "codfw1dev" = "cloud-instances2-b-codfw"
+    "codfw1dev" = "lan-flat-cloudinstances2b"
     "eqiad1"    = "lan-flat-cloudinstances2b"
   }
 }
 variable "fixed_subnet" {
   type = map
   default = {
-    "codfw1dev" = "lan-flat-cloudinstances2b"
+    "codfw1dev" = "cloud-instances2-b-codfw"
     "eqiad1"    = "cloud-instances2-b-eqiad"
   }
 }
