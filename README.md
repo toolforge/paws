@@ -114,11 +114,10 @@ cd terraform
 terraform apply -var datacenter=<eqiad1|codfw1dev>
 
 mkdir /tmp/paws-k8s-setup/
-git clone https://github.com/kubernetes/cloud-provider-openstack.git
+git clone https://github.com/kubernetes/cloud-provider-openstack.git /tmp/paws-k8s-setup/cloud-provider-openstack/
 cp cloud.conf /tmp/paws-k8s-setup/
 cd /tmp/paws-k8s-setup/cloud-provider-openstack/
 git checkout 9ed6d961c6ee5a4f51533877ae981aa6d9753f2d # newest has so far worked though
-cd cloud-provider-openstack
 base64 -w 0 ../cloud.conf ; echo
 vim manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml # replace cloud.conf 64 with above
 kubectl create -f manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml
