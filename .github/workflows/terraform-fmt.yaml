@@ -1,0 +1,33 @@
+---
+
+name: "terraform fmt"
+
+'on':
+  pull_request:
+
+jobs:
+  tf-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install terraform
+        run: |
+          sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+          wget -O- https://apt.releases.hashicorp.com/gpg | \
+          gpg --dearmor | \
+          sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+          https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+          sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update
+          sudo apt-get install -y terraform
+      - name: terraform fmt
+        run: |
+          shopt -s extglob
+          cd terraform
+          if ! terraform fmt -check -diff !(secrets).tf ; then
+             echo "please update your terraform code to match the above.";
+             echo 'or run `terraform fmt` to have terraform reformat it.';
+             exit 1;
+          fi
