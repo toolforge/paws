@@ -155,7 +155,7 @@ COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
 COPY r/rsession.conf /etc/rstudio/rsession.conf
 
 # Install the R Kernel
-RUN r -e "install.packages('IRkernel', version='1.3')" && \
+RUN r -e "install.packages('IRkernel', version='1.3.2')" && \
     r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
     rm -rf /tmp/downloaded_packages
 
@@ -167,7 +167,7 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.2/openrefine-linux-3.7.2.tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.4/openrefine-linux-3.7.4.tar.gz' | tar xzf - --strip=1
 
 USER root
 RUN apt-get install --yes unzip
@@ -225,10 +225,9 @@ RUN /tmp/install-julia
 
 
 RUN pip install --no-cache-dir \
-    retrolab \
     jupyterlab-link-share>=0.2.4 \
     nbgitpuller \
-    voila \
+#    voila # 0.4.0 downgrades jupyter-server to 1.24.0 appears to work on 2.0 from 0.5.0, though not yet released.
     bash_kernel
 
 # Install the bash kernel

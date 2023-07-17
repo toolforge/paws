@@ -1,5 +1,7 @@
 #!/bin/bash
-set -euo pipefail
+#set -euo pipefail
+# we're getting closer to the end of life for setup.py pipefail now fails on it.
+# To keep labpawspublic working we should update to use wheel
 
 pip install --no-cache-dir \
     pythreejs \

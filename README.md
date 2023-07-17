@@ -25,7 +25,7 @@ It is possible to run a fully-functioning PAWS system inside [minikube](https://
 access to the secrets.yaml file to do it either, since the defaults mostly support it.
 
 You will need to install minikube (tested on minikube 1.23) and [helm](https://helm.sh) and kubectl on your system. When you are confident those are working, start minikube with:
- - `minikube start --kubernetes-version=v1.22.11`
+ - `minikube start --kubernetes-version=v1.23.15`
  - `minikube addons enable ingress`
 (from the top level of this repo):
 install the dependencies for the PAWS dev environment with these steps:
@@ -101,10 +101,64 @@ Would run tox.
 https://wikitech.wikimedia.org/wiki/PAWS
 
 ### Comment to Phabricator
-
 To have a PR make comments to an associated phabricator ticket have the last line of the commit look like:
 
 Bug: <ticket number>
 
 For example:
 Bug: T318182
+
+### Deployment ###
+```
+cd terraform
+terraform apply -var datacenter=<eqiad1|codfw1dev>
+
+mkdir /tmp/paws-k8s-setup/
+git clone https://github.com/kubernetes/cloud-provider-openstack.git /tmp/paws-k8s-setup/cloud-provider-openstack/
+cp cloud.conf /tmp/paws-k8s-setup/
+cd /tmp/paws-k8s-setup/cloud-provider-openstack/
+git checkout 9ed6d961c6ee5a4f51533877ae981aa6d9753f2d # newest has so far worked though
+base64 -w 0 ../cloud.conf ; echo
+vim manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml # replace cloud.conf 64 with above
+kubectl create -f manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml
+kubectl -f manifests/cinder-csi-plugin/ apply
+cd -
+```
+
+sc.yaml:
+
+```
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: cinder.csi.openstack.org
+parameters:
+  availability: nova
+```
+
+```
+kubectl apply -f sc.yaml
+
+helm upgrade --install ingress-nginx ingress-nginx \
+  --version v4.4.0 \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace \
+  --set controller.service.type=NodePort \
+  --set controller.service.enableHttps=false \
+  --set controller.service.nodePorts.http=30001 \
+  --set-string controller.config.proxy-body-size="4m" # T328168
+
+kubectl config set-context --current --namespace=prod
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm dep up paws/
+kubectl create namespace prod
+helm install paws --namespace prod ./paws -f paws/secrets.yaml -f paws/production.yaml --timeout=50m
+kubectl apply -f manifests/psp.yaml
+```
+
+update the web proxy in horizon to point to current cluster.
+
+https://wikitech.wikimedia.org/wiki/PAWS/Admin#Deployment

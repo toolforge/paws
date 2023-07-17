@@ -10,7 +10,7 @@ jupyterhub:
       - name: homes
         nfs:
           server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
-          path: /srv/misc/shared/paws/project
+          path: /srv/paws/project
       - name: dumps
         nfs:
           server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
@@ -30,9 +30,6 @@ jupyterhub:
           nfs_home = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
           dumps_src1 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
           dumps_src2 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
-    db:
-      type: mysql
-      upgrade: true
   ingress:
     enabled: true
     hosts:
