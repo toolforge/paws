@@ -4,10 +4,8 @@ mwdb
 mwxml
 mwreverts
 mwsessions
-mwdiffs
 mwoauth
 mwtypes
-mwpersistence
 mwparserfromhell
 git+https://github.com/yuvipanda/python-wdqs.git
 

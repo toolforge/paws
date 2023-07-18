@@ -5,7 +5,50 @@
   hosts: localhost
   tasks:
     - name: include env vars
-      include_vars: vars/{{ datacenter | default('eqiad1') }}.yaml
+      include_vars: vars/{{ datacenter }}.yaml
+
+    - name: Temporary directory for cloud provider
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: paws
+      register: paws_dir
+      changed_when: False
+
+    - name: Clone cloud-provider-openstack
+      ansible.builtin.git:
+        repo: https://github.com/kubernetes/cloud-provider-openstack.git
+        dest: "{{ paws_dir.path }}"
+        version: v1.26.3
+      changed_when: False
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: files/csi-secret-cinderplugin.yaml.crypt
+        dest: "{{ paws_dir.path }}/manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml"
+      changed_when: False
+
+    - name: install the things!
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ paws_dir.path }}/manifests/cinder-csi-plugin/{{ item }}"
+      loop:
+        - "csi-secret-cinderplugin.yaml"
+        - "cinder-csi-controllerplugin-rbac.yaml"
+        - "cinder-csi-controllerplugin.yaml"
+        - "cinder-csi-nodeplugin-rbac.yaml"
+        - "cinder-csi-nodeplugin.yaml"
+        - "csi-cinder-driver.yaml"
+
+    - name: Delete temporary directory
+      ansible.builtin.file:
+        state: absent
+        path: "{{ paws_dir.path }}"
+      changed_when: False
+
+    - name: and sc.yaml
+      kubernetes.core.k8s:
+        state: present
+        src: "files/sc.yaml"
 
     - name: Deploy ingress-nginx
       kubernetes.core.helm:
@@ -36,7 +79,12 @@
         release_namespace: "{{ namespace }}"
         create_namespace: true
         values_files:
-          - ../paws/{{ secret-file }}.yaml
-          - ../paws/{{ env-file }}.yaml
+          - ../paws/{{ secret_file }}.yaml
+          - ../paws/{{ env_file }}.yaml
         timeout: '50m'
         dependency_update: true
+
+    - name: and psp.yaml
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('template', 'files/psp.yaml.j2') }}"
