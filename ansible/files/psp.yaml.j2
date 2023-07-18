@@ -142,7 +142,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: paws-psp
-  namespace: prod
+  namespace: {{ namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -151,20 +151,20 @@ subjects:
   # For all most accounts in the prod (paws) namespace
   - kind: ServiceAccount
     name: hub
-    namespace: prod
+    namespace: {{ namespace }}
   - kind: ServiceAccount
     name: default
-    namespace: prod
+    namespace: {{ namespace }}
   - kind: ServiceAccount
     name: hook-image-awaiter
-    namespace: prod
+    namespace: {{ namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: paws-psp-public
-  namespace: prod
+  namespace: {{ namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -173,7 +173,7 @@ subjects:
   # For the paws-public service account in the prod (paws) namespace
   - kind: ServiceAccount
     name: paws-public
-    namespace: prod
+    namespace: {{ namespace }}
 ---
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -251,7 +251,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: minesweeper-psp
-  namespace: prod
+  namespace: {{ namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -260,4 +260,4 @@ subjects:
   # For all most accounts in the prod (paws) namespace
   - kind: ServiceAccount
     name: minesweeper
-    namespace: prod
+    namespace: {{ namespace }}

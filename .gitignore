@@ -10,3 +10,5 @@ dev-values.yaml
 *.swp
 terraform.tfstate*
 .terraform*
+terraform/kube.config
+.venv*
