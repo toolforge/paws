@@ -1,7 +1,8 @@
 # Directory entries are not enough to encrypt fines beneath it
 # https://github.com/AGWA/git-crypt#gitattributes-file
 paws/secrets.yaml filter=git-crypt diff=git-crypt
-ansible/files/csi-secret-cinderplugin.yaml.crypt filter=git-crypt diff=git-crypt
+ansible/files/csi-secret-cinderplugin.yaml.eqiad1.crypt filter=git-crypt diff=git-crypt
+ansible/files/csi-secret-cinderplugin.yaml.codfw1dev.crypt filter=git-crypt diff=git-crypt
 paws/codfw-secrets.yaml filter=git-crypt diff=git-crypt
 paws/files/minesweeper/secrets/** filter=git-crypt diff=git-crypt
 terraform/secrets.tf filter=git-crypt diff=git-crypt

@@ -23,7 +23,7 @@
 
     - name: Copy file with owner and permissions
       ansible.builtin.copy:
-        src: files/csi-secret-cinderplugin.yaml.crypt
+        src: files/csi-secret-cinderplugin.yaml.{{ datacenter }}.crypt
         dest: "{{ paws_dir.path }}/manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml"
       changed_when: False
 
