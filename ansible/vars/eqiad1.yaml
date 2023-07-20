@@ -1,5 +1,5 @@
 ---
 
-secret-file: 'secrets'
+secret_file: 'secrets'
 namespace: 'prod'
-env-file: 'production'
+env_file: 'production'

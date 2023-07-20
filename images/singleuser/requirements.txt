@@ -42,3 +42,8 @@ wmpaws
 # Web dev stuff
 flask
 fastapi
+
+# mwpersistence has a dep which pulls in PyYAML 5.4.1, which has
+# packaging issues with Cython 3.0.0 (also present in PyYAML 6.0.0).
+# Pin a higher version.
+pyyaml>6.0.0

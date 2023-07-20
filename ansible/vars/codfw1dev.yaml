@@ -1,5 +1,5 @@
 ---
 
-secret-file: 'codfw1dev-secrets'
+secret_file: 'codfw-secrets'
 namespace: 'codfw1dev'
-env-file: 'codfw1dev'
+env_file: 'codfw'
