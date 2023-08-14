@@ -1,4 +1,4 @@
-FROM jupyterhub/k8s-hub:3.0.0-beta.3.git.6256.hc3c4e121
+FROM jupyterhub/k8s-hub:3.0.0
 ARG NB_USER=tools.paws
 ARG NB_UID=52771
 ARG HOME=/home/paws
