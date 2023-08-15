@@ -48,10 +48,6 @@ RUN pip install --prefix=/srv/paws --no-cache-dir \
     notebook==6.5.5 \
     jupyterlab==4.0.3
 
-# jupyterlab 4.0.2 with notebook 6.5.5 works...
-# jupyterlab 4.0.3 with notebook 6.5.5 works...
-# jupyterlab 4.0.2 with notebook 7.0.1 does not...
-# jupyterlab 4.0.0 with notebook 7.0.1 does not...
 ## End minimal setup ##
 
 USER root
@@ -230,7 +226,6 @@ RUN /tmp/install-julia
 
 RUN pip install --no-cache-dir \
     jupyterlab-link-share>=0.2.4 \
-#    nbgitpuller \
 #    voila # 0.4.0 downgrades jupyter-server to 1.24.0 appears to work on 2.0 from 0.5.0, though not yet released.
     bash_kernel
 
