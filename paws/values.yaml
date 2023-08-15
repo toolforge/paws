@@ -70,14 +70,6 @@ jupyterhub:
         client_id: fea321f1b6b5aed9fa83d5362839cd3d
         client_secret: 6b17e5b87ae5ee893f5d4ba8b0e2377c6c0c3fcc
         mw_index_url: https://meta.wikimedia.org/w/index.php
-      Authenticator:
-        admin_users:
-          - BDavis_(WMF)
-          - ABorrero_(WMF)
-          - NSkaggs_(WMF)
-          - Andrewbogott
-          - Chicocvenancio
-          - VRook_(WMF)
       JupyterHub:
         authenticator_class: mediawiki
     db:
@@ -235,6 +227,14 @@ jupyterhub:
                       },
                   ]
 
+          c.OAuthenticator.admin_users = {
+              "BDavis (WMF)",
+              "VRook (WMF)",
+              "ABorrero (WMF)",
+              "NSkaggs (WMF)",
+              "Andrewbogott",
+              "Chicocvenancio"
+          }
           c.OAuthenticator.allow_all = True
           c.JupyterHub.authenticator_class = Auth
           c.JupyterHub.authenticate_prometheus = False
@@ -311,7 +311,7 @@ minesweeper:
   enabled: false  # most local-dev testers won't have the key to configs
   image:
     name: quay.io/wikimedia-paws-prod/minesweeper
-    tag: pr-285 # minesweeper tag managed by github actions
+    tag: pr-321 # minesweeper tag managed by github actions
     template: "{{ .Values.minesweeper.image.name }}:{{ .Values.minesweeper.image.tag }}"
 # If not deployed for prod use, we use the some hacks for testing
 localdev:
