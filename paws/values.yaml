@@ -235,6 +235,7 @@ jupyterhub:
                       },
                   ]
 
+          c.OAuthenticator.allow_all = True
           c.JupyterHub.authenticator_class = Auth
           c.JupyterHub.authenticate_prometheus = False
           c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg'
@@ -255,7 +256,7 @@ jupyterhub:
       fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-236 # paws-hub tag managed by github actions
+      tag: pr-317 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
@@ -278,11 +279,10 @@ jupyterhub:
   singleuser:
     cmd:
       - jupyterhub-singleuser
-      - --LabApp.collaborative=true
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-315 # singleuser tag managed by github actions
+      tag: pr-317 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 1G
