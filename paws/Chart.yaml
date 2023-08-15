@@ -3,8 +3,8 @@
 apiVersion: v2
 description: A Helm chart for PAWS
 name: paws
-version: "2.7"
+version: "2.8"
 dependencies:
   - name: jupyterhub
-    version: "2.0.0"
+    version: "3.0.0"
     repository: "https://jupyterhub.github.io/helm-chart"
