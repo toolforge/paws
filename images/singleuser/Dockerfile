@@ -84,7 +84,8 @@ RUN apt-get install --yes \
         nano \
         vim \
         lsof \
-        mariadb-client
+        mariadb-client \
+        unrar
 
 # pyaudio
 RUN apt-get install --yes \
