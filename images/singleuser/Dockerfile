@@ -85,7 +85,7 @@ RUN apt-get install --yes \
         vim \
         lsof \
         mariadb-client \
-		unrar
+        unrar
 
 # pyaudio
 RUN apt-get install --yes \
