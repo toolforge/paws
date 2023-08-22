@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=8.3.0
+ENV PYWIKIBOT_VERSION=8.3.1
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -78,7 +78,8 @@ RUN apt-get install --yes \
         nano \
         vim \
         lsof \
-        mariadb-client
+        mariadb-client \
+        unrar
 
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get install -y nodejs
