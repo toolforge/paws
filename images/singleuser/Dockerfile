@@ -46,7 +46,7 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 RUN pip install --prefix=/srv/paws --no-cache-dir \
     jupyterhub==4.0.1 \
     notebook==6.5.5 \
-    jupyterlab==4.0.3
+    jupyterlab==4.0.5
 
 ## End minimal setup ##
 
