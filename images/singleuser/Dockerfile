@@ -51,10 +51,6 @@ RUN pip install --prefix=/srv/paws --no-cache-dir \
 
 USER root
 
-# Setup nodesource, because node on Ubuntu is far too old to be useful
-ADD node/nodesource.gpg /etc/apt/trusted.gpg.d/nodesource.gpg
-ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
-
 # Base building utilities that'll always be required, probably
 RUN apt-get update && \
     apt-get install --yes \
@@ -65,12 +61,10 @@ RUN apt-get update && \
         gcc \
         apt-transport-https
 
-
 RUN apt-get update --yes && \
     apt-get install --yes \
         python3-dev \
-        openjdk-11-jdk \
-        nodejs
+        openjdk-11-jdk
 
 # Utilities
 RUN apt-get install --yes \
@@ -85,6 +79,9 @@ RUN apt-get install --yes \
         lsof \
         mariadb-client \
         unrar
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get install -y nodejs
 
 # pyaudio
 RUN apt-get install --yes \
