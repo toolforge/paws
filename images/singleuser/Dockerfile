@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=8.1.2
+ENV PYWIKIBOT_VERSION=8.3.1
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -44,17 +44,12 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 
 # Install base notebook packages
 RUN pip install --prefix=/srv/paws --no-cache-dir \
-    jupyterhub==4.0.0 \
-    notebook==6.4.12 \
-    jupyterlab==3.4.8
+    jupyterhub==4.0.1 \
+    jupyterlab==4.0.5
 
 ## End minimal setup ##
 
 USER root
-
-# Setup nodesource, because node on Ubuntu is far too old to be useful
-ADD node/nodesource.gpg /etc/apt/trusted.gpg.d/nodesource.gpg
-ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
 
 # Base building utilities that'll always be required, probably
 RUN apt-get update && \
@@ -66,12 +61,10 @@ RUN apt-get update && \
         gcc \
         apt-transport-https
 
-
 RUN apt-get update --yes && \
     apt-get install --yes \
         python3-dev \
-        openjdk-11-jdk \
-        nodejs
+        openjdk-11-jdk
 
 # Utilities
 RUN apt-get install --yes \
@@ -84,7 +77,11 @@ RUN apt-get install --yes \
         nano \
         vim \
         lsof \
-        mariadb-client
+        mariadb-client \
+        unrar
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get install -y nodejs
 
 # pyaudio
 RUN apt-get install --yes \
@@ -226,7 +223,6 @@ RUN /tmp/install-julia
 
 RUN pip install --no-cache-dir \
     jupyterlab-link-share>=0.2.4 \
-    nbgitpuller \
 #    voila # 0.4.0 downgrades jupyter-server to 1.24.0 appears to work on 2.0 from 0.5.0, though not yet released.
     bash_kernel
 
@@ -261,18 +257,5 @@ COPY banner /etc/bash.bashrc
 
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
-
-## Install SPARQL
-USER root
-RUN apt-get update && \
-    apt-get install --yes \
-    # For sparql kernel
-    graphviz
-
-USER ${NB_USER}
-RUN pip install --no-cache-dir sparqlkernel
-RUN python3 -m jupyter sparqlkernel install --sys-prefix
-
-## End SPARQL Install
 
 EXPOSE 8888
