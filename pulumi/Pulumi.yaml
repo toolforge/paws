@@ -1,0 +1,35 @@
+---
+
+name: paws
+runtime: yaml
+description: paws pumuli
+outputs:
+  kubeconfig: ${cluster1.kubeconfig}
+resources:
+  cluster1:
+    type: openstack:containerinfra:Cluster
+    properties:
+      clusterTemplateId: ${clustertemplate1}
+      masterCount: 1
+      name: paws-dev-pulumi
+      nodeCount: ${workers}
+  clustertemplate1:
+    type: openstack:containerinfra:ClusterTemplate
+    properties:
+      coe: kubernetes
+      dnsNameserver: 8.8.8.8
+      dockerStorageDriver: overlay2
+      dockerVolumeSize: ${volume-size}
+      externalNetworkId: ${external-network-id}
+      fixedSubnet: ${fixed-subnet}
+      fixedNetwork: lan-flat-cloudinstances2b
+      flavor: ${worker-flavor}
+      floatingIpEnabled: false
+      image: ${image-name}
+      labels:
+        kube_tag: "v1.23.15-rancher1-linux-amd64"
+        hyperkube_prefix: "docker.io/rancher/"
+        cloud_provider_enabled: "true"
+      masterFlavor: ${control-flavor}
+      name: paws-${name}-pulumi
+      networkDriver: flannel

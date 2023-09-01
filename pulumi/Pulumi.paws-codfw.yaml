@@ -1,0 +1,13 @@
+---
+
+encryptionsalt: v1:OmSkg8q3Cf0=:v1:fdlfGHhWwjqwfflB:B693Z4nQ//26jsrYR8LmzGaYcXCzEA==
+config:
+  paws:name: dev
+  paws:workers: 2
+  paws:volume-size: 20
+  paws:external-network-id: wan-transport-codfw
+  paws:fixed-subnet: cloud-instances2-b-codfw
+  paws:fixed-network: cloud-instances2-b-codfw
+  paws:worker-flavor: g3.cores1.ram2.disk20
+  paws:control-flavor: g3.cores1.ram2.disk20
+  paws:image-name: Fedora-CoreOS-34
