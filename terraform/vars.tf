@@ -88,6 +88,6 @@ variable "workers" {
   type = map(any)
   default = {
     "codfw1dev" = "2"
-    "eqiad1"    = "3"
+    "eqiad1"    = "4"
   }
 }
