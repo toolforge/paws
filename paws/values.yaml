@@ -285,7 +285,7 @@ jupyterhub:
       tag: pr-326 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
-      guarantee: 1G
+      guarantee: 0.70G
       limit: 3G
     cpu:
       guarantee: .15
