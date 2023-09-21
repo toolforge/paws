@@ -5,11 +5,6 @@ resource "openstack_containerinfra_cluster_v1" "k8s_123_6" {
   node_count          = var.workers[var.datacenter]
 }
 
-resource "local_file" "kube_config" {
-  content  = resource.openstack_containerinfra_cluster_v1.k8s_123_6.kubeconfig.raw_config
-  filename = "kube.config"
-}
-
 resource "openstack_containerinfra_clustertemplate_v1" "template_123_6" {
   name                  = "paws${var.name[var.datacenter]}-123-6"
   coe                   = "kubernetes"
