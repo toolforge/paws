@@ -55,6 +55,7 @@
         name: ingress-nginx
         chart_ref: ingress-nginx
         chart_repo_url: https://kubernetes.github.io/ingress-nginx
+        chart_version: 4.7.2
         release_namespace: ingress-nginx
         create_namespace: true
         set_values:
