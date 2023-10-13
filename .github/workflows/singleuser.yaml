@@ -11,7 +11,7 @@ name: build and push singleuser
 jobs:
   build-and-push:
     name: build and push singleuser
-    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v2
+    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v3
     with:
       imagename: singleuser
     secrets:
