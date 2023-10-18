@@ -164,7 +164,7 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.5/openrefine-linux-3.7.5.tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.6/openrefine-linux-3.7.6.tar.gz' | tar xzf - --strip=1
 
 USER root
 RUN apt-get install --yes unzip
