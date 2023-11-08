@@ -55,7 +55,7 @@
         name: ingress-nginx
         chart_ref: ingress-nginx
         chart_repo_url: https://kubernetes.github.io/ingress-nginx
-        chart_version: 4.7.2
+        chart_version: 4.8.3
         release_namespace: ingress-nginx
         create_namespace: true
         set_values:
@@ -66,6 +66,8 @@
           - value: controller.service.nodePorts.http=30001
             value_type: string
           - value: controller.config.proxy-body-size=4m
+            value_type: string
+          - value: controller.config.allow-snippet-annotations=true
             value_type: string
 
     - name: Add jupyterhub chart repo
