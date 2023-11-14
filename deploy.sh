@@ -26,8 +26,8 @@ if ! command -v helm ; then
   exit 1
 fi
 
-if ! command -v terraform ; then
-  echo "please install terraform"
+if ! command -v tofu ; then
+  echo "please install tofu"
   exit 1
 fi
 
@@ -36,9 +36,9 @@ source .venv/deploy/bin/activate
 pip install ansible==8.1.0 kubernetes==26.1.0
 
 
-cd terraform
-terraform init
-terraform apply -var datacenter=${datacenter}  # -auto-approve
+cd tofu
+tofu init
+tofu apply -var datacenter=${datacenter}  # -auto-approve
 export KUBECONFIG=$(pwd)/kube.config
 
 cd ../ansible
