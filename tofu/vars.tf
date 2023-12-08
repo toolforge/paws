@@ -80,7 +80,7 @@ variable "fixed_subnet" {
 variable "image_name" {
   type = map(any)
   default = {
-    "codfw1dev" = "Fedora-CoreOS-34"
+    "codfw1dev" = "Fedora-CoreOS-38"
     "eqiad1"    = "magnum-fedora-coreos-34"
   }
 }
