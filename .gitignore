@@ -10,5 +10,5 @@ dev-values.yaml
 *.swp
 terraform.tfstate*
 .terraform*
-terraform/kube.config
+tofu/kube.config
 .venv*
