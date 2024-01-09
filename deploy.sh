@@ -15,6 +15,15 @@ else
   exit
 fi
 
+if [ -n "${2}" ]
+then
+  if [ "${2}" = 'tofu' ]
+  then
+    # exit after tofu
+    tofuonly=1
+  fi
+fi
+
 
 if ! command -v kubectl ; then
   echo "please install kubectl"
@@ -39,9 +48,16 @@ pip install ansible==8.1.0 kubernetes==26.1.0
 
 
 cd tofu
-tofu init -backend-config access_key="${ACCESS_KEY}" -backend-config secret_key="${SECRET_KEY}"
-tofu apply -var datacenter=${datacenter} # -auto-approve
+AWS_ACCESS_KEY_ID=${ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${SECRET_KEY} tofu init 
+#tofu init -backend-config access_key="${ACCESS_KEY}" -backend-config secret_key="${SECRET_KEY}"
+AWS_ACCESS_KEY_ID=${ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${SECRET_KEY} tofu apply -var datacenter=${datacenter} # -auto-approve
+#tofu apply -var datacenter=${datacenter} # -auto-approve
 export KUBECONFIG=$(pwd)/kube.config
+
+if [ "${tofuonly}" = '1' ]
+then
+  exit
+fi
 
 cd ../ansible
 ansible-playbook paws.yaml --extra-vars "datacenter=${datacenter}"
