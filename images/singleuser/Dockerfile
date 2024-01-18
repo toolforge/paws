@@ -115,16 +115,10 @@ RUN apt-get update --yes && \
         # For R's devtools
         libssl-dev
 
-# Install RStudio
-# give access to libssl1.1 for rstudio-server
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" > /etc/apt/sources.list.d/focal.list
-RUN apt-get update
-
-ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
+# Install rstudio-server
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.0-369-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
-# remove focal repo
-RUN rm /etc/apt/sources.list.d/focal.list && apt-get update
 
 
 # Create user owned R libs dir
