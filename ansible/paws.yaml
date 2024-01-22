@@ -70,6 +70,21 @@
           - value: controller.config.allow-snippet-annotations=true
             value_type: string
 
+    - name: Prometheus
+      kubernetes.core.helm:
+        name: prometheus
+        chart_ref: prometheus
+        chart_repo_url: https://prometheus-community.github.io/helm-charts
+        chart_version: 25.11.0
+        release_namespace: metrics
+        create_namespace: true
+
+    - name: Ingress for prometheus
+      kubernetes.core.k8s:
+        state: present
+        template: "templates/prometheus-ingress.yaml.j2"
+        namespace: metrics
+
     - name: Add jupyterhub chart repo
       kubernetes.core.helm_repository:
         name: jupyterhub
