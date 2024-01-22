@@ -48,8 +48,8 @@ pip install ansible==8.1.0 kubernetes==26.1.0
 
 
 cd tofu
-AWS_ACCESS_KEY_ID=${ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${SECRET_KEY} tofu init
-AWS_ACCESS_KEY_ID=${ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${SECRET_KEY} tofu apply -var datacenter=${datacenter} # -auto-approve
+AWS_ACCESS_KEY_ID=${ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${SECRET_KEY} tofu init -backend-config=${datacenter}-backend.conf
+AWS_ACCESS_KEY_ID=${ACCESS_KEY} AWS_SECRET_ACCESS_KEY=${SECRET_KEY} tofu apply -var datacenter=${datacenter}
 export KUBECONFIG=$(pwd)/kube.config
 
 if [ "${tofuonly}" = '1' ]
