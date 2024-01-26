@@ -22,14 +22,14 @@ variable "auth-url" {
 variable "tenant_id" {
   type = map(any)
   default = {
-    "codfw1dev" = "paws-dev"
+    "codfw1dev" = "pawsdev"
     "eqiad1"    = "paws"
   }
 }
 variable "application_credential_id" {
   type = map(any)
   default = {
-    "codfw1dev" = "e487b78d4c5d4bb6a30c2f7471b03bc0"
+    "codfw1dev" = "3f7f32ab28484173b127e1fb435057ff"
     "eqiad1"    = "74fa33352a4a44038e7f924324194fe5"
   }
 }
