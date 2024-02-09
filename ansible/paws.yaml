@@ -70,6 +70,13 @@
           - value: controller.config.allow-snippet-annotations=true
             value_type: string
 
+    - name: Create metrics namespace for prometheus
+      kubernetes.core.k8s:
+        name: metrics
+        kind: Namespace
+        state: present
+      register: prometheus
+
     - name: Prometheus
       kubernetes.core.helm:
         name: prometheus
@@ -84,6 +91,10 @@
         state: present
         template: "templates/prometheus-ingress.yaml.j2"
         namespace: metrics
+
+    - name: Pull in previous prometheus data
+      ansible.builtin.script: files/prometheus-data.sh
+      when: prometheus.changed
 
     - name: Add jupyterhub chart repo
       kubernetes.core.helm_repository:
