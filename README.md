@@ -121,3 +121,6 @@ https://wikitech.wikimedia.org/wiki/PAWS/Admin#Deployment
 If the entire project is removed two parts of paws are not managed by tofu/ansible.
 Object storage container: An object storage container named "tofu-state" will need to be generated in horizon. This is where the state file for tofu resides.
 NFS: The NFS server is not included. And a fresh NFS server will be needed for paws to operate.
+
+# backup prometheus
+see ansible/files/prometheus-data.sh for example of backup/restore
