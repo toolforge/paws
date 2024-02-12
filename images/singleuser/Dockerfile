@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=8.3.1
+ENV PYWIKIBOT_VERSION=8.6.0
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -44,8 +44,8 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 
 # Install base notebook packages
 RUN pip install --prefix=/srv/paws --no-cache-dir \
-    jupyterhub==4.0.1 \
-    jupyterlab==4.0.5
+    jupyterhub==4.0.2 \
+    jupyterlab==4.1.0
 
 ## End minimal setup ##
 
@@ -115,16 +115,10 @@ RUN apt-get update --yes && \
         # For R's devtools
         libssl-dev
 
-# Install RStudio
-# give access to libssl1.1 for rstudio-server
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" > /etc/apt/sources.list.d/focal.list
-RUN apt-get update
-
-ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
+# Install rstudio-server
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.0-369-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
-# remove focal repo
-RUN rm /etc/apt/sources.list.d/focal.list && apt-get update
 
 
 # Create user owned R libs dir
@@ -164,7 +158,7 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.4/openrefine-linux-3.7.4.tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.9/openrefine-linux-3.7.9.tar.gz' | tar xzf - --strip=1
 
 USER root
 RUN apt-get install --yes unzip

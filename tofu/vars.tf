@@ -22,15 +22,15 @@ variable "auth-url" {
 variable "tenant_id" {
   type = map(any)
   default = {
-    "codfw1dev" = "paws-dev"
+    "codfw1dev" = "pawsdev"
     "eqiad1"    = "paws"
   }
 }
 variable "application_credential_id" {
   type = map(any)
   default = {
-    "codfw1dev" = "f7ef9367a65b48a4896df59a938238c1"
-    "eqiad1"    = "9abb08ec748d4037992f33b1626220e2"
+    "codfw1dev" = "3f7f32ab28484173b127e1fb435057ff"
+    "eqiad1"    = "74fa33352a4a44038e7f924324194fe5"
   }
 }
 
@@ -80,7 +80,7 @@ variable "fixed_subnet" {
 variable "image_name" {
   type = map(any)
   default = {
-    "codfw1dev" = "Fedora-CoreOS-34"
+    "codfw1dev" = "Fedora-CoreOS-38"
     "eqiad1"    = "magnum-fedora-coreos-34"
   }
 }
@@ -88,6 +88,6 @@ variable "workers" {
   type = map(any)
   default = {
     "codfw1dev" = "2"
-    "eqiad1"    = "3"
+    "eqiad1"    = "4"
   }
 }

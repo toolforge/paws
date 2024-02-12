@@ -9,27 +9,27 @@ jupyterhub:
     extraVolumes:
       - name: homes
         nfs:
-          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
           path: /srv/paws/project
       - name: dumps
         nfs:
-          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
           path: /
       # Without this, dumps becomes inaccessible and can hang the host
       - name: dumps-src1
         nfs:
-          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
           path: /
       - name: dumps-src2
         nfs:
-          server: haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud
+          server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
           path: /
     extraConfig:
       00-myConfig: |
           localdev = False
-          nfs_home = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
-          dumps_src1 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
-          dumps_src2 = 'haproxy-and-nfs.paws-dev.codfw1dev.wikimedia.cloud'
+          nfs_home = 'pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud'
+          dumps_src1 = 'pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud'
+          dumps_src2 = 'pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud'
   ingress:
     enabled: true
     hosts:

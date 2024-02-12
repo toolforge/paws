@@ -55,6 +55,7 @@
         name: ingress-nginx
         chart_ref: ingress-nginx
         chart_repo_url: https://kubernetes.github.io/ingress-nginx
+        chart_version: 4.8.3
         release_namespace: ingress-nginx
         create_namespace: true
         set_values:
@@ -66,6 +67,34 @@
             value_type: string
           - value: controller.config.proxy-body-size=4m
             value_type: string
+          - value: controller.config.allow-snippet-annotations=true
+            value_type: string
+
+    - name: Create metrics namespace for prometheus
+      kubernetes.core.k8s:
+        name: metrics
+        kind: Namespace
+        state: present
+      register: prometheus
+
+    - name: Prometheus
+      kubernetes.core.helm:
+        name: prometheus
+        chart_ref: prometheus
+        chart_repo_url: https://prometheus-community.github.io/helm-charts
+        chart_version: 25.11.0
+        release_namespace: metrics
+        create_namespace: true
+
+    - name: Ingress for prometheus
+      kubernetes.core.k8s:
+        state: present
+        template: "templates/prometheus-ingress.yaml.j2"
+        namespace: metrics
+
+    - name: Pull in previous prometheus data
+      ansible.builtin.script: files/prometheus-data.sh
+      when: prometheus.changed
 
     - name: Add jupyterhub chart repo
       kubernetes.core.helm_repository:
