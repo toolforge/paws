@@ -85,6 +85,9 @@
         chart_version: 25.11.0
         release_namespace: metrics
         create_namespace: true
+        set_values:
+          - value: prometheus.retention=30d
+            value_type: string
 
     - name: Ingress for prometheus
       kubernetes.core.k8s:
