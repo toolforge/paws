@@ -176,6 +176,8 @@ RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/exten
 
 USER root
 
+RUN npm install -g wikibase-cli
+
 # Machine-learning type stuff
 RUN apt-get update && \
     apt-get install --yes \
@@ -222,8 +224,6 @@ RUN pip install --no-cache-dir \
 
 # Install the bash kernel
 RUN python -m bash_kernel.install --sys-prefix
-
-
 
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
