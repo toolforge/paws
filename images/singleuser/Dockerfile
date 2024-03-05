@@ -216,6 +216,11 @@ RUN /tmp/install-julia
 
 ## Done Installing Julia
 
+# install sql access tool
+COPY install-sql-tool /tmp/install-sql-tool
+RUN /tmp/install-sql-tool
+
+## Done installing sql access tool
 
 RUN pip install --no-cache-dir \
     jupyterlab-link-share>=0.2.4 \
