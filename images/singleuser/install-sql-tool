@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl https://gerrit.wikimedia.org/r/plugins/gitiles/labs/toollabs/+/refs/heads/master/misctools/sql?format=TEXT | base64 -d > /srv/paws/bin/sql
+chmod 755 /srv/paws/bin/sql
