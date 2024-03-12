@@ -77,13 +77,6 @@ variable "fixed_subnet" {
     "eqiad1"    = "cloud-instances2-b-eqiad"
   }
 }
-variable "image_name" {
-  type = map(any)
-  default = {
-    "codfw1dev" = "Fedora-CoreOS-38"
-    "eqiad1"    = "magnum-fedora-coreos-34"
-  }
-}
 variable "workers" {
   type = map(any)
   default = {
