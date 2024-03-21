@@ -254,7 +254,7 @@ jupyterhub:
       fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-342 # paws-hub tag managed by github actions
+      tag: pr-392 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
@@ -280,7 +280,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-394 # singleuser tag managed by github actions
+      tag: pr-392 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 0.70G
