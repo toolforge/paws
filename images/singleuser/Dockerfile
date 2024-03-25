@@ -165,8 +165,7 @@ RUN apt-get install --yes unzip
 
 USER ${NB_USER}
 ENV REFINE_DIR /home/paws
-RUN pip install --no-cache-dir \
-    git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
+RUN pip install --no-cache-dir nb_serverproxy_openrefine
 
 USER root
 RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
