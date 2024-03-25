@@ -138,7 +138,7 @@ USER ${NB_USER}
 RUN pip install --no-cache-dir \
     jupyter-server-proxy \
     rpy2 \
-    git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
+    jupyter-rsession-proxy
 
 # Set CRAN mirror to rspm before we install anything
 COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
