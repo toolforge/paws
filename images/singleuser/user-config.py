@@ -29,6 +29,7 @@ for fam in (
     "mediawiki",
     "wikivoyage",
     "wikinews",
+    "species",
 ):
     usernames[fam]["*"] = os.environ["USER"]  # noqa: F821
 
