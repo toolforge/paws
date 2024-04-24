@@ -1,12 +1,17 @@
-resource "openstack_containerinfra_cluster_v1" "k8s_123_13" {
-  name                = "paws${var.name[var.datacenter]}-123-13"
-  cluster_template_id = resource.openstack_containerinfra_clustertemplate_v1.template_123_13.id
+resource "openstack_containerinfra_cluster_v1" "k8s_126_1" {
+  name                = "paws${var.name[var.datacenter]}-126-1"
+  cluster_template_id = resource.openstack_containerinfra_clustertemplate_v1.template_126_1.id
   master_count        = 1
   node_count          = var.workers[var.datacenter]
 }
 
-resource "openstack_containerinfra_clustertemplate_v1" "template_123_13" {
-  name                  = "paws${var.name[var.datacenter]}-123-13"
+resource "local_file" "kube_config" {
+  content  = resource.openstack_containerinfra_cluster_v1.k8s_126_1.kubeconfig.raw_config
+  filename = "kube.config"
+}
+
+resource "openstack_containerinfra_clustertemplate_v1" "template_126_1" {
+  name                  = "paws${var.name[var.datacenter]}-126-1"
   coe                   = "kubernetes"
   dns_nameserver        = "8.8.8.8"
   docker_storage_driver = "overlay2"
@@ -21,7 +26,7 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_123_13" {
   network_driver        = "flannel"
 
   labels = {
-    kube_tag               = "v1.23.15-rancher1-linux-amd64"
+    kube_tag               = "v1.26.8-rancher1-linux-amd64"
     hyperkube_prefix       = "docker.io/rancher/"
     cloud_provider_enabled = "true"
   }

@@ -111,7 +111,7 @@
         timeout: '50m'
         dependency_update: true
 
-    - name: and psp.yaml
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', 'files/psp.yaml.j2') }}"
+#    - name: and psp.yaml
+#      kubernetes.core.k8s:
+#        state: present
+#        definition: "{{ lookup('template', 'files/psp.yaml.j2') }}"
