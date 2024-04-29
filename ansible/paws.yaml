@@ -110,8 +110,3 @@
           - ../paws/{{ env_file }}.yaml
         timeout: '50m'
         dependency_update: true
-
-    - name: and psp.yaml
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', 'files/psp.yaml.j2') }}"
