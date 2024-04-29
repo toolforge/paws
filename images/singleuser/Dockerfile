@@ -137,7 +137,6 @@ RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
 USER ${NB_USER}
 RUN pip install --no-cache-dir \
     jupyter-server-proxy \
-    rpy2 \
     jupyter-rsession-proxy
 
 # Set CRAN mirror to rspm before we install anything
