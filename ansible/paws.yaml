@@ -75,7 +75,6 @@
         name: metrics
         kind: Namespace
         state: present
-      register: prometheus
 
     - name: Prometheus
       kubernetes.core.helm:
@@ -95,10 +94,6 @@
         template: "templates/prometheus-ingress.yaml.j2"
         namespace: metrics
 
-    - name: Pull in previous prometheus data
-      ansible.builtin.script: files/prometheus-data.sh
-      when: prometheus.changed
-
     - name: Add jupyterhub chart repo
       kubernetes.core.helm_repository:
         name: jupyterhub
@@ -115,8 +110,3 @@
           - ../paws/{{ env_file }}.yaml
         timeout: '50m'
         dependency_update: true
-
-    - name: and psp.yaml
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('template', 'files/psp.yaml.j2') }}"
