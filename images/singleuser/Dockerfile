@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ENV PYWIKIBOT_VERSION=8.6.0
+ENV PYWIKIBOT_VERSION=9.1.2
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -44,8 +44,8 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 
 # Install base notebook packages
 RUN pip install --prefix=/srv/paws --no-cache-dir \
-    jupyterhub==4.0.2 \
-    jupyterlab==4.1.0
+    jupyterhub==4.1.1 \
+    jupyterlab==4.1.8
 
 ## End minimal setup ##
 
@@ -116,7 +116,7 @@ RUN apt-get update --yes && \
         libssl-dev
 
 # Install rstudio-server
-ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.0-369-amd64.deb
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.1-402-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
 
@@ -137,8 +137,7 @@ RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
 USER ${NB_USER}
 RUN pip install --no-cache-dir \
     jupyter-server-proxy \
-    rpy2 \
-    git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
+    jupyter-rsession-proxy
 
 # Set CRAN mirror to rspm before we install anything
 COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
@@ -165,8 +164,7 @@ RUN apt-get install --yes unzip
 
 USER ${NB_USER}
 ENV REFINE_DIR /home/paws
-RUN pip install --no-cache-dir \
-    git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
+RUN pip install --no-cache-dir nb_serverproxy_openrefine
 
 USER root
 RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
@@ -175,6 +173,8 @@ RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/exten
 ## Done setting up OpenRefine
 
 USER root
+
+RUN npm install -g wikibase-cli
 
 # Machine-learning type stuff
 RUN apt-get update && \
@@ -214,6 +214,11 @@ RUN /tmp/install-julia
 
 ## Done Installing Julia
 
+# install sql access tool
+COPY install-sql-tool /tmp/install-sql-tool
+RUN /tmp/install-sql-tool
+
+## Done installing sql access tool
 
 RUN pip install --no-cache-dir \
     jupyterlab-link-share>=0.2.4 \
@@ -222,8 +227,6 @@ RUN pip install --no-cache-dir \
 
 # Install the bash kernel
 RUN python -m bash_kernel.install --sys-prefix
-
-
 
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt

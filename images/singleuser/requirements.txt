@@ -22,7 +22,6 @@ bqplot
 plotly
 holoviews[recommended]
 streamlit
-jupyter-dash
 
 # scientific stuff
 pandas

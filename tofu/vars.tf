@@ -29,8 +29,8 @@ variable "tenant_id" {
 variable "application_credential_id" {
   type = map(any)
   default = {
-    "codfw1dev" = "3f7f32ab28484173b127e1fb435057ff"
-    "eqiad1"    = "74fa33352a4a44038e7f924324194fe5"
+    "codfw1dev" = "ef08f1e29861499d94617f6e116c264f"
+    "eqiad1"    = "43edf67449c740538af78c1743cb72c3"
   }
 }
 
@@ -77,17 +77,10 @@ variable "fixed_subnet" {
     "eqiad1"    = "cloud-instances2-b-eqiad"
   }
 }
-variable "image_name" {
-  type = map(any)
-  default = {
-    "codfw1dev" = "Fedora-CoreOS-38"
-    "eqiad1"    = "magnum-fedora-coreos-34"
-  }
-}
 variable "workers" {
   type = map(any)
   default = {
     "codfw1dev" = "2"
-    "eqiad1"    = "4"
+    "eqiad1"    = "5"
   }
 }

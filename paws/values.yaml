@@ -6,7 +6,7 @@ pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: pr-277 # nbserve tag managed by github actions
+      tag: pr-377 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
@@ -254,7 +254,7 @@ jupyterhub:
       fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-342 # paws-hub tag managed by github actions
+      tag: pr-392 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
@@ -280,7 +280,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-374 # singleuser tag managed by github actions
+      tag: pr-409 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 0.70G
@@ -309,7 +309,7 @@ minesweeper:
   enabled: false  # most local-dev testers won't have the key to configs
   image:
     name: quay.io/wikimedia-paws-prod/minesweeper
-    tag: pr-340 # minesweeper tag managed by github actions
+    tag: pr-400 # minesweeper tag managed by github actions
     template: "{{ .Values.minesweeper.image.name }}:{{ .Values.minesweeper.image.tag }}"
 # If not deployed for prod use, we use the some hacks for testing
 localdev:
