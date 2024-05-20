@@ -24,8 +24,8 @@ If your PR originates from a fork, please be sure "Allow edits and access to sec
 It is possible to run a fully-functioning PAWS system inside [minikube](https://minikube.sigs.k8s.io/docs/)! You don't need
 access to the secrets.yaml file to do it either, since the defaults mostly support it.
 
-You will need to install minikube (tested on minikube 1.23) and [helm](https://helm.sh) and kubectl on your system. When you are confident those are working, start minikube with:
- - `minikube start --kubernetes-version=v1.23.15`
+You will need to install minikube (tested on minikube v1.33.1) and [helm](https://helm.sh) and kubectl on your system. When you are confident those are working, start minikube with:
+ - `minikube start --kubernetes-version=v1.26.8`
  - `minikube addons enable ingress`
 (from the top level of this repo):
 install the dependencies for the PAWS dev environment with these steps:
