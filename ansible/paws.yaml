@@ -70,6 +70,23 @@
           - value: controller.config.allow-snippet-annotations=true
             value_type: string
 
+    - name: Add jupyterhub chart repo
+      kubernetes.core.helm_repository:
+        name: jupyterhub
+        repo_url: "https://jupyterhub.github.io/helm-chart/"
+
+    - name: Deploy paws
+      kubernetes.core.helm:
+        name: paws
+        chart_ref: ../paws
+        release_namespace: "{{ namespace }}"
+        create_namespace: true
+        values_files:
+          - ../paws/{{ secret_file }}.yaml
+          - ../paws/{{ env_file }}.yaml
+        timeout: '50m'
+        dependency_update: true
+
     - name: Create metrics namespace for prometheus
       kubernetes.core.k8s:
         name: metrics
@@ -93,20 +110,3 @@
         state: present
         template: "templates/prometheus-ingress.yaml.j2"
         namespace: metrics
-
-    - name: Add jupyterhub chart repo
-      kubernetes.core.helm_repository:
-        name: jupyterhub
-        repo_url: "https://jupyterhub.github.io/helm-chart/"
-
-    - name: Deploy paws
-      kubernetes.core.helm:
-        name: paws
-        chart_ref: ../paws
-        release_namespace: "{{ namespace }}"
-        create_namespace: true
-        values_files:
-          - ../paws/{{ secret_file }}.yaml
-          - ../paws/{{ env_file }}.yaml
-        timeout: '50m'
-        dependency_update: true
