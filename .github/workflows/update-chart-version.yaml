@@ -1,0 +1,46 @@
+---
+
+name: update chart version
+
+'on':
+  pull_request_target:
+
+jobs:
+  update-container-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      - name: git fetch
+        run: |
+          git fetch
+      - name: git checkout
+        run: |
+          git checkout ${{ github.head_ref }}
+
+      # compare  to upstream main branch
+      - name: git add remote
+        run: |
+          git remote add toolforgepaws https://github.com/toolforge/paws.git
+      - name: git remote update
+        run: |
+          git remote update
+
+      - name: update values.yaml
+        run: |
+          if [[ $(git diff remotes/toolforgepaws/main -- paws/values.yaml) ]]; then
+            VERSION=$(grep ^version paws/Chart.yaml | perl -ne '$_ =~ /^version: (\d+.\d+.)(\d+)/; $version = $2 + 1; print "$1$version"')
+            sed -i "s/^version: .*/version: ${VERSION} # patch number managed by github actions/" paws/Chart.yaml
+          fi
+
+      - uses: EndBug/add-and-commit@v7
+        with:
+          add: 'paws/Chart.yaml'
+          author_name: Github Action
+          author_email: auto@github.com
+          branch: ${{ github.head_ref }}
+          message: 'auto update of ${{ inputs.imagename }} tag'
+          pull: --rebase --autostash
