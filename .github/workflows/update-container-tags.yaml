@@ -1,6 +1,6 @@
 ---
 
-name: update container tags
+name: update container tags and Chart.yaml
 
 'on':
   pull_request_target:
@@ -37,11 +37,21 @@ jobs:
             fi
           done
 
+      - name: update Chart.yaml
+        run: |
+          # Update Chart.yaml version if something in paws/* has changed. Though only do it once.
+          # The grep tests to see if the version has already changed in Chart.yaml
+          if [[ $(git diff remotes/toolforgepaws/main -- paws/) ]] && [[ ! $(git diff remotes/toolforgepaws/main -- paws/Chart.yaml | grep ^+version) ]]; then
+            VERSION=$(grep ^version paws/Chart.yaml | perl -ne '$_ =~ /^version: (\d+.\d+.)(\d+)/; $version = $2 + 1; print "$1$version"')
+            sed -i "s/^version: .*/version: ${VERSION} # patch number managed by github actions/" paws/Chart.yaml
+          fi
+
+
       - uses: EndBug/add-and-commit@v7
         with:
-          add: 'paws/values.yaml'
+          add: '["paws/values.yaml", "paws/Chart.yaml"]'
           author_name: Github Action
           author_email: auto@github.com
           branch: ${{ github.head_ref }}
-          message: 'auto update of ${{ inputs.imagename }} tag'
+          message: 'auto update of tags and Chart version'
           pull: --rebase --autostash
