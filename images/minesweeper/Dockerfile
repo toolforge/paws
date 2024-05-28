@@ -1,4 +1,4 @@
-FROM alpine:3.15
+FROM alpine:3.20.0
 
 RUN apk add --no-cache procps python3 py3-pip py3-psutil
 RUN python3 -mpip install --no-cache --upgrade pip
