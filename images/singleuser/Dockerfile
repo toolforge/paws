@@ -114,7 +114,7 @@ RUN apt-get update --yes && \
         libssl-dev
 
 # Install rstudio-server
-ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/noble/amd64/rstudio-server-2023.12.1-402-amd64.deb
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.1-402-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
 
@@ -142,6 +142,7 @@ COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
 # RStudio needs its own config
 COPY r/rsession.conf /etc/rstudio/rsession.conf
 
+USER root
 # Install the R Kernel
 RUN r -e "install.packages('IRkernel', version='1.3.2')" && \
     r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
@@ -226,12 +227,8 @@ RUN /tmp/install-sql-tool
 
 ## Done installing sql access tool
 
-RUN pip install --no-cache-dir \
-    jupyterlab-link-share>=0.2.4 \
-#    voila # 0.4.0 downgrades jupyter-server to 1.24.0 appears to work on 2.0 from 0.5.0, though not yet released.
-    bash_kernel
-
 # Install the bash kernel
+RUN pip install bash_kernel
 RUN python -m bash_kernel.install --sys-prefix
 
 # Install mass amount of python libraries!

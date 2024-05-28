@@ -27,7 +27,6 @@ streamlit
 pandas
 scipy
 scikit-learn
-scikit-neuralnetwork
 
 # Scraping
 lxml
