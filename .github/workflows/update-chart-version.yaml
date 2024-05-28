@@ -3,7 +3,8 @@
 name: update chart version
 
 'on':
-  pull_request_target:
+  pull_request:
+  #pull_request_target:
 
 jobs:
   update-container-tags:
