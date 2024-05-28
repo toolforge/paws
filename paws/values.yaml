@@ -1,7 +1,7 @@
 ---
 
 # pawsPublicEnabled enables the anonymous viewing service for notebooks
-pawsPublicEnabled: true
+pawsPublicEnabled: true 
 pawspublic:
   nbserve:
     image:
