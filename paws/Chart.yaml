@@ -3,7 +3,7 @@
 apiVersion: v2
 description: A Helm chart for PAWS
 name: paws
-version: 3.0.17 # patch number managed by github actions
+version: 3.0.18 # patch number managed by github actions
 dependencies:
   - name: jupyterhub
     version: 3.3.3
