@@ -316,6 +316,6 @@ localdev:
   enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: pr-155 # jobber tag managed by github actions
+    tag: pr-420 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
