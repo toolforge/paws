@@ -15,7 +15,7 @@ pawspublic:
   renderer:
     image:
       name: quay.io/wikimedia-paws-prod/renderer
-      tag: pr-168 # renderer tag managed by github actions
+      tag: pr-418 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     requests:
