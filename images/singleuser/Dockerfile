@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV PYWIKIBOT_VERSION=9.1.3
 ENV EDITOR=/bin/nano
@@ -14,11 +14,9 @@ ENV NB_USER tools.paws
 ENV NB_UID 52771
 ENV HOME /home/paws
 
-RUN adduser --disabled-password \
-    --gecos "Default user" \
+RUN useradd \
     --uid ${NB_UID} \
-    --home ${HOME} \
-    --force-badname \
+    --home-dir ${HOME} \
     ${NB_USER}
 WORKDIR ${HOME}
 
@@ -116,7 +114,7 @@ RUN apt-get update --yes && \
         libssl-dev
 
 # Install rstudio-server
-ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.1-402-amd64.deb
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/noble/amd64/rstudio-server-2023.12.1-402-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
 
