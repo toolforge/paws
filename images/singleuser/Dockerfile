@@ -172,6 +172,14 @@ RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/exten
 
 ## Done setting up OpenRefine
 
+## install quarto
+
+USER root
+RUN wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.deb -O /tmp/quarto.deb
+RUN dpkg -i /tmp/quarto.deb
+
+## done install quarto
+
 USER root
 
 RUN npm install -g wikibase-cli
