@@ -45,6 +45,10 @@ source secrets-${datacenter}.sh
 python3 -m venv .venv/deploy
 source .venv/deploy/bin/activate
 pip install ansible==9.6.0 kubernetes==26.1.0
+# install helm diff. Needed to keep helm module idempotent
+helm plugin install https://github.com/databus23/helm-diff || true
+# update kubernetes.core. This path will likely need updated with bastion os upgrades.
+ansible-galaxy collection install -U kubernetes.core -p ./.venv/deploy/lib/python3.11/site-packages/ansible_collections
 
 
 cd tofu
