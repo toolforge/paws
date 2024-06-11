@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV PYWIKIBOT_VERSION=9.1.3
 ENV EDITOR=/bin/nano
@@ -14,11 +14,9 @@ ENV NB_USER tools.paws
 ENV NB_UID 52771
 ENV HOME /home/paws
 
-RUN adduser --disabled-password \
-    --gecos "Default user" \
+RUN useradd \
     --uid ${NB_UID} \
-    --home ${HOME} \
-    --force-badname \
+    --home-dir ${HOME} \
     ${NB_USER}
 WORKDIR ${HOME}
 
@@ -144,6 +142,7 @@ COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
 # RStudio needs its own config
 COPY r/rsession.conf /etc/rstudio/rsession.conf
 
+USER root
 # Install the R Kernel
 RUN r -e "install.packages('IRkernel', version='1.3.2')" && \
     r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
@@ -228,12 +227,8 @@ RUN /tmp/install-sql-tool
 
 ## Done installing sql access tool
 
-RUN pip install --no-cache-dir \
-    jupyterlab-link-share>=0.2.4 \
-#    voila # 0.4.0 downgrades jupyter-server to 1.24.0 appears to work on 2.0 from 0.5.0, though not yet released.
-    bash_kernel
-
 # Install the bash kernel
+RUN pip install bash_kernel
 RUN python -m bash_kernel.install --sys-prefix
 
 # Install mass amount of python libraries!
