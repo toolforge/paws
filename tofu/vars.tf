@@ -38,15 +38,15 @@ variable "application_credential_id" {
 variable "worker_flavor" {
   type = map(any)
   default = {
-    "codfw1dev" = "g3.cores1.ram2.disk20"
-    "eqiad1"    = "g3.cores8.ram32.disk20"
+    "codfw1dev" = "g4.cores1.ram2.disk20"
+    "eqiad1"    = "g4.cores8.ram32.disk20"
   }
 }
 variable "control_flavor" {
   type = map(any)
   default = {
-    "codfw1dev" = "g3.cores1.ram2.disk20"
-    "eqiad1"    = "g3.cores2.ram4.disk20"
+    "codfw1dev" = "g4.cores1.ram2.disk20"
+    "eqiad1"    = "g4.cores2.ram4.disk20"
   }
 }
 variable "volume_size" {
