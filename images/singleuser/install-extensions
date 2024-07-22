@@ -10,7 +10,7 @@ pip install --no-cache-dir \
     RISE \
     py-heat-magic \
     jupyter-resource-usage \
-    git+https://github.com/toolforge/labpawspublic@08b8b4f89143055df024ebbbfb159b07f0f2a5b0 \
+    git+https://github.com/toolforge/labpawspublic@10ba684789ff5b6e0e2e2122ce68be101266acb8 \
 #    git+https://github.com/toolforge/paws-favicon@v1.0 \
 
 # Rebuild JupyterLab for plotly-dash extension

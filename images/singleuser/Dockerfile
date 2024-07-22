@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-ENV PYWIKIBOT_VERSION=9.1.3
+ENV PYWIKIBOT_VERSION=9.2.1
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -43,7 +43,7 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 # Install base notebook packages
 RUN pip install --prefix=/srv/paws --no-cache-dir \
     jupyterhub==4.1.1 \
-    jupyterlab==4.2.2
+    jupyterlab==4.2.4
 
 ## End minimal setup ##
 
@@ -156,7 +156,7 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.9/openrefine-linux-3.7.9.tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.8.2/openrefine-linux-3.8.2.tar.gz' | tar xzf - --strip=1
 
 USER root
 RUN apt-get install --yes unzip
@@ -166,7 +166,7 @@ ENV REFINE_DIR /home/paws
 RUN pip install --no-cache-dir nb_serverproxy_openrefine
 
 USER root
-RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.2/openrefine-commons.zip -O /tmp/openrefine-commonsextension.zip
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
