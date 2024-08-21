@@ -254,7 +254,7 @@ jupyterhub:
       fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-392 # paws-hub tag managed by github actions
+      tag: pr-448 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
