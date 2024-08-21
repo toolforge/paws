@@ -6,5 +6,5 @@ name: paws
 version: 3.0.0
 dependencies:
   - name: jupyterhub
-    version: 3.3.3
+    version: 3.3.8
     repository: "https://jupyterhub.github.io/helm-chart"
