@@ -1,6 +1,6 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
-ENV PYWIKIBOT_VERSION=8.1.2
+ENV PYWIKIBOT_VERSION=9.3.1
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,11 +14,9 @@ ENV NB_USER tools.paws
 ENV NB_UID 52771
 ENV HOME /home/paws
 
-RUN adduser --disabled-password \
-    --gecos "Default user" \
+RUN useradd \
     --uid ${NB_UID} \
-    --home ${HOME} \
-    --force-badname \
+    --home-dir ${HOME} \
     ${NB_USER}
 WORKDIR ${HOME}
 
@@ -44,17 +42,12 @@ RUN pip --no-cache-dir install -U pip setuptools wheel
 
 # Install base notebook packages
 RUN pip install --prefix=/srv/paws --no-cache-dir \
-    jupyterhub==4.0.0 \
-    notebook==6.4.12 \
-    jupyterlab==3.4.8
+    jupyterhub==4.1.1 \
+    jupyterlab==4.2.4
 
 ## End minimal setup ##
 
 USER root
-
-# Setup nodesource, because node on Ubuntu is far too old to be useful
-ADD node/nodesource.gpg /etc/apt/trusted.gpg.d/nodesource.gpg
-ADD node/nodesource.list /etc/apt/sources.list.d/nodesource.list
 
 # Base building utilities that'll always be required, probably
 RUN apt-get update && \
@@ -66,12 +59,10 @@ RUN apt-get update && \
         gcc \
         apt-transport-https
 
-
 RUN apt-get update --yes && \
     apt-get install --yes \
         python3-dev \
-        openjdk-11-jdk \
-        nodejs
+        openjdk-11-jdk
 
 # Utilities
 RUN apt-get install --yes \
@@ -84,7 +75,11 @@ RUN apt-get install --yes \
         nano \
         vim \
         lsof \
-        mariadb-client
+        mariadb-client \
+        unrar
+
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get install -y nodejs
 
 # pyaudio
 RUN apt-get install --yes \
@@ -118,16 +113,10 @@ RUN apt-get update --yes && \
         # For R's devtools
         libssl-dev
 
-# Install RStudio
-# give access to libssl1.1 for rstudio-server
-RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted" > /etc/apt/sources.list.d/focal.list
-RUN apt-get update
-
-ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.02.3-492-amd64.deb
+# Install rstudio-server
+ENV RSTUDIO_SERVER_URL https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.12.1-402-amd64.deb
 RUN curl --silent --location --fail ${RSTUDIO_SERVER_URL} > /tmp/rstudio-server.deb
 RUN gdebi -n /tmp/rstudio-server.deb && rm /tmp/rstudio-server.deb
-# remove focal repo
-RUN rm /etc/apt/sources.list.d/focal.list && apt-get update
 
 
 # Create user owned R libs dir
@@ -146,14 +135,14 @@ RUN sed -i -e '/^R_LIBS_USER=/s/^/#/' /etc/R/Renviron && \
 USER ${NB_USER}
 RUN pip install --no-cache-dir \
     jupyter-server-proxy \
-    rpy2 \
-    git+https://github.com/toolforge/jupyter-rsession-proxy.git@57d89b4
+    jupyter-rsession-proxy
 
 # Set CRAN mirror to rspm before we install anything
 COPY r/Rprofile.site /usr/lib/R/etc/Rprofile.site
 # RStudio needs its own config
 COPY r/rsession.conf /etc/rstudio/rsession.conf
 
+USER root
 # Install the R Kernel
 RUN r -e "install.packages('IRkernel', version='1.3.2')" && \
     r -e "IRkernel::installspec(prefix='${VENV_DIR}')" && \
@@ -167,23 +156,32 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.7.4/openrefine-linux-3.7.4.tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.8.2/openrefine-linux-3.8.2.tar.gz' | tar xzf - --strip=1
 
 USER root
 RUN apt-get install --yes unzip
 
 USER ${NB_USER}
 ENV REFINE_DIR /home/paws
-RUN pip install --no-cache-dir \
-    git+https://github.com/innovationOUtside/nb_serverproxy_openrefine@f10677f15cab1f1a0f6a4e80ee65e3598a041fae
+RUN pip install --no-cache-dir nb_serverproxy_openrefine
 
 USER root
-RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.1/openrefine-commons-0.1.1.zip -O /tmp/openrefine-commonsextension.zip
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.2/openrefine-commons.zip -O /tmp/openrefine-commonsextension.zip
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
 
+## install quarto
+
 USER root
+RUN wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.deb -O /tmp/quarto.deb
+RUN dpkg -i /tmp/quarto.deb
+
+## done install quarto
+
+USER root
+
+RUN npm install -g wikibase-cli
 
 # Machine-learning type stuff
 RUN apt-get update && \
@@ -223,17 +221,15 @@ RUN /tmp/install-julia
 
 ## Done Installing Julia
 
+# install sql access tool
+COPY install-sql-tool /tmp/install-sql-tool
+RUN /tmp/install-sql-tool
 
-RUN pip install --no-cache-dir \
-    jupyterlab-link-share>=0.2.4 \
-    nbgitpuller \
-#    voila # 0.4.0 downgrades jupyter-server to 1.24.0 appears to work on 2.0 from 0.5.0, though not yet released.
-    bash_kernel
+## Done installing sql access tool
 
 # Install the bash kernel
+RUN pip install bash_kernel
 RUN python -m bash_kernel.install --sys-prefix
-
-
 
 # Install mass amount of python libraries!
 COPY --chown=tools.paws:tools.paws requirements.txt /tmp/requirements.txt
@@ -261,18 +257,5 @@ COPY banner /etc/bash.bashrc
 
 # use custom css to hide clusters tab
 COPY --chown=tools.paws:tools.paws hide_clusters_tab.css /home/paws/.jupyter/custom/custom.css
-
-## Install SPARQL
-USER root
-RUN apt-get update && \
-    apt-get install --yes \
-    # For sparql kernel
-    graphviz
-
-USER ${NB_USER}
-RUN pip install --no-cache-dir sparqlkernel
-RUN python3 -m jupyter sparqlkernel install --sys-prefix
-
-## End SPARQL Install
 
 EXPOSE 8888

@@ -5,13 +5,57 @@
   hosts: localhost
   tasks:
     - name: include env vars
-      include_vars: vars/{{ datacenter | default('eqiad1') }}.yaml
+      include_vars: vars/{{ datacenter }}.yaml
+
+    - name: Temporary directory for cloud provider
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: paws
+      register: paws_dir
+      changed_when: False
+
+    - name: Clone cloud-provider-openstack
+      ansible.builtin.git:
+        repo: https://github.com/kubernetes/cloud-provider-openstack.git
+        dest: "{{ paws_dir.path }}"
+        version: v1.26.3
+      changed_when: False
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: files/csi-secret-cinderplugin.yaml.{{ datacenter }}.crypt
+        dest: "{{ paws_dir.path }}/manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml"
+      changed_when: False
+
+    - name: install the things!
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ paws_dir.path }}/manifests/cinder-csi-plugin/{{ item }}"
+      loop:
+        - "csi-secret-cinderplugin.yaml"
+        - "cinder-csi-controllerplugin-rbac.yaml"
+        - "cinder-csi-controllerplugin.yaml"
+        - "cinder-csi-nodeplugin-rbac.yaml"
+        - "cinder-csi-nodeplugin.yaml"
+        - "csi-cinder-driver.yaml"
+
+    - name: Delete temporary directory
+      ansible.builtin.file:
+        state: absent
+        path: "{{ paws_dir.path }}"
+      changed_when: False
+
+    - name: and sc.yaml
+      kubernetes.core.k8s:
+        state: present
+        src: "files/sc.yaml"
 
     - name: Deploy ingress-nginx
       kubernetes.core.helm:
         name: ingress-nginx
         chart_ref: ingress-nginx
         chart_repo_url: https://kubernetes.github.io/ingress-nginx
+        chart_version: 4.10.1
         release_namespace: ingress-nginx
         create_namespace: true
         set_values:
@@ -22,6 +66,8 @@
           - value: controller.service.nodePorts.http=30001
             value_type: string
           - value: controller.config.proxy-body-size=4m
+            value_type: string
+          - value: controller.config.allow-snippet-annotations=true
             value_type: string
 
     - name: Add jupyterhub chart repo
@@ -36,7 +82,31 @@
         release_namespace: "{{ namespace }}"
         create_namespace: true
         values_files:
-          - ../paws/{{ secret-file }}.yaml
-          - ../paws/{{ env-file }}.yaml
+          - ../paws/{{ secret_file }}.yaml
+          - ../paws/{{ env_file }}.yaml
         timeout: '50m'
         dependency_update: true
+
+    - name: Create metrics namespace for prometheus
+      kubernetes.core.k8s:
+        name: metrics
+        kind: Namespace
+        state: present
+
+    - name: Prometheus
+      kubernetes.core.helm:
+        name: prometheus
+        chart_ref: prometheus
+        chart_repo_url: https://prometheus-community.github.io/helm-charts
+        chart_version: 25.26.0
+        release_namespace: metrics
+        create_namespace: true
+        set_values:
+          - value: prometheus.retention=30d
+            value_type: string
+
+    - name: Ingress for prometheus
+      kubernetes.core.k8s:
+        state: present
+        template: "templates/prometheus-ingress.yaml.j2"
+        namespace: metrics

@@ -1,0 +1,28 @@
+---
+
+name: "tofu fmt"
+
+'on':
+  pull_request:
+
+jobs:
+  tf-fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install tofu
+        run: |
+          sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+          curl -s https://packagecloud.io/install/repositories/opentofu/tofu/script.deb.sh?any=true -o /tmp/tofu-repository-setup.sh
+          sudo bash /tmp/tofu-repository-setup.sh
+          sudo apt install tofu
+      - name: tofu fmt
+        run: |
+          shopt -s extglob
+          cd tofu
+          if ! tofu fmt -check -diff !(secrets).tf ; then
+             echo "please update your tofu code to match the above.";
+             echo 'or run `tofu fmt` to have tofu reformat it.';
+             exit 1;
+          fi

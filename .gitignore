@@ -10,3 +10,6 @@ dev-values.yaml
 *.swp
 terraform.tfstate*
 .terraform*
+tofu/kube.config
+.venv*
+ansible/collections/*

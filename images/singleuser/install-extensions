@@ -10,14 +10,8 @@ pip install --no-cache-dir \
     RISE \
     py-heat-magic \
     jupyter-resource-usage \
-    git+https://github.com/toolforge/nbpawspublic@0a75dabbcacb2e673b21af04fabc809cc186aa46 \
-    git+https://github.com/toolforge/labpawspublic@08b8b4f89143055df024ebbbfb159b07f0f2a5b0 \
+    git+https://github.com/toolforge/labpawspublic@10ba684789ff5b6e0e2e2122ce68be101266acb8 \
 #    git+https://github.com/toolforge/paws-favicon@v1.0 \
-
-# this fails with Jupyter command `jupyter-nbextension` not found.
-# tracking in T312234
-#jupyter nbextension install --py nbpawspublic --sys-prefix
-#jupyter nbextension enable --py nbpawspublic --sys-prefix
 
 # Rebuild JupyterLab for plotly-dash extension
 # Should be fixed by https://github.com/plotly/jupyter-dash/issues/49

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
@@ -20,7 +20,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG RESTY_VERSION="1.17.8.2"
+ARG RESTY_VERSION="1.25.3.1"
 ARG RESTY_J="1"
 # ARG RESTY_OPENSSL_VERSION="1.1.1d"
 ARG RESTY_CONFIG_OPTIONS="\
