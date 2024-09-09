@@ -44,7 +44,7 @@ source secrets-${datacenter}.sh
 
 python3 -m venv .venv/deploy
 source .venv/deploy/bin/activate
-pip install ansible==9.6.0 kubernetes==26.1.0
+pip install ansible==10.3.0 kubernetes==26.1.0
 # install helm diff. Needed to keep helm module idempotent
 helm plugin install https://github.com/databus23/helm-diff || true
 
