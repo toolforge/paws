@@ -10,7 +10,7 @@ name: build and push nbserve
 jobs:
   build-and-push:
     name: build and push nbserve
-    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v3
+    uses: toolforge/github-actions/.github/workflows/build-and-push.yaml@build-and-push-v4
     with:
       imagename: nbserve
     secrets:
