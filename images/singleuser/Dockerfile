@@ -1,5 +1,5 @@
 FROM ubuntu:24.04
-
+ 
 ENV PYWIKIBOT_VERSION=9.5.0
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
