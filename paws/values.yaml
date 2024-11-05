@@ -6,7 +6,7 @@ pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: pr-419 # nbserve tag managed by github actions
+      tag: pr-461 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
@@ -15,7 +15,7 @@ pawspublic:
   renderer:
     image:
       name: quay.io/wikimedia-paws-prod/renderer
-      tag: pr-418 # renderer tag managed by github actions
+      tag: pr-461 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     requests:
@@ -254,7 +254,7 @@ jupyterhub:
       fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-448 # paws-hub tag managed by github actions
+      tag: pr-461 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
@@ -280,7 +280,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-459 # singleuser tag managed by github actions
+      tag: pr-461 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 0.70G
@@ -316,6 +316,6 @@ localdev:
   enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: pr-420 # jobber tag managed by github actions
+    tag: pr-461 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
