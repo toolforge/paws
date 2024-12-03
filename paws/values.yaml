@@ -299,7 +299,20 @@ jupyterhub:
       REFINE_DOMAIN: "*"  # Check jupyterhub.ingress.hosts
     networkPolicy:
       egressAllowRules:
-        privateIPs: true  # needed for access to replicas
+        privateIPs: true  # Allow all connections to private IPs, needed for access to replicas
+        nonPrivateIPs: false # Block all connections to non-private IPs, except the ones allowed below
+      egress:
+        # Allow connections to non-private IPs only for TCP ports 80 and 443
+        # and for UDP ports 53 (DNS) and 123 (NTP)
+        - ports:
+            - protocol: TCP
+              port: 80
+            - protocol: TCP
+              port: 443
+            - protocol: UDP
+              port: 53
+            - protocol: UDP
+              port: 123
 # mysql configures the wiki replica backend variables
 mysql:
   domain: "svc.cluster.local"
