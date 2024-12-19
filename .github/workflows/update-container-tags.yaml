@@ -8,6 +8,8 @@ name: update container tags
 jobs:
   update-container-tags:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_REF: ${{ github.head_ref }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -19,7 +21,7 @@ jobs:
           git fetch
       - name: git checkout
         run: |
-          git checkout ${{ github.head_ref }}
+          git checkout "$GITHUB_REF"
 
       # compare  to upstream main branch
       - name: git add remote
@@ -42,6 +44,6 @@ jobs:
           add: 'paws/values.yaml'
           author_name: Github Action
           author_email: auto@github.com
-          branch: ${{ github.head_ref }}
+          branch: ${{ env.GITHUB_REF }}
           message: 'auto update of ${{ inputs.imagename }} tag'
           pull: --rebase --autostash
