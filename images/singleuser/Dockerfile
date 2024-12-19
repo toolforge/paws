@@ -166,7 +166,7 @@ ENV REFINE_DIR /home/paws
 RUN pip install --no-cache-dir nb_serverproxy_openrefine
 
 USER root
-RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.2/openrefine-commons.zip -O /tmp/openrefine-commonsextension.zip
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.3/openrefine-commons-extension-0.1.3.zip -O /tmp/openrefine-commonsextension.zip
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
