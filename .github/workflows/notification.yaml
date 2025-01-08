@@ -14,7 +14,7 @@ jobs:
       - name: irc notification
         run: |
           sudo apt-get update
-          sudo apt-get install netcat -y
+          sudo apt-get install netcat-traditional -y
           message="${{ github.actor }} ${{ github.event.action }} ${{ github.event.pull_request._links.html.href }}"
           echo -e "USER notefromgithub notefromgithub notefromgithub :notefromgithub\nNICK notefromgithub\nJOIN #wikimedia-cloud-feed\nPRIVMSG #wikimedia-cloud-feed :${message}\nQUIT\n" | nc irc.libera.chat 6667
   phabricator-comment:
