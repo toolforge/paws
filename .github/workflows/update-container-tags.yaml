@@ -18,8 +18,10 @@ jobs:
         run: |
           git fetch
       - name: git checkout
+        env:
+          HEADREF: ${{ github.head_ref }}
         run: |
-          git checkout ${{ github.head_ref }}
+          git checkout "$HEADREF"
 
       # compare  to upstream main branch
       - name: git add remote
