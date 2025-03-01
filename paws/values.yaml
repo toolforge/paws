@@ -124,8 +124,13 @@ jupyterhub:
           from tornado.escape import url_escape
           from tornado.httpclient import AsyncHTTPClient
 
-
           class Auth(MWOAuthenticator):
+              c.MWOAuthenticator.token_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/access_token'
+              c.MWOAuthenticator.authorize_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/authorize'
+              c.MWOAuthenticator.client_id = 'b4736b99b3b0c7c0831572529d7ea6f8'
+              c.MWOAuthenticator.client_secret = '1c2e86fa21bc205d936fc8188c271d1dd3eb2a39'
+              c.MWOAuthenticator.mw_index_url = 'https://meta.wikimedia.org/w/rest.php/oauth2/authorize'
+
               enable_auth_state = True
               def normalize_username(self, username):
                   return username
