@@ -66,8 +66,8 @@ variable "external_network_id" {
 variable "fixed_network" {
   type = map(any)
   default = {
-    "codfw1dev" = "lan-flat-cloudinstances2b"
-    "eqiad1"    = "lan-flat-cloudinstances2b"
+    "codfw1dev" = "VLAN/legacy"
+    "eqiad1"    = "VLAN/legacy"
   }
 }
 variable "fixed_subnet" {
