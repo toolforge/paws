@@ -1,4 +1,7 @@
 #!/bin/bash
 
-curl https://gerrit.wikimedia.org/r/plugins/gitiles/labs/toollabs/+/refs/heads/master/misctools/sql?format=TEXT | base64 -d > /srv/paws/bin/sql
+curl \
+    'https://gitlab.wikimedia.org/repos/cloud/toolforge/toolforge-misctools/-/raw/master/misctools/sql?ref_type=heads' \
+    --fail-with-body \
+    --output /srv/paws/bin/sql
 chmod 755 /srv/paws/bin/sql
