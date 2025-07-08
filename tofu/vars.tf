@@ -66,15 +66,15 @@ variable "external_network_id" {
 variable "fixed_network" {
   type = map(any)
   default = {
-    "codfw1dev" = "lan-flat-cloudinstances2b"
-    "eqiad1"    = "lan-flat-cloudinstances2b"
+    "codfw1dev" = "VXLAN/IPv6-dualstack"
+    "eqiad1"    = "VXLAN/IPv6-dualstack"
   }
 }
 variable "fixed_subnet" {
   type = map(any)
   default = {
-    "codfw1dev" = "cloud-instances2-b-codfw"
-    "eqiad1"    = "cloud-instances2-b-eqiad"
+    "codfw1dev" = "vxlan-dualstack-ipv4"
+    "eqiad1"    = "vxlan-dualstack-ipv4"
   }
 }
 variable "workers" {
