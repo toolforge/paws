@@ -1,17 +1,17 @@
-resource "openstack_containerinfra_cluster_v1" "k8s_127a" {
-  name                = "paws${var.name[var.datacenter]}-127a"
-  cluster_template_id = resource.openstack_containerinfra_clustertemplate_v1.template_127a.id
+resource "openstack_containerinfra_cluster_v1" "k8s_127b" {
+  name                = "paws${var.name[var.datacenter]}-127b"
+  cluster_template_id = resource.openstack_containerinfra_clustertemplate_v1.template_127b.id
   master_count        = 1
   node_count          = var.workers[var.datacenter]
 }
 
 resource "local_file" "kube_config" {
-  content  = resource.openstack_containerinfra_cluster_v1.k8s_127a.kubeconfig.raw_config
+  content  = resource.openstack_containerinfra_cluster_v1.k8s_127b.kubeconfig.raw_config
   filename = "kube.config"
 }
 
-resource "openstack_containerinfra_clustertemplate_v1" "template_127a" {
-  name                  = "paws${var.name[var.datacenter]}-127a"
+resource "openstack_containerinfra_clustertemplate_v1" "template_127b" {
+  name                  = "paws${var.name[var.datacenter]}-127b"
   coe                   = "kubernetes"
   dns_nameserver        = "8.8.8.8"
   docker_storage_driver = "overlay2"
