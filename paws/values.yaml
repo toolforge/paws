@@ -232,7 +232,7 @@ jupyterhub:
           c.OAuthenticator.allow_all = True
           c.JupyterHub.authenticator_class = Auth
           c.JupyterHub.authenticate_prometheus = False
-          c.JupyterHub.logo_file = '/srv/jupyterhub/PAWS.svg'
+          c.JupyterHub.logo_file = '/usr/local/share/jupyterhub/static/PAWS.svg'
           c.JupyterHub.template_vars = {
               'announcement': ('<span class="alert-success">'
                               'Welcome to PAWS. '
