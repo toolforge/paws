@@ -10,7 +10,7 @@ RUN adduser --disabled-password \
     --force-badname \
     ${NB_USER}
 
-COPY PAWS.svg /srv/jupyterhub
+COPY PAWS.svg /usr/local/share/jupyterhub/static/PAWS.svg
 COPY paws-favicon.ico /usr/local/share/jupyterhub/static/favicon.ico
 
 RUN chown -R ${NB_USER}:${NB_USER} /srv/jupyterhub
