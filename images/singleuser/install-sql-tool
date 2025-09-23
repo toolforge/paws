@@ -2,7 +2,7 @@
 set -e
 
 curl \
-    'https://gitlab.wikimedia.org/repos/cloud/toolforge/misctools-cli/-/raw/master/misctools/sql?ref_type=heads' \
+    'https://gitlab.wikimedia.org/repos/cloud/toolforge/misctools-cli/-/raw/main/misctools/sql?ref_type=heads' \
     --fail \
     --output /srv/paws/bin/sql
 chmod 755 /srv/paws/bin/sql
