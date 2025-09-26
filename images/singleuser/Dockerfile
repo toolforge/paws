@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-ENV PYWIKIBOT_VERSION=10.4.0
+ENV PYWIKIBOT_VERSION=10.5.0
 ENV EDITOR=/bin/nano
 ENV PYWIKIBOT_DIR=/srv/paws
 ENV DEBIAN_FRONTEND=noninteractive
@@ -156,7 +156,7 @@ USER root
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
 RUN mkdir -p ${OPENREFINE_DIR} && cd ${OPENREFINE_DIR} && \
-    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.9.0/openrefine-linux-3.9.0.tar.gz' | tar xzf - --strip=1
+    curl -L 'https://github.com/OpenRefine/OpenRefine/releases/download/3.9.5/openrefine-linux-3.9.5.tar.gz' | tar xzf - --strip=1
 
 USER root
 RUN apt-get install --yes unzip
@@ -166,7 +166,7 @@ ENV REFINE_DIR /home/paws
 RUN pip install --no-cache-dir nb_serverproxy_openrefine
 
 USER root
-RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.3/openrefine-commons-extension-0.1.3.zip -O /tmp/openrefine-commonsextension.zip
+RUN wget https://github.com/OpenRefine/CommonsExtension/releases/download/v0.1.5/openrefine-commons-extension-0.1.5-prerelease.zip -O /tmp/openrefine-commonsextension.zip
 RUN unzip /tmp/openrefine-commonsextension.zip -d ${OPENREFINE_DIR}/webapp/extensions/
 
 ## Done setting up OpenRefine
