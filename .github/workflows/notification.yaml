@@ -21,18 +21,19 @@ jobs:
     runs-on: ubuntu-latest
     name: Comment on Phabricator
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: post to phabricator
         run: |
           message="${{ github.actor }} ${{ github.event.action }} ${{ github.event.pull_request._links.html.href }}"
           echo "${message}"
           inital_commit=$(git log origin/main..origin/${{ github.head_ref }} --pretty=%H | tail -n1)
-          task=$(curl ${{ github.event.pull_request._links.commits.href }} | jq .[0].commit.message -r | grep "^Bug: T[0-9]*$" | head -1 | awk '{print $2}')
-
-          if [ -n "${task}" ]; then
+          curl ${{ github.event.pull_request._links.commits.href }} | jq .[0].commit.message -r | grep "^Bug: T[0-9]*$" | awk '{print $2}' | while IFS= read -r done; do
             curl https://phabricator.wikimedia.org/api/maniphest.edit \
+                -H "User-Agent: WMCS/paws github notifications"
                 -d api.token=${{ secrets.TOOLFORGE_PHAB_BOT_KEY }} \
                 -d transactions[0][type]=comment \
                 -d transactions[0][value]="${message}" \
-                -d objectIdentifier=${task}
-          fi
+                -d objectIdentifier="${task}"
+          done
