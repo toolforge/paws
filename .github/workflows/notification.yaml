@@ -31,7 +31,7 @@ jobs:
           inital_commit=$(git log origin/main..origin/${{ github.head_ref }} --pretty=%H | tail -n1)
           curl ${{ github.event.pull_request._links.commits.href }} | jq .[0].commit.message -r | grep "^Bug: T[0-9]*$" | awk '{print $2}' | while IFS= read -r done; do
             curl https://phabricator.wikimedia.org/api/maniphest.edit \
-                -H "User-Agent: WMCS/paws github notifications"
+                -H "User-Agent: WMCS/paws github notifications" \
                 -d api.token=${{ secrets.TOOLFORGE_PHAB_BOT_KEY }} \
                 -d transactions[0][type]=comment \
                 -d transactions[0][value]="${message}" \
