@@ -222,12 +222,12 @@ jupyterhub:
                   ]
 
           c.OAuthenticator.admin_users = {
-              "BDavis (WMF)",
-              "VRook (WMF)",
-              "ABorrero (WMF)",
-              "NSkaggs (WMF)",
               "Andrewbogott",
-              "Chicocvenancio"
+              "BDavis (WMF)",
+              "DCaro (WMF)",
+              "FNegri-WMF",
+              "Raymond Ndibe",
+              "Taavi",
           }
           c.OAuthenticator.allow_all = True
           c.JupyterHub.authenticator_class = Auth
