@@ -15,13 +15,14 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_135a" {
   coe                   = "kubernetes"
   dns_nameserver        = "8.8.8.8"
   docker_storage_driver = "overlay2"
-  docker_volume_size    = var.volume_size[var.datacenter]
+
   external_network_id   = var.external_network_id[var.datacenter]
   fixed_subnet          = var.fixed_subnet[var.datacenter]
   fixed_network         = var.fixed_network[var.datacenter]
   flavor                = var.worker_flavor[var.datacenter]
   image                 = "47b0da60-68d3-42af-b8b2-d56ef809e041"
   keypair_id            = "abogottcodfw1dev"
+  master_lb_enabled     = "true"
   master_flavor         = var.control_flavor[var.datacenter]
   network_driver        = "calico"
 
@@ -35,5 +36,6 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_135a" {
     k8s_keystone_auth_tag          = "v1.35.0"
     magnum_auto_healer_tag         = "v1.35.0"
     octavia_ingress_controller_tag = "v1.35.0"
+    master_lb_floating_ip_enabled  = "false"
   }
 }
