@@ -15,7 +15,7 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_135a" {
   coe                   = "kubernetes"
   dns_nameserver        = "8.8.8.8"
   docker_storage_driver = "overlay2"
-
+  docker_volume_size    = var.volume_size[var.datacenter]
   external_network_id   = var.external_network_id[var.datacenter]
   fixed_subnet          = var.fixed_subnet[var.datacenter]
   fixed_network         = var.fixed_network[var.datacenter]
