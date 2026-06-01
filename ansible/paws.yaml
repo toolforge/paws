@@ -82,7 +82,6 @@
         values_files:
           - ../paws/{{ secret_file }}.yaml
           - ../paws/{{ env_file }}.yaml
-        timeout: '50m'
         dependency_update: true
 
     - name: Create metrics namespace for prometheus
