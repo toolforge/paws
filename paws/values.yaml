@@ -223,11 +223,13 @@ jupyterhub:
 
           c.OAuthenticator.admin_users = {
               "Andrewbogott",
+              "APuthin-WMF"
               "BDavis (WMF)",
               "DCaro (WMF)",
               "FNegri-WMF",
               "Raymond Ndibe",
               "Taavi",
+              "TLepage-WMF",
           }
           c.OAuthenticator.allow_all = True
           c.JupyterHub.authenticator_class = Auth
