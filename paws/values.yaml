@@ -223,7 +223,7 @@ jupyterhub:
 
           c.OAuthenticator.admin_users = {
               "Andrewbogott",
-              "APuthin-WMF"
+              "APuthin-WMF",
               "BDavis (WMF)",
               "DCaro (WMF)",
               "FNegri-WMF",
