@@ -13,42 +13,6 @@ spec:
   hostPath:
     path: /srv/paws/project/paws/userhomes
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: dumps1
-spec:
-  accessModes:
-    - ReadOnlyMany
-  capacity:
-    storage: 1Gi
-  hostPath:
-    path: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: dumps2
-spec:
-  accessModes:
-    - ReadOnlyMany
-  capacity:
-    storage: 1Gi
-  hostPath:
-    path: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: dumps
-spec:
-  accessModes:
-    - ReadOnlyMany
-  capacity:
-    storage: 1Gi
-  hostPath:
-    path: /mnt/public/dumps
----
 apiVersion: batch/v1
 kind: Job
 metadata:
