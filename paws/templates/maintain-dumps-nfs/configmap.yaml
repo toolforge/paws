@@ -1,0 +1,27 @@
+---
+
+{{- /* configmap for maintain-dumps-nfs source files */}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: maintain-dumps-nfs-src
+  labels:
+    app: maintain-dumps-nfs
+    component: maintain-dumps-nfs-src
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+data:
+{{- (.Files.Glob "files/maintain-dumps-nfs/*").AsConfig | nindent 2 }}
+{{- /* configmap for maintain-dumps-nfs configuration from values */}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maintain-dumps-nfs-config
+  labels:
+    app: maintain-dumps-nfs
+    component: maintain-dumps-nfs-config
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  "maintain-dumps-nfs.json": {{ toJson (pick .Values.maintainDumpsNfs "server" "compatSymlinks") | quote }}
