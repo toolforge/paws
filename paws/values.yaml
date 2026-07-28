@@ -301,6 +301,20 @@ minesweeper:
     name: quay.io/wikimedia-paws-prod/minesweeper
     tag: pr-487 # minesweeper tag managed by github actions
     template: "{{ .Values.minesweeper.image.name }}:{{ .Values.minesweeper.image.tag }}"
+maintainDumpsNfs:
+  enabled: false
+  image:
+    name: quay.io/wikimedia-paws-prod/maintain-dumps-nfs
+    tag: pr-1 # maintain-dumps-nfs tag managed by github actions
+    template: "{{ .Values.maintainDumpsNfs.image.name }}:{{ .Values.maintainDumpsNfs.image.tag }}"
+  server: dumps-nfs.wikimedia.org
+  compatSymlinks:
+    - dumps-clouddumps1001.wikimedia.org
+    - dumps-clouddumps1002.wikimedia.org
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
 # If not deployed for prod use, we use the some hacks for testing
 localdev:
   enabled: true

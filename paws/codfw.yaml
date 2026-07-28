@@ -27,6 +27,17 @@ jupyterhub:
       HUB_DOMAIN: "hub-paws-dev.codfw1dev.wmcloud.org"  # Check jupyterhub.ingress.hosts
 minesweeper:
   enabled: true
+maintainDumpsNfs:
+  enabled: false
+  server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+
 localdev:
   enabled: false
 pawspublic:

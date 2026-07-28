@@ -1,0 +1,89 @@
+---
+
+{{- if .Values.maintainDumpsNfs.enabled -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: maintain-dumps-nfs
+spec:
+  selector:
+    matchLabels:
+      name: maintain-dumps-nfs
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        name: maintain-dumps-nfs
+        app: binder
+        component: maintain-dumps-nfs
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/maintain-dumps-nfs/configmap.yaml") . | sha256sum }}
+
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- with .Values.maintainDumpsNfs.affinity }}
+      affinity:
+{{ toYaml . | nindent 8 }}
+      {{- end }}
+      tolerations:
+        - effect: NoSchedule
+          key: hub.jupyter.org/dedicated
+          operator: Equal
+          value: user
+        - effect: NoSchedule
+          key: hub.jupyter.org_dedicated
+          operator: Equal
+          value: user
+      serviceAccountName: maintain-dumps-nfs
+
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- . | toYaml | nindent 8 }}
+      {{- end }}
+
+      containers:
+        - name: maintain-dumps-nfs
+          image: {{ tpl .Values.maintainDumpsNfs.image.template . | quote}}
+          securityContext:
+            privileged: true
+            runAsUser: 0
+            runAsGroup: 0
+        {{- with .Values.maintainDumpsNfs.resources }}
+          resources: {{ toJson . }}
+        {{- end }}
+          volumeMounts:
+            - name: host-nfs
+              mountPath: /host/mnt/nfs
+              mountPropagation: Bidirectional
+            - name: host-public-dumps
+              mountPath: /host/public/dumps
+              mountPropagation: Bidirectional
+            - name: config
+              mountPath: /etc/maintain-dumps-nfs
+              readOnly: true
+            - name: src
+              mountPath: /srv/maintain-dumps-nfs
+              readOnly: true
+          command:
+            - python3
+            - /srv/maintain-dumps-nfs/maintain-dumps-nfs.py
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: host-nfs
+          hostPath:
+            path: /mnt/nfs
+            type: DirectoryOrCreate
+        - name: host-public-dumps
+          hostPath:
+            path: /public/dumps
+            type: DirectoryOrCreate
+        - name: src
+          configMap:
+            name: maintain-dumps-nfs-src
+        - name: config
+          configMap:
+            name: maintain-dumps-nfs-config
+{{- end }}
