@@ -139,44 +139,38 @@ jupyterhub:
                   homenfs = '/srv/paws/project/paws/userhomes/{}'.format(identity['sub'])
                   # Create the homedir so docker doesn't do it as root
                   os.makedirs(homedir, mode=0o755, exist_ok=True)
+
+                  # Common spawner volumes from the host. Contents are managed
+                  # by maintain-dumps-nfs:
+                  # * mnt-nfs holds the nfs mount to dumps-nfs.w.o and gets
+                  # re-mounted as needed, hence the mountPropagation option.
+                  # * public-dumps is the public interface and holds a symlink to /mnt/nfs
+
+                  spawner.volumes = [
+                          {
+                              'name': 'public-dumps',
+                              'hostPath': { 'path': '/public/dumps' }
+                          },
+                          {
+                              'name': 'mnt-nfs',
+                              'hostPath': { 'path': '/mnt/nfs' }
+                          },
+                  ]
+
                   if localdev == True:
-                      spawner.volumes = [
+                      spawner.volumes.extend([
                           {
                               'name': 'home',
                               'hostPath': { 'path': homenfs }
                           },
-                          {
-                              'name': 'dumps',
-                              'hostPath': { 'path': '/public/dumps' }
-                          },
-                          {
-                              'name': 'dumps-src1',
-                              'hostPath': { 'path': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org' }
-                          },
-                          {
-                              'name': 'dumps-src2',
-                              'hostPath': { 'path': '/mnt/nfs/dumps-clouddumps1002.wikimedia.org' }
-                          }
-                      ]
+                      ])
                   else:
-                      spawner.volumes = [
+                      spawner.volumes.extend([
                           {
                               'name': 'home',
                               'nfs': { 'server': nfs_home, 'path': homenfs }
                           },
-                          {
-                              'name': 'dumps',
-                              'nfs': { 'server': dumps_src1, 'path': '/' }
-                          },
-                          {
-                              'name': 'dumps-src1',
-                              'nfs': { 'server': dumps_src1, 'path': '/' }
-                          },
-                          {
-                              'name': 'dumps-src2',
-                              'nfs': { 'server': dumps_src2, 'path': '/' }
-                          }
-                      ]
+                      ])
 
                   spawner.volume_mounts = [
                       {
@@ -184,18 +178,14 @@ jupyterhub:
                           'mountPath': '/home/paws'
                       },
                       {
-                          'name': 'dumps',
-                          'mountPath': '/public/dumps/public',
+                          'name': 'public-dumps',
+                          'mountPath': '/public/dumps',
                           'readOnly': True
                       },
                       {
-                          'name': 'dumps-src1',
-                          'mountPath': '/mnt/nfs/dumps-clouddumps1001.wikimedia.org',
-                          'readOnly': True
-                      },
-                      {
-                          'name': 'dumps-src2',
-                          'mountPath': '/mnt/nfs/dumps-clouddumps1002.wikimedia.org',
+                          'name': 'mnt-nfs',
+                          'mountPath': '/mnt/nfs',
+                          'mountPropagation': 'HostToContainer',
                           'readOnly': True
                       },
                   ]
