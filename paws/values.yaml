@@ -223,11 +223,13 @@ jupyterhub:
 
           c.OAuthenticator.admin_users = {
               "Andrewbogott",
+              "APuthin-WMF",
               "BDavis (WMF)",
               "DCaro (WMF)",
               "FNegri-WMF",
               "Raymond Ndibe",
               "Taavi",
+              "TLepage-WMF",
           }
           c.OAuthenticator.allow_all = True
           c.JupyterHub.authenticator_class = Auth
@@ -276,7 +278,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-511 # singleuser tag managed by github actions
+      tag: pr-517 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 0.70G
