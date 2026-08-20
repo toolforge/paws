@@ -11,19 +11,7 @@ jupyterhub:
         nfs:
           server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
           path: /srv/paws/project
-      - name: dumps
-        nfs:
-          server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
-          path: /
-      # Without this, dumps becomes inaccessible and can hang the host
-      - name: dumps-src1
-        nfs:
-          server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
-          path: /
-      - name: dumps-src2
-        nfs:
-          server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
-          path: /
+
     extraConfig:
       00-myConfig: |
           localdev = False
