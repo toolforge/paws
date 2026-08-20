@@ -148,10 +148,6 @@ jupyterhub:
 
                   spawner.volumes = [
                           {
-                              'name': 'public-dumps',
-                              'hostPath': { 'path': '/public/dumps' }
-                          },
-                          {
                               'name': 'mnt-nfs',
                               'hostPath': { 'path': '/mnt/nfs' }
                           },
@@ -176,11 +172,6 @@ jupyterhub:
                       {
                           'name': 'home',
                           'mountPath': '/home/paws'
-                      },
-                      {
-                          'name': 'public-dumps',
-                          'mountPath': '/public/dumps',
-                          'readOnly': True
                       },
                       {
                           'name': 'mnt-nfs',
@@ -247,7 +238,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-530 # singleuser tag managed by github actions
+      tag: pr-532 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 0.70G

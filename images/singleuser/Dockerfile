@@ -152,6 +152,11 @@ RUN r -e "install.packages('IRkernel', version='1.3.2')" && \
 
 USER root
 
+# Ship the /public/dumps/public symlink. As per T432583 dumps-nfs.w.o is always
+# mounted to /mnt/nfs/dumps
+RUN mkdir -p /public/dumps && \
+    ln -s /mnt/nfs/dumps /public/dumps/public
+
 ## Setup OpenRefine
 ENV OPENREFINE_DIR /srv/openrefine
 ENV PATH=$PATH:$OPENREFINE_DIR
