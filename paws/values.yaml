@@ -75,30 +75,9 @@ jupyterhub:
       - name: homes
         hostPath:
           path: /srv/paws/project
-      - name: dumps
-        hostPath:
-          path: /mnt/public/dumps
-      # Without this, dumps becomes inaccessible and can hang the host
-      - name: dumps-src1
-        hostPath:
-          path: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
-          type: DirectoryOrCreate
-      - name: dumps-src2
-        hostPath:
-          path: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
-          type: DirectoryOrCreate
     extraVolumeMounts:
       - name: homes
         mountPath: /data/project
-      - name: dumps
-        mountPath: /public/dumps
-        readOnly: true
-      - name: dumps-src1
-        mountPath: /mnt/nfs/dumps-clouddumps1001.wikimedia.org
-        readOnly: true
-      - name: dumps-src2
-        mountPath: /mnt/nfs/dumps-clouddumps1002.wikimedia.org
-        readOnly: true
     extraConfig:
       fixLabels: |
           def fix_labels(spawner, pod):
@@ -278,7 +257,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-517 # singleuser tag managed by github actions
+      tag: pr-529 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 0.70G
