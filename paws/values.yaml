@@ -305,7 +305,7 @@ maintainDumpsNfs:
   enabled: false
   image:
     name: quay.io/wikimedia-paws-prod/maintain-dumps-nfs
-    tag: pr-1 # maintain-dumps-nfs tag managed by github actions
+    tag: pr-531 # maintain-dumps-nfs tag managed by github actions
     template: "{{ .Values.maintainDumpsNfs.image.name }}:{{ .Values.maintainDumpsNfs.image.tag }}"
   server: dumps-nfs.wikimedia.org
   compatSymlinks:
