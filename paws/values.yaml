@@ -148,10 +148,6 @@ jupyterhub:
 
                   spawner.volumes = [
                           {
-                              'name': 'public-dumps',
-                              'hostPath': { 'path': '/public/dumps' }
-                          },
-                          {
                               'name': 'mnt-nfs',
                               'hostPath': { 'path': '/mnt/nfs' }
                           },
@@ -176,11 +172,6 @@ jupyterhub:
                       {
                           'name': 'home',
                           'mountPath': '/home/paws'
-                      },
-                      {
-                          'name': 'public-dumps',
-                          'mountPath': '/public/dumps',
-                          'readOnly': True
                       },
                       {
                           'name': 'mnt-nfs',

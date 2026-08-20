@@ -2,14 +2,13 @@
 
 Runs as a DaemonSet with Bidirectional mount propagation so the mount is
 visible on the host.  Also manages clouddumps100[12]-compat symlinks within
-/mnt/nfs and a /public/dumps/public -> /mnt/nfs/dumps symlink for singleuser
-pods.
+/mnt/nfs.
 
 Similar to dumps-nfs-client-sitter in the puppet repo, but differs in that it
 also manages symlinks as opposed to puppet in production.
 
-/mnt/nfs and /public/dumps are then bind-mounted from the host into singleuser
-pods by the jupyterhub spawner.
+/mnt/nfs is then bind-mounted from the host into singleuser pods by the
+jupyterhub spawner.
 """
 
 import errno
@@ -163,38 +162,6 @@ def ensure_compat_symlinks(host_mnt_nfs):
             logger.debug("Compat symlink %s -> %s ok", link_path, target)
 
 
-def ensure_public_dumps_symlink():
-    """Create /host/public/dumps/public -> /mnt/nfs/dumps so singleuser pods can reach dumps via /public/dumps."""
-    dumps_dir = "/host/public/dumps"
-    public_path = os.path.join(dumps_dir, "public")
-    target = "/mnt/nfs/dumps"
-    try:
-        current = os.readlink(public_path)
-        if current == target:
-            logger.info("Symlink %s -> %s already exists", public_path, target)
-            return
-        logger.info("Symlink %s points to %s, updating", public_path, current)
-        os.unlink(public_path)
-    except OSError as e:
-        if e.errno == errno.ENOENT:
-            logger.info("Symlink %s missing — creating", public_path)
-        elif os.path.isdir(public_path):
-            logger.error(
-                "%s exists and is a directory — cannot create compat symlink",
-                public_path,
-            )
-            return
-        else:
-            logger.info("Removing existing %s to create symlink", public_path)
-            try:
-                os.unlink(public_path)
-            except OSError:
-                logger.warning("Failed to remove %s", public_path)
-                return
-    os.makedirs(dumps_dir, exist_ok=True)
-    os.symlink(target, public_path)
-
-
 def main():
     """Mount NFS dumps, create compat symlinks, then loop for health checks and remounts."""
     config = load_config()
@@ -203,7 +170,6 @@ def main():
     server = config["server"]
     mount_info = {"host_path": DUMPS_MOUNT}
 
-    ensure_public_dumps_symlink()
     ensure_compat_symlinks("/host/mnt/nfs")
 
     while True:

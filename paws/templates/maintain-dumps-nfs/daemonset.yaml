@@ -56,9 +56,6 @@ spec:
             - name: host-nfs
               mountPath: /host/mnt/nfs
               mountPropagation: Bidirectional
-            - name: host-public-dumps
-              mountPath: /host/public/dumps
-              mountPropagation: Bidirectional
             - name: config
               mountPath: /etc/maintain-dumps-nfs
               readOnly: true
