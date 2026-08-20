@@ -16,8 +16,6 @@ jupyterhub:
       00-myConfig: |
           localdev = False
           nfs_home = 'paws-nfs.svc.paws.eqiad1.wikimedia.cloud'
-          dumps_src1 = 'clouddumps1001.wikimedia.org'
-          dumps_src2 = 'clouddumps1002.wikimedia.org'
   ingress:
     enabled: true
     hosts:
@@ -28,7 +26,7 @@ jupyterhub:
 minesweeper:
   enabled: true
 maintainDumpsNfs:
-  enabled: false
+  enabled: true
   server: dumps-nfs.wikimedia.org
   affinity:
     nodeAffinity:

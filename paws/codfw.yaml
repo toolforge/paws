@@ -16,8 +16,6 @@ jupyterhub:
       00-myConfig: |
           localdev = False
           nfs_home = 'pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud'
-          dumps_src1 = 'pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud'
-          dumps_src2 = 'pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud'
   ingress:
     enabled: true
     hosts:
@@ -28,7 +26,7 @@ jupyterhub:
 minesweeper:
   enabled: true
 maintainDumpsNfs:
-  enabled: false
+  enabled: true
   server: pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud
   affinity:
     nodeAffinity:
