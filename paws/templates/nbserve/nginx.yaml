@@ -138,20 +138,39 @@ data:
                         if userid == nil then
                             local http = require "resty.http";
                             local httpc = http.new();
+                            httpc:set_timeout(5000);
                             local apiurl = "https://meta.wikimedia.org/w/api.php?" ..
                                            "action=query&format=json&formatversion=2" ..
                                            "&prop=&list=users&meta=&usprop=centralids" ..
                                            "&ususers=" .. ngx.escape_uri(m[1]);
 
-                            local res, err = httpc:request_uri(apiurl);
-                            local cjson = require "cjson";
-                            local resp_data = cjson.decode(res.body);
-
-                            ngx.log(ngx.ERR, res.body);
-                            if resp_data["query"]["users"][1]["missing"] then
-                                ngx.exit(404);
+                            local res = httpc:request_uri(apiurl, {
+                                headers = {
+                                    ["User-Agent"] = "PAWS nbserve (https://wikitech.wikimedia.org/wiki/PAWS)"
+                                }
+                            });
+                            if not res or res.status ~= 200 then
+                                return ngx.exit(502);
                             end
-                            userid = resp_data["query"]["users"][1]["centralids"]["CentralAuth"]
+
+                            local cjson = require "cjson.safe";
+                            local resp_data = cjson.decode(res.body);
+                            if type(resp_data) ~= "table" or
+                               type(resp_data.query) ~= "table" or
+                               type(resp_data.query.users) ~= "table" or
+                               type(resp_data.query.users[1]) ~= "table" then
+                                return ngx.exit(502);
+                            end
+
+                            local user = resp_data.query.users[1];
+                            if user.missing or user.invalid or
+                               type(user.centralids) ~= "table" then
+                                return ngx.exit(404);
+                            end
+                            userid = user.centralids.CentralAuth;
+                            if type(userid) ~= "number" or userid <= 0 then
+                                return ngx.exit(404);
+                            end
 
                             ngx.shared.usernamemapping:set(m[1], userid);
                         end
