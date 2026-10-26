@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
@@ -6,7 +6,7 @@ RUN apt-get update \
     build-essential \
     curl \
     libgd-dev \
-    libpcre3-dev \
+    libpcre2-dev \
     libssl-dev \
     luarocks \
     make \
@@ -20,7 +20,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ARG RESTY_VERSION="1.25.3.1"
+ARG RESTY_VERSION="1.31.1.1"
 ARG RESTY_J="1"
 # ARG RESTY_OPENSSL_VERSION="1.1.1d"
 ARG RESTY_CONFIG_OPTIONS="\
