@@ -1,0 +1,21 @@
+---
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  labels:
+    name: paws-hub
+  name: paws-hub
+spec:
+  parentRefs:
+    - name: {{ .Values.gateway.name | quote }}
+      namespace: {{ .Values.gateway.namespace | quote }}
+  hostnames:
+  {{- range .Values.jupyterhub.ingress.hosts }}
+    - {{ . | quote }}
+  {{- end }}
+  rules:
+    # proxy-public is the z2jh service in front of the configurable-http-proxy.
+    - backendRefs:
+        - name: proxy-public
+          port: 80

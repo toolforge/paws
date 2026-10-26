@@ -17,7 +17,6 @@ jupyterhub:
           localdev = False
           nfs_home = 'pawsdev-nfs.pawsdev.codfw1dev.wikimedia.cloud'
   ingress:
-    enabled: true
     hosts:
       - hub-paws-dev.codfw1dev.wmcloud.org
   singleuser:

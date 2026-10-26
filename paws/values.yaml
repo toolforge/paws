@@ -31,6 +31,11 @@ paws:
     frontHost: paws.wmcloud.org
     # paws.ingress.frontRedirect should be the destination for URL path of / at paws.ingress.frontHost
     frontRedirect: https://wikitech.wikimedia.org/wiki/PAWS
+# gateway is the Gateway API Gateway that the PAWS HTTPRoutes attach to.
+# ansible/paws.yaml creates it.
+gateway:
+  name: paws-gateway
+  namespace: istio-system
 jupyterhub:
   prePuller:
     containerSecurityContext:
@@ -217,11 +222,12 @@ jupyterhub:
       requests:
         memory: "200Mi"
         cpu: .2
+  # The z2jh Ingress is disabled. The paws-hub HTTPRoute
+  # (templates/hub-route.yaml) uses jupyterhub.ingress.hosts as its host names.
   ingress:
-    enabled: true
+    enabled: false
     hosts:
       - hub.paws.local
-    ingressClassName: "nginx"
   # We are not on an autoscaling cluster, so we don't want this
   scheduling:
     userScheduler:
