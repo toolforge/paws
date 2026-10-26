@@ -1,17 +1,29 @@
 ---
 
 {{ if .Values.paws.frontPageEnabled }}
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+{{- $redirect := urlParse .Values.paws.ingress.frontRedirect }}
+# Send a permanent redirect to frontRedirect for all requests to frontHost.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   labels:
     name: paws-front-page
     ingress.paws.wmcloud.org: front
-  annotations:
-    nginx.ingress.kubernetes.io/permanent-redirect: {{ .Values.paws.ingress.frontRedirect | quote }}
   name: paws-front-page
 spec:
-  ingressClassName: nginx
+  parentRefs:
+    - name: {{ .Values.gateway.name | quote }}
+      namespace: {{ .Values.gateway.namespace | quote }}
+  hostnames:
+    - {{ .Values.paws.ingress.frontHost | quote }}
   rules:
-    - host: {{ .Values.paws.ingress.frontHost | quote }}
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: {{ $redirect.scheme | quote }}
+            hostname: {{ $redirect.host | quote }}
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: {{ $redirect.path | quote }}
+            statusCode: 301
 {{ end }}

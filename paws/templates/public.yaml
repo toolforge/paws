@@ -154,25 +154,21 @@ spec:
   selector:
     name: renderer
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
   labels:
     name: paws-public-custom
     ingress.paws.wmcloud.org: public
-  annotations:
   name: paws-public-custom
 spec:
-  ingressClassName: nginx
+  parentRefs:
+    - name: {{ .Values.gateway.name | quote }}
+      namespace: {{ .Values.gateway.namespace | quote }}
+  hostnames:
+    - {{ .Values.pawspublic.ingress.host | quote }}
   rules:
-    - host: {{ .Values.pawspublic.ingress.host | quote }}
-      http:
-        paths:
-          - backend:
-              service:
-                name: paws-public
-                port:
-                  number: 8000
-            pathType: Prefix
-            path: /
+    - backendRefs:
+        - name: paws-public
+          port: 8000
 {{ end }}

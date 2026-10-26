@@ -3,6 +3,10 @@
 - name: Deploy PAWS to k8s cluster
   gather_facts: false
   hosts: localhost
+  vars:
+    istio_chart_repo: https://istio-release.storage.googleapis.com/charts
+    istio_version: 1.27.1
+    gateway_api_crds_url: https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
   tasks:
     - name: include env vars
       include_vars: vars/{{ datacenter }}.yaml
@@ -50,23 +54,77 @@
         state: present
         src: "files/sc.yaml"
 
-    - name: Deploy ingress-nginx
+    # Install the CRDs before istiod starts, so that istiod watches them.
+    - name: Install the Gateway API CRDs
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('ansible.builtin.url', gateway_api_crds_url, split_lines=False) | from_yaml_all | list }}"
+
+    - name: Deploy istio base
       kubernetes.core.helm:
-        name: ingress-nginx
-        chart_ref: ingress-nginx
-        chart_repo_url: https://kubernetes.github.io/ingress-nginx
-        chart_version: 4.14.3
-        release_namespace: ingress-nginx
+        name: istio-base
+        chart_ref: base
+        chart_repo_url: "{{ istio_chart_repo }}"
+        chart_version: "{{ istio_version }}"
+        release_namespace: istio-system
         create_namespace: true
-        set_values:
-          - value: controller.service.type=NodePort
-            value_type: string
-          - value: controller.service.enableHttps=false
-            value_type: string
-          - value: controller.service.nodePorts.http=30001
-            value_type: string
-          - value: controller.config.proxy-body-size=4m
-            value_type: string
+
+    - name: Deploy istiod
+      kubernetes.core.helm:
+        name: istiod
+        chart_ref: istiod
+        chart_repo_url: "{{ istio_chart_repo }}"
+        chart_version: "{{ istio_version }}"
+        release_namespace: istio-system
+        wait: true
+
+    # This deployment holds the NodePort (30001) that the front proxy sends
+    # traffic to. The paws-gateway Gateway uses this deployment.
+    - name: Deploy istio ingress gateway
+      kubernetes.core.helm:
+        name: istio-ingressgateway
+        chart_ref: gateway
+        chart_repo_url: "{{ istio_chart_repo }}"
+        chart_version: "{{ istio_version }}"
+        release_namespace: istio-system
+        values:
+          service:
+            type: NodePort
+            ports:
+              - name: status-port
+                port: 15021
+                protocol: TCP
+                targetPort: 15021
+              - name: http2
+                port: 80
+                protocol: TCP
+                targetPort: 80
+                nodePort: 30001
+
+    # The HTTPRoutes of PAWS and prometheus attach to this Gateway.
+    # The address binds the Gateway to the istio-ingressgateway deployment,
+    # so istio does not create a new deployment and service for it.
+    - name: Create the paws-gateway Gateway
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: gateway.networking.k8s.io/v1
+          kind: Gateway
+          metadata:
+            name: paws-gateway
+            namespace: istio-system
+          spec:
+            gatewayClassName: istio
+            addresses:
+              - type: Hostname
+                value: istio-ingressgateway.istio-system.svc.cluster.local
+            listeners:
+              - name: http
+                port: 80
+                protocol: HTTP
+                allowedRoutes:
+                  namespaces:
+                    from: All
 
     - name: Add jupyterhub chart repo
       kubernetes.core.helm_repository:
@@ -102,8 +160,8 @@
           - value: prometheus.retention=30d
             value_type: string
 
-    - name: Ingress for prometheus
+    - name: HTTPRoute for prometheus
       kubernetes.core.k8s:
         state: present
-        template: "templates/prometheus-ingress.yaml.j2"
+        template: "templates/prometheus-route.yaml.j2"
         namespace: metrics
