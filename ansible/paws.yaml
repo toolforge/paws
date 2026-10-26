@@ -7,6 +7,19 @@
     istio_chart_repo: https://istio-release.storage.googleapis.com/charts
     istio_version: 1.27.1
     gateway_api_crds_url: https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
+    istio_gateway_values:
+      service:
+        type: NodePort
+        ports:
+          - name: status-port
+            port: 15021
+            protocol: TCP
+            targetPort: 15021
+          - name: http2
+            port: 80
+            protocol: TCP
+            targetPort: 80
+            nodePort: 30001
   tasks:
     - name: include env vars
       include_vars: vars/{{ datacenter }}.yaml
@@ -77,6 +90,9 @@
         chart_version: "{{ istio_version }}"
         release_namespace: istio-system
         wait: true
+        values: >-
+          {{ {'pilot': {'resources': {'requests': istio_requests}}}
+             if istio_requests is defined else {} }}
 
     # This deployment holds the NodePort (30001) that the front proxy sends
     # traffic to. The paws-gateway Gateway uses this deployment.
@@ -87,19 +103,10 @@
         chart_repo_url: "{{ istio_chart_repo }}"
         chart_version: "{{ istio_version }}"
         release_namespace: istio-system
-        values:
-          service:
-            type: NodePort
-            ports:
-              - name: status-port
-                port: 15021
-                protocol: TCP
-                targetPort: 15021
-              - name: http2
-                port: 80
-                protocol: TCP
-                targetPort: 80
-                nodePort: 30001
+        values: >-
+          {{ istio_gateway_values
+             | combine({'resources': {'requests': istio_requests}}
+                       if istio_requests is defined else {}) }}
 
     # The HTTPRoutes of PAWS and prometheus attach to this Gateway.
     # The address binds the Gateway to the istio-ingressgateway deployment,

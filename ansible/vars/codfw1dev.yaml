@@ -3,3 +3,8 @@
 secret_file: 'codfw-secrets'
 namespace: 'codfw1dev'
 env_file: 'codfw'
+# Resource requests for istiod and the istio ingress gateway.
+# When this is not set, the istio chart defaults apply.
+istio_requests:
+  cpu: 100m
+  memory: 100Mi
