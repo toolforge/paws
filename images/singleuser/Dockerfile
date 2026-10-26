@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 ENV PYWIKIBOT_VERSION=11.6.0
 ENV EDITOR=/bin/nano

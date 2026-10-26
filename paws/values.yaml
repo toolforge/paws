@@ -67,7 +67,6 @@ jupyterhub:
       JupyterHub:
         authenticator_class: mediawiki
     db:
-      # jupyterhub.hub.db values are overridden in Cloud VPS
       url: sqlite://
       type: sqlite-pvc
       upgrade: true
@@ -79,6 +78,7 @@ jupyterhub:
       - name: homes
         mountPath: /data/project
     extraConfig:
+      # TODO: Double check why this is needed
       fixLabels: |
           def fix_labels(spawner, pod):
             del pod.metadata.labels['hub.jupyter.org/username']
@@ -94,7 +94,6 @@ jupyterhub:
           import os
           import json
           from oauthenticator.mediawiki import MWOAuthenticator
-          from tornado import gen
 
           from tornado.escape import url_escape
           from tornado.httpclient import AsyncHTTPClient
@@ -120,11 +119,10 @@ jupyterhub:
                       self.log.error(f"Error checking for Wikimedia lock on user {user.name}: {e}")
                       return False  # Notebook cookies keep user logged in
 
-              @gen.coroutine
               # more information about where this comes from found here:
               # https://jupyterhub-kubespawner.readthedocs.io/en/latest/spawner.html#kubespawner.KubeSpawner.volumes
-              def pre_spawn_start(self, user, spawner):
-                  auth_state = yield user.get_auth_state()
+              async def pre_spawn_start(self, user, spawner):
+                  auth_state = await user.get_auth_state()
                   identity = auth_state['MEDIAWIKI_USER_IDENTITY']
                   spawner.environment['ACCESS_KEY'] = auth_state['ACCESS_TOKEN_KEY']
                   spawner.environment['ACCESS_SECRET'] = auth_state['ACCESS_TOKEN_SECRET']
