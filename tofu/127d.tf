@@ -5,10 +5,11 @@ resource "openstack_containerinfra_cluster_v1" "k8s_127d" {
   node_count          = var.workers[var.datacenter]
 }
 
-resource "local_file" "kube_config" {
-  content  = resource.openstack_containerinfra_cluster_v1.k8s_127d.kubeconfig.raw_config
-  filename = "kube.config"
-}
+## Pending deletion when deploying the new cluster
+# resource "local_file" "kube_config" {
+#   content  = resource.openstack_containerinfra_cluster_v1.k8s_127d.kubeconfig.raw_config
+#   filename = "kube.config"
+# }
 
 resource "openstack_containerinfra_clustertemplate_v1" "template_127d" {
   name                  = "paws${var.name[var.datacenter]}-127d"
@@ -19,12 +20,14 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_127d" {
   external_network_id   = var.external_network_id[var.datacenter]
   fixed_subnet          = var.fixed_subnet[var.datacenter]
   fixed_network         = var.fixed_network[var.datacenter]
-  flavor                = var.worker_flavor[var.datacenter]
-  floating_ip_enabled   = "false"
-  image                 = "Fedora-CoreOS-38"
-  keypair_id            = "paws-magnum-vm"
-  master_flavor         = var.control_flavor[var.datacenter]
-  network_driver        = "calico"
+  # Hardcoded, will go away soon
+  flavor              = "g4.cores8.ram32.disk20"
+  floating_ip_enabled = "false"
+  image               = "Fedora-CoreOS-38"
+  keypair_id          = "paws-magnum-vm"
+  # Hardcoded, will go away soon
+  master_flavor  = "g4.cores2.ram4.disk20"
+  network_driver = "calico"
 
   labels = {
     kube_tag                       = "v1.27.8-rancher2"
