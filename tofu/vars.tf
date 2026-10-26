@@ -73,7 +73,7 @@ variable "fixed_network" {
 variable "fixed_subnet" {
   type = map(any)
   default = {
-    "codfw1dev" = "cloud-flat-codfw1dev"
+    "codfw1dev" = "vxlan-dualstack-ipv4"
     "eqiad1"    = "vxlan-dualstack-ipv4"
   }
 }
@@ -82,5 +82,12 @@ variable "workers" {
   default = {
     "codfw1dev" = "2"
     "eqiad1"    = "5"
+  }
+}
+variable "keypair_id" {
+  type = map(any)
+  default = {
+    "codfw1dev" = "abogottcodfw1dev"
+    "eqiad1"    = "paws-magnum-vm"
   }
 }
