@@ -20,11 +20,11 @@ resource "openstack_containerinfra_clustertemplate_v1" "template_136a" {
   fixed_subnet          = var.fixed_subnet[var.datacenter]
   fixed_network         = var.fixed_network[var.datacenter]
   flavor                = var.worker_flavor[var.datacenter]
-  image             = "ubuntu-22.04-v1.36.5-for-magnum"
-  keypair_id        = var.keypair_id[var.datacenter]
-  master_lb_enabled = "true"
-  master_flavor     = var.control_flavor[var.datacenter]
-  network_driver    = "calico"
+  image                 = "ubuntu-22.04-v1.36.5-for-magnum"
+  keypair_id            = var.keypair_id[var.datacenter]
+  master_lb_enabled     = "true"
+  master_flavor         = var.control_flavor[var.datacenter]
+  network_driver        = "calico"
 
   labels = {
     kube_tag                      = "v1.36.4"
