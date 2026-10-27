@@ -6,7 +6,7 @@ pawspublic:
   nbserve:
     image:
       name: quay.io/wikimedia-paws-prod/nbserve
-      tag: pr-419 # nbserve tag managed by github actions
+      tag: pr-537 # nbserve tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.nbserve.image.name}}:{{.Values.pawspublic.nbserve.image.tag }}"
     replicas: 1
@@ -15,7 +15,7 @@ pawspublic:
   renderer:
     image:
       name: quay.io/wikimedia-paws-prod/renderer
-      tag: pr-418 # renderer tag managed by github actions
+      tag: pr-537 # renderer tag managed by github actions
       # pawspublic.nbserve.image.template safely defines image:tag name in yaml
       template: "{{ .Values.pawspublic.renderer.image.name}}:{{.Values.pawspublic.renderer.image.tag }}"
     requests:
@@ -215,7 +215,7 @@ jupyterhub:
       fsGroup: 52771
     image:
       name: quay.io/wikimedia-paws-prod/paws-hub
-      tag: pr-499 # paws-hub tag managed by github actions
+      tag: pr-537 # paws-hub tag managed by github actions
     containerSecurityContext:
       runAsUser: 52771
     resources:
@@ -242,7 +242,7 @@ jupyterhub:
     fsGid: 52771
     image:
       name: quay.io/wikimedia-paws-prod/singleuser
-      tag: pr-532 # singleuser tag managed by github actions
+      tag: pr-537 # singleuser tag managed by github actions
       pullPolicy: Always
     memory:
       guarantee: 0.70G
@@ -284,13 +284,13 @@ minesweeper:
   enabled: false  # most local-dev testers won't have the key to configs
   image:
     name: quay.io/wikimedia-paws-prod/minesweeper
-    tag: pr-516 # minesweeper tag managed by github actions
+    tag: pr-537 # minesweeper tag managed by github actions
     template: "{{ .Values.minesweeper.image.name }}:{{ .Values.minesweeper.image.tag }}"
 maintainDumpsNfs:
   enabled: false
   image:
     name: quay.io/wikimedia-paws-prod/maintain-dumps-nfs
-    tag: pr-523 # maintain-dumps-nfs tag managed by github actions
+    tag: pr-537 # maintain-dumps-nfs tag managed by github actions
     template: "{{ .Values.maintainDumpsNfs.image.name }}:{{ .Values.maintainDumpsNfs.image.tag }}"
   server: dumps-nfs.wikimedia.org
   compatSymlinks:
@@ -305,6 +305,6 @@ localdev:
   enabled: true
   image:
     name: quay.io/wikimedia-paws-prod/jobber
-    tag: pr-420 # jobber tag managed by github actions
+    tag: pr-537 # jobber tag managed by github actions
     # mediawikiHacks.image.template safely defines image:tag name in yaml
     template: "{{ .Values.localdev.image.name}}:{{.Values.localdev.image.tag }}"
