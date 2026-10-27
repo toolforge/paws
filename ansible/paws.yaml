@@ -24,49 +24,6 @@
     - name: include env vars
       include_vars: vars/{{ datacenter }}.yaml
 
-    - name: Temporary directory for cloud provider
-      ansible.builtin.tempfile:
-        state: directory
-        suffix: paws
-      register: paws_dir
-      changed_when: False
-
-    - name: Clone cloud-provider-openstack
-      ansible.builtin.git:
-        repo: https://github.com/kubernetes/cloud-provider-openstack.git
-        dest: "{{ paws_dir.path }}"
-        version: v1.26.3
-      changed_when: False
-
-    - name: Copy file with owner and permissions
-      ansible.builtin.copy:
-        src: files/csi-secret-cinderplugin.yaml.{{ datacenter }}.crypt
-        dest: "{{ paws_dir.path }}/manifests/cinder-csi-plugin/csi-secret-cinderplugin.yaml"
-      changed_when: False
-
-    - name: install the things!
-      kubernetes.core.k8s:
-        state: present
-        src: "{{ paws_dir.path }}/manifests/cinder-csi-plugin/{{ item }}"
-      loop:
-        - "csi-secret-cinderplugin.yaml"
-        - "cinder-csi-controllerplugin-rbac.yaml"
-        - "cinder-csi-controllerplugin.yaml"
-        - "cinder-csi-nodeplugin-rbac.yaml"
-        - "cinder-csi-nodeplugin.yaml"
-        - "csi-cinder-driver.yaml"
-
-    - name: Delete temporary directory
-      ansible.builtin.file:
-        state: absent
-        path: "{{ paws_dir.path }}"
-      changed_when: False
-
-    - name: and sc.yaml
-      kubernetes.core.k8s:
-        state: present
-        src: "files/sc.yaml"
-
     # Install the CRDs before istiod starts, so that istiod watches them.
     - name: Install the Gateway API CRDs
       kubernetes.core.k8s:
